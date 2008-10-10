@@ -1,0 +1,137 @@
+%D \module
+%D   [      file=simpleslides-s-ThickStripes,
+%D        version=2007.07.17, 
+%D          title=\CONTEXT\ Style File,
+%D       subtitle=Presentation Module --- Thick Stripes style,
+%D         author=Thomas A. Schmitz,
+%D           date=\PRESTITdate,
+%D      copyright={Thomas A. Schmitz}]
+%C
+%C Copyright 2007 Thomas A. Schmitz.
+%C This file may be distributed under the GNU General Public License v. 2.0.
+
+%D This file provides the \quotation{ThickStripes} style for the presentation
+%D module. It is loaded at runtime. The theme for this style is inspired by the
+%D \quotation{Berkeley} theme of the \LaTeX\ Beamer package.
+
+\writestatus{simpleslides}{loading Thick Stripes style}
+
+\startmodule[simpleslides-s-ThickStripes]
+
+\unprotect
+
+%D First, we change the page layout to have more space on the top and the
+%D left.
+
+\setuplayout [width=fit,
+              leftmargin=1.5cm,
+	      rightmargin=0cm,
+              leftmargindistance=.9cm,
+              rightmargindistance=0pt,
+              height=fit, 
+              header=2.5cm, 
+              footer=0cm, 
+              topspace=.4cm, 
+              backspace=2.9cm,
+	      cutspace=2.8cm,
+              bottomspace=0cm,
+              bottom=0pt,
+              location=singlesided]
+
+%D These macros are used for placing figures/pictures:
+
+\define\NormalHeight        {\textheight}
+\define\NormalWidth         {.476\textwidth}
+\define\PictureFrameHeight  {\textheight}
+\define\PictureFrameWidth   {.476\textwidth}
+
+\setuplayer
+  [simpleslides:slidetitle]
+  [x=29mm]
+
+%D We define our color scheme
+
+\definecolor [simpleslides:backgroundcolor]   [s=.9]
+\definecolor [simpleslides:variantcolor]      [r=.15,g=.15,b=.525]
+\definecolor [simpleslides:contrastcolor]     [r=.2,g=.2,b=.7]
+\definecolor [simpleslides:altcontranstcolor] [s=.4]
+\definecolor [simpleslides:itemize:color]     [simpleslides:backgroundcolor]
+
+
+%D We use \METAPOST to draw the background. The background consists of two
+%D stripes and a "clock" at the bottom.
+
+\startuseMPgraphic{simpleslides:MP:ornament}
+StartPage ;
+save a, b,  theta;
+numeric a, b,  theta ;
+
+save t ;
+pair  t[] ;
+
+a = 2.5cm ;
+b = 1.5cm ;
+
+z[1] = ulcorner Page shifted (a,0) ;
+z[2] = llcorner Page shifted (a,0) ;
+z[3] = ulcorner Page shifted (0,-a) ;
+z[4] = urcorner Page shifted (0,-a) ;
+z[5] = ulcorner Page shifted (a,-a) ;
+
+save p ;
+path p[] ;
+p[1] = ulcorner Page -- z[1] -- z[2] -- llcorner Page -- cycle ;
+p[2] = ulcorner Page -- urcorner Page -- z[4] -- z[3] -- cycle ;
+p[3] = ulcorner Page -- z[1] -- z[5] -- z[3] -- cycle ;
+
+fill Page withcolor \MPcolor{simpleslides:backgroundcolor} ;
+fill p[1] withcolor \MPcolor{simpleslides:contrastcolor} ;
+fill p[2] withcolor \MPcolor{simpleslides:contrastcolor} ;
+fill p[3] withcolor \MPcolor{simpleslides:variantcolor} ;
+
+pickup pencircle scaled 5pt ;
+
+if \realfolio > 1:
+	theta = (PageNumber - 1)/(NOfPages - 1) ;
+	p[4] = unitcircle scaled b rotated 90 shifted (b + ((a-b)/2),(a-b)/2) ;
+	fill p[4] withcolor \MPcolor{simpleslides:backgroundcolor} ;
+	t[0] = center p[4] ;
+	t[1] = point 1 along p[4] ;
+	t[2] = point -theta along p[4] ;
+	t[3] = point -theta/2 along p[4] ;
+	p[5] = t[0] -- t[1] .. t[3] .. t[2] -- cycle ;
+	fill p[5] withcolor \MPcolor{simpleslides:altcontranstcolor} ;
+fi ;
+StopPage ;
+\stopuseMPgraphic
+
+%D We define these backgrounds as overlays:
+
+\defineoverlay
+  [simpleslides:background:ornament]
+  [\useMPgraphic{simpleslides:MP:ornament}]
+
+
+%D We want the title to placed in color. 
+
+\setupTitle[\c!headcolor={simpleslides:contrastcolor}]
+
+%D We want the slide title on the top
+
+\setupSlideTitle
+   [\c!after=,
+    \c!alternative=layer,
+    \c!width=\textwidth,
+    \c!height=2.5cm,
+    \c!color=simpleslides:backgroundcolor]
+
+%D The symbol for the first level of itemizations. 
+
+\definesymbol[1][\useMPgraphic{simpleslides:itemize:triangle}]
+\setupitemize[1][inmargin][color=simpleslides:backgroundcolor]
+
+\protect
+\stopmodule
+
+\endinput
+
