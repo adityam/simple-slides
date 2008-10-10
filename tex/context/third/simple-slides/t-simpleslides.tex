@@ -1,0 +1,95 @@
+%D \module
+%D   [      file=t-simpleslides,
+%D        version=2007.07.15, 
+%D          title=\CONTEXT\ Style File,
+%D       subtitle=Presentation Module simpleslides,
+%D         author=Thomas A. Schmitz,
+%D           date=\currentdate,
+%D      copyright={Thomas A. Schmitz}]
+%C
+%C Copyright 2007 Thomas A. Schmitz.
+%C This file may be distributed under the GNU General Public License v. 2.0.
+
+%M \usemodule[int-load]
+%M \setupcolors[state=start]
+%M \loadsetups[cont-en.xml]
+%M \loadsetups[simpleslides.xml]
+
+%D This module is meant to facilitate writing presentations in \CONTEXT. It
+%D provides a consistent interface and macros; there are different styles which
+%D give different output. The module has been written for projector||based
+%D presentations, so elements which are typical for screen presentations (such
+%D as interactive hyperlinks or tables of contents) are not included. The
+%D module is meant for an academic environment, specifically in the humanities.
+%D Hence, it has the following characteristics:
+%D
+%D \startitemize 
+%D
+%D \item The look is rather sober. In academia, presentations are not meant to
+%D showcase fancy \TeX\ effects; nothing should divert the audience's attention
+%D from the content.
+%D
+%D \item The module is written for slides which exhibit text and/or images.
+%D From my own experience with \TeX||based presentations, I have provided a
+%D setup for horizontal (landscape) pictures and for vertical (portrait)
+%D pictures, which are accompanied by an area for explanatory text.
+%D
+%D \item A simple switch in the module setup command will produce different
+%D output. 
+%D
+%D \item It is easy to customize the module or to add more styles.
+%D
+%D \stopitemize
+%D
+%D The macros are commented rather extensively to give users (especially users
+%D relatively new to \CONTEXT) the chance to unserstand the mechanisms and
+%D create their own styles. Of course, I did not invent this code on my own. My
+%D thanks are due, as always, to Hans Hagen, whose presentation modules in the
+%D \CONTEXT\ core have been a wonderful source of inspiration, to Mojca
+%D Miklavec, who provided help with Metapost, and to Aditya Mahajan, who helped
+%D tremendously in cleaning up the code and making the user interface more
+%D consistent. 
+
+\writestatus{loading}{module simpleslides}
+
+\startmodule[simpleslides]
+
+\unprotect
+
+\setupmodule
+  [style=DoubleFrame,
+   font=LatinModernSans,
+   size=17pt,
+   stylecolor=blue,
+   stylebottom=square]
+
+\usemodule
+  [simpleslides-s]
+  [default]
+
+% AM: Much cleaner than \processaction
+%     I am assuming that user style is named t-simpleslides-style.tex
+%     If you want to support style.tex that can be done by adding one 
+%     \doiffileelse 
+
+\usemodule
+  [simpleslides-s]
+  [\currentmoduleparameter{style}]
+  [ color=\currentmoduleparameter{stylecolor},
+   bottom=\currentmoduleparameter{stylebottom}]
+
+\usemodule
+  [simpleslides-f]
+  [default]
+
+%AM: This should define \NormalSize and \TitleSize, set up the proper font
+% and possibly font fallback
+\usemodule[simpleslides-f][fonts]
+          [font=\currentmoduleparament{font},
+           size=\currentmoduleparameter{size}]
+
+\protect
+
+\stopmodule
+
+% Demo in the end.
