@@ -1,0 +1,66 @@
+%D \module
+%D   [      file=simpleslides-f-default,
+%D        version=2007.07.15, 
+%D          title=\CONTEXT\ Style File,
+%D       subtitle=Presentation Module simpleslides --- Default font setup,
+%D         author=Thomas A. Schmitz,
+%D           date=\currentdate,
+%D      copyright={Thomas A. Schmitz}]
+%C
+%C Copyright 2007 Thomas A. Schmitz.
+%C This file may be distributed under the GNU General Public License v. 2.0.
+
+\writestatus{simpleslides}{loading default font setup}
+
+\startmodule[simpleslides-f-default]
+
+\unprotect
+
+\setupbodyfontenvironment[default][em=italic] 
+
+%D The fontsize is set via the \type{size}||key; it will be used in numerous
+%D setup||commands. In earlier versions, I had used the \tex{processaction}
+%D mechanism to define the \tex{NormalSize} and \tex{TitleSize}, but Aditya
+%D rightly pointed out that this is somewhat inflexible. I now set the font
+%D dimensions directly; \tex{TitleSize} is calculated from \tex{NormalSize}. I
+%D do a few tests to get nice sizes. 
+
+\newdimen\simpleslidesNormalSize  
+\newdimen\simpleslidesTitleSize  
+
+\simpleslidesNormalSize=\moduleparameter{simpleslides}{size}\relax
+
+\ifdim\simpleslidesNormalSize<16pt%
+	\simpleslidesTitleSize=1.6\simpleslidesNormalSize\relax%
+\else%
+	\ifdim\simpleslidesNormalSize<20pt%
+		\simpleslidesTitleSize=1.4142\simpleslidesNormalSize\relax%
+	\else%
+		\simpleslidesTitleSize=30pt\relax%
+	\fi%
+\fi%
+
+\def\NormalSize{\the\simpleslidesNormalSize}
+\def\TitleSize {\the\simpleslidesTitleSize}
+
+\beginOLDTEX 
+\setupencoding[default=ec]
+\endOLDTEX
+
+%D The bodyfont needs to be defined so \CONTEXT\ can calculate size switches,
+%D math formulas, etc.
+
+\starttypescript [serif] [default] [size] 
+\definebodyfont [14pt,15pt,16pt,17pt,20pt,25pt,\NormalSize,\TitleSize] [rm] [default] 
+\stoptypescript
+
+\starttypescript [sans] [default] [size] 
+\definebodyfont [14pt,15pt,16pt,17pt,20pt,25pt,\NormalSize,\TitleSize] [ss] [default] 
+\stoptypescript
+
+\definebodyfontenvironment[\NormalSize]
+\definebodyfontenvironment[\TitleSize]
+
+\protect
+
+\stopmodule

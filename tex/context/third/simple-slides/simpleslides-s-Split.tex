@@ -1,0 +1,195 @@
+%D \module
+%D   [      file=simpleslides-s-Split,
+%D        version=2007.07.17, 
+%D          title=\CONTEXT\ Style File,
+%D       subtitle=Presentation Module --- Split style,
+%D         author=Thomas A. Schmitz,
+%D           date=\PRESTITdate,
+%D      copyright={Thomas A. Schmitz}]
+%C
+%C Copyright 2007 Thomas A. Schmitz.
+%C This file may be distributed under the GNU General Public License v. 2.0.
+
+%D This file provides the \quotation{Split} style for the presentation
+%D module. It is loaded at runtime. The look of this style was inspired by the
+%D \quotation{Copenhagen} theme of the \LaTeX\ \filename{beamer} package.
+
+\writestatus{simpleslides}{loading Black Blue style}
+
+\startmodule[simpleslides-s-Split]
+
+\unprotect
+
+%AM: NOTE: The black and blue colors can be made configurable.
+
+%D First, we change the page layout to have more space on the top and the
+%D bottom.
+
+\setuplayout [width=fit,
+              margin=0cm,
+              height=fit,
+              header=3.2cm, 
+              footer=.5cm, 
+              topspace=.6cm, 
+              backspace=1cm,
+              location=singlesided]
+
+\setuplayout [simpleslides:layout:horizontal][header=3.2cm]
+\setuplayout [simpleslides:layout:vertical]  [header=0.5cm]
+\setuplayout [simpleslides:layout:title]     [header=0.5cm]
+
+%D We also specify the position of the slidetitle.
+
+\setuplayer[simpleslides:layer:slidetitle]
+    [x=10mm,y=12mm]
+
+%D These macros are used for placing figures/pictures:
+
+\define\NormalHeight        {\textheight}
+\define\NormalWidth         {.476\textwidth}
+\define\PictureFrameHeight  {\textheight}
+\define\PictureFrameWidth   {.476\textwidth}
+
+
+%D Next we define a few generic frames, which will be used by other macros to
+%D get a consistent look and feel.
+
+\setupframed[simpleslides:framed]
+             [corner=round,
+              background=color,backgroundcolor={simpleslides:contrastcolor}]
+
+\defineframed[simpleslides:framed:small]
+             [frame=off,offset=0pt,strut=no,
+              width=0.5\textwidth,height=0.5cm,
+              top=\vss,bottom=\vss]
+
+%D We define our color scheme:
+
+\definecolor [simpleslides:backgroundcolor]   [s=.9]
+\definecolor [simpleslides:contrastcolor]     [r=.2, g=.2, b=.72]
+\definecolor [simpleslides:variantcolor]      [s=0]
+\definecolor [simpleslides:itemize:color]     [simpleslides:contrastcolor]
+
+%D We use \METAPOST\ to draw backgrounds. First, we define a few helper macros
+%D to place text inside \METAPOST
+
+\definetextext[simpleslides:sometxt:left] {\TaspresentSometxtLeft}
+\definetextext[simpleslides:sometxt:right]{\TaspresentSometxtRight}
+
+\unexpanded\def\TaspresentSometxtLeft#1%
+  {\getvalue{simpleslides:framed:small}[align=left]
+                       {\ix\color[simpleslides:backgroundcolor]
+                       {#1\quad\strut}}}
+
+\unexpanded\def\TaspresentSometxtRight#1%
+  {\getvalue{simpleslides:framed:small}[align=right]
+                       {\ix\color[simpleslides:backgroundcolor]
+                       {\strut\quad#1}}}
+
+%D Now we use \METAPOST\ to draw a page ornament, which will then be inherited
+%D by different backgrounds.
+
+\startuseMPgraphic{simpleslides:MP:ornament} 
+StartPage ;
+save p, Main, a ;
+path p[] ; path Main ;
+
+numeric a; a=.5cm ;
+
+fill Page withcolor \MPcolor{simpleslides:backgroundcolor} ;
+
+z1 = ulcorner Page shifted (0,-a) ;
+z2 = urcorner Page shifted (0,-a) ;
+z3 = llcorner Page shifted (0,a) ;
+z4 = lrcorner Page shifted (0,a) ;
+z5 = 1/2[ulcorner Page,urcorner Page] ;
+z6 = 1/2[z1,z2] ;
+z7 = 1/2[llcorner Page,lrcorner Page] ;
+z8 = 1/2[z3,z4] ;
+
+p[1] = ulcorner Page -- urcorner Page -- z2 -- z1 -- cycle ;
+p[2] = ulcorner Page -- z5 -- z6 -- z1 -- cycle ;
+p[3] = llcorner Page -- lrcorner Page -- z4 -- z3 -- cycle ;
+p[4] = llcorner Page -- z7 -- z8 -- z3 -- cycle ;
+
+fill p[1] withcolor \MPcolor{simpleslides:contrastcolor} ;
+fill p[2] withcolor \MPcolor{simpleslides:variantcolor} ;
+fill p[3] withcolor \MPcolor{simpleslides:variantcolor} ;
+fill p[4] withcolor \MPcolor{simpleslides:contrastcolor} ;
+
+draw \sometxt[simpleslides:sometxt:left]{\moduleparameter{simpleslides:title}{date}}
+     shifted (1cm,y1) ;
+
+draw \sometxt[simpleslides:sometxt:right]{\folio\ of \lastpage}
+     shifted (x5,y1) ;
+
+draw \sometxt[simpleslides:sometxt:left]{\moduleparameter{simpleslides:title}{author}}
+     shifted (1cm,0) ;
+
+draw \sometxt[simpleslides:sometxt:right]{\moduleparameter{simpleslides:title}{title}}
+      shifted (x5,0) ;
+
+StopPage ;
+\stopuseMPgraphic 
+
+%D We use this ornament in different backgrounds.
+
+\defineoverlay 
+  [simpleslides:background:ornament] 
+  [\useMPgraphic{simpleslides:MP:ornament}] 
+
+\defineoverlay 
+  [simpleslides:background:title] 
+  [\useMPgraphic{simpleslides:MP:ornament}] 
+
+%D We want the title to placed in a framed box. We redefine all the keys of
+%D \type{\setupTitle}, so that the module is easier to maintain.
+
+\setupTitle
+  [\c!title=,
+   \c!author=,
+   \c!date=\currentdate,
+   \c!headstyle=,
+   \c!headcolor={simpleslides:backgroundcolor},
+   \c!align=\v!middle,
+   \c!before={\vfill\getvalue{simpleslides:framed}
+              [\c!width=\textwidth,\c!height=.75\textheight,
+               \c!align=\v!middle, \c!strut=\v!no]
+              \bgroup},
+   \c!after={\egroup\vfill},
+   \c!title\c!style={\switchtobodyfont[\TitleSize]},
+   \c!title\c!color=,
+   \c!title\c!align=,%\v!middle,
+   \c!author\c!style=,
+   \c!author\c!color=,
+   \c!author\c!align=,%\v!middle, 
+   \c!date\c!style=,
+   \c!date\c!color=,
+   \c!date\c!align=,%\v!middle,
+   \c!before\c!title=,
+   \c!before\c!author=,
+   \c!before\c!date=,
+   \c!after\c!title={\blank[1*line]},
+   \c!after\c!author={\blank[2*line]},
+   \c!after\c!date=]
+
+%D We also want the slide title in a framed box.
+
+\setupSlideTitle
+  [\c!after=,
+   \c!alternative=layer,
+   \c!height=2.1cm,
+   \c!width=\textwidth,
+   \c!color=simpleslides:backgroundcolor]
+
+
+%D The symbol for the first level of itemizations. 
+
+\definesymbol[1][\useMPgraphic{simpleslides:itemize:square}]
+\setupitemize[1][color={simpleslides:itemize:color}]
+
+\protect
+\stopmodule
+
+\endinput
+
