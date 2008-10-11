@@ -1,0 +1,128 @@
+%D \module
+%D   [      file=simpleslides-s-Shaded,
+%D        version=2007.07.17, 
+%D          title=\CONTEXT\ Style File,
+%D       subtitle=Presentation Module --- Shaded style,
+%D         author=Thomas A. Schmitz,
+%D           date=\PRESTITdate,
+%D      copyright={Thomas A. Schmitz}]
+%C
+%C Copyright 2007 Thomas A. Schmitz.
+%C This file may be distributed under the GNU General Public License v. 2.0.
+
+%D This file provides the \quotation{Shaded} style for the presentation
+%D module. It is loaded at runtime. 
+
+\writestatus{simpleslides}{loading Shaded style}
+
+\startmodule[simpleslides-s-Shaded]
+
+\unprotect
+
+%D The page layout:
+
+\setuplayout [width=fit,
+              margin=1.5cm,
+              leftmargindistance=0pt,
+              rightmargindistance=0pt,
+              height=fit, 
+              header=0pt, 
+              footer=5pt, 
+              topspace=.8cm, 
+              backspace=1.5cm,
+              bottomspace=.8cm,
+              bottom=12pt,
+              location=singlesided]
+
+%D These macros are used for placing figures/pictures:
+
+\define\NormalHeight        {.83\textheight}
+\define\NormalWidth         {.476\textwidth}
+\define\PictureFrameHeight  {.83\textheight}
+\define\PictureFrameWidth   {.476\textwidth}
+
+%D This module has three color schemes, blue, green and bluered.
+
+
+\startsetups simpleslides:setups:bluered
+\definecolor [simpleslides:textcolor]         [white]
+\definecolor [simpleslides:interactioncolor]  [b=.2]
+\definecolor [simpleslides:contrastcolor]     [b=.8]
+\definecolor [simpleslides:itemize:color]     [s=1]
+\definecolor [simpleslides:backgroundcolor]    [r=0.5,g=0,b=0]
+\definecolor [simpleslides:variantcolor]       [r=0,g=0,b=0.5]
+\stopsetups
+
+\startsetups simpleslides:setups:blue
+\definecolor [simpleslides:textcolor]         [white]
+\definecolor [simpleslides:interactioncolor]  [b=.2]
+\definecolor [simpleslides:contrastcolor]     [r=.72,g=.77,b=.94]
+\definecolor [simpleslides:itemize:color]     [s=1]
+\definecolor [simpleslides:backgroundcolor]    [r=0,g=0,b=1]
+\definecolor [simpleslides:variantcolor]       [r=0,g=0,b=0.05]
+\stopsetups
+
+\startsetups simpleslides:setups:green
+\definecolor [simpleslides:textcolor]         [white]
+\definecolor [simpleslides:interactioncolor]  [s=.2]
+\definecolor [simpleslides:contrastcolor]     [s=.5]
+\definecolor [simpleslides:itemize:color]     [s=1]
+\definecolor [simpleslides:backgroundcolor]    [r=0,g=.8,b=0]
+\definecolor [simpleslides:variantcolor]       [r=0,g=0.05,b=0]
+\stopsetups
+
+%D Now we choose the scheme that the user asked for
+
+\setups{simpleslides:setups:blue}
+\setups{simpleslides:setups:\moduleparameter{simpleslides}{stylecolor}}
+
+\setupcolors[textcolor={simpleslides:textcolor}]
+
+
+%D This module shades the background in a gradient. We use \METAPOST\ to draw
+%D the background.
+
+\startuniqueMPgraphic{simpleslides:MP:ornament}
+save p;
+path p ;
+p := unitsquare xscaled \overlaywidth yscaled \overlayheight ;
+linear_shade(p,6,
+             \MPcolor{simpleslides:backgroundcolor},
+             \MPcolor{simpleslides:variantcolor}) ;
+\stopuniqueMPgraphic
+
+%D We define these backgrounds as overlays:
+
+\defineoverlay
+  [simpleslides:background:ornament]
+  [\useMPgraphic{simpleslides:MP:ornament}]
+
+\defineoverlay 
+  [simpleslides:background:title] 
+  [\useMPgraphic{simpleslides:MP:ornament}] 
+
+%D The symbol for the first level of itemizations. 
+
+\definesymbol[1][\useMPgraphic{simpleslides:itemize:square}]
+\setupitemize[1][color={simpleslides:itemize:color}]
+
+%D The \quotation{Shaded} style uses \CONTEXT's interactionbar:
+
+\setupsubpagenumber[way=bytext,state=start]
+
+\setupinteraction
+  [page=yes,
+   color=simpleslides:interactioncolor,
+   contrastcolor=simpleslides:contrastcolor,
+   menu=on,
+   state=start]
+
+\startinteractionmenu[bottom]
+{\interactionbar[alternative=f,width=\makeupwidth,height=1ex]}
+\stopinteractionmenu
+
+\protect
+\stopmodule
+
+\endinput
+
