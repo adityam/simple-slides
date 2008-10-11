@@ -1,0 +1,160 @@
+%D \module
+%D   [      file=simpleslides-s--Embossed,
+%D        version=2007.07.17, 
+%D          title=\CONTEXT\ Style File,
+%D       subtitle=Presentation Module --- Embossed style,
+%D         author=Thomas A. Schmitz,
+%D           date=\PRESTITdate,
+%D      copyright={Thomas A. Schmitz}]
+%C
+%C Copyright 2007 Thomas A. Schmitz.
+%C This file may be distributed under the GNU General Public License v. 2.0.
+
+%D This file provides the \quotation{embossed} style for the presentation
+%D module. It is loaded at runtime. 
+
+\writestatus{simpleslides}{loading module embossed}
+
+\startmodule[simpleslides-s-Embossed]
+
+\unprotect
+%D The page layout:
+
+\setuplayout [width=fit,
+              margin=1.3cm,
+              height=fit,
+              header=1cm, 
+              footer=1cm, 
+              topspace=10mm, 
+              backspace=2cm,
+              location=singlesided]
+
+\setuplayout [simpleslides:layout:horizontal][header=1cm]
+\setuplayout [simpleslides:layout:vertical]  [header=0cm]
+\setuplayout [simpleslides:layout:title]     [header=0cm]
+
+%D We also specify the position of the slidetitle.
+
+\setuplayer[simpleslides:layer:slidetitle]
+    [x=20mm,y=2mm]
+
+%D Next we define a generic frame
+
+\defineframed[simpleslides:framed]
+             [frame=off,offset=0pt,
+              top=\vss,bottom=\vss]
+
+\defineframed[simpleslides:framed:big]
+             [frame=off,offset=0pt,strut=no,
+              width=\textwidth,height=2cm,
+              top=\vss,bottom=\vss]
+
+%D We define our color scheme:
+
+\definecolor [simpleslides:backgroundcolor]   [r=1,g=1,b=.8]
+\definecolor [simpleslides:variantcolor]    [r=.6,g=.2,b=.2]
+\definecolor [simpleslides:specialcolor:1] 	[r=.4,g=.2,b=.2]
+\definecolor [simpleslides:specialcolor:2] 	[r=.7,g=.2,b=.2]
+\definecolor [simpleslides:contrastcolor] 	[r=.2,g=.2,b=.5]
+\definecolor [simpleslides:framecolor]      [s=.4]
+\definecolor [simpleslides:itemize:color]     [simpleslides:contrastcolor]
+
+%D This module write "Made with ConTeXt" in bold at the bottom. We first define
+%D a font for it.
+
+\beginOLDTEX
+\loadmapfile[qhv-ec.map]
+\definefontsynonym [Embossed] [ec-qhvb] 
+\endOLDTEX
+
+\beginLUATEX
+\definefontsynonym [Embossed] [name:texgyreherosbold]
+\endLUATEX
+
+\definefont[EmblemFont] [Embossed at 30pt]
+
+%D The emblem string is configurable.
+
+\setuplabeltext [\s!en]    [simpleslidesemblem={Made with \CONTEXT}]
+
+\definetextext[simpleslides:sometxt:left] {\TaspresentSometxtLeft}
+\definetextext[simpleslides:sometxt:right]{\TaspresentSometxtRight}
+
+\unexpanded\def\TaspresentSometxtLeft#1%
+  {\getvalue{simpleslides:framed:big}
+                       {\EmblemFont\color[simpleslides:specialcolor:1]
+                       {#1}}}
+
+\unexpanded\def\TaspresentSometxtRight#1%
+  {\getvalue{simpleslides:framed:big}
+                       {\EmblemFont\color[simpleslides:specialcolor:2]
+                       {#1}}}
+
+\startuseMPgraphic{simpleslides:MP:ornament}
+StartPage ;
+
+save a, b;
+numeric a; a = 2cm ;
+numeric b; b = 0.9cm ;
+
+z1 = llcorner Page shifted (0,a) ;
+z2 = lrcorner Page shifted (0,a) ;
+
+save bottom ; path bottom ;
+bottom = llcorner Page -- z1 -- z2 -- lrcorner Page -- cycle ;
+
+fill Page withcolor \MPcolor{simpleslides:backgroundcolor} ;
+fill bottom withcolor \MPcolor{simpleslides:variantcolor} ;
+
+draw Page withcolor \MPcolor{simpleslides:framecolor} 
+          withpen pencircle scaled 12pt ;
+draw topboundary bottom withcolor \MPcolor{simpleslides:framecolor}
+          withpen pencircle scaled 6pt ;
+
+
+draw \sometxt[simpleslides:sometxt:left]{\labeltext{simpleslidesemblem} \hfill \pagenumber\ of \lastpage} 
+      shifted (1.96cm,0.04cm) ;
+
+draw \sometxt[simpleslides:sometxt:right]{\labeltext{simpleslidesemblem} \hfill \pagenumber\ of \lastpage} 
+      shifted (2cm,0) ; 
+
+StopPage ;
+\stopuseMPgraphic
+
+
+%D We define these backgrounds as overlays:
+
+\defineoverlay
+  [simpleslides:background:ornament]
+  [\useMPgraphic{simpleslides:MP:ornament}]
+
+\defineoverlay
+  [simpleslides:background:title]
+  [\useMPgraphic{simpleslides:MP:ornament}]
+
+
+%D We want the presentation title to be in color
+
+\setupTitle[\c!title\c!color=simpleslides:contrastcolor]
+
+%D We also want the slide title in a framed box.
+
+\setupSlideTitle
+  [\c!after=,
+   \c!alternative=layer,
+   \c!color={simpleslides:contrastcolor},
+   \c!width=\textwidth,
+   \c!height=2cm,
+   \c!align=\v!middle]
+
+
+%D The symbol for the first level of itemizations. 
+
+\definesymbol[1][\useMPgraphic{simpleslides:itemize:square}]
+\setupitemize[1][color={simpleslides:itemize:color}]
+
+\protect
+\stopmodule
+
+\endinput
+
