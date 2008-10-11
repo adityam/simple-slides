@@ -1,0 +1,131 @@
+%D \module
+%D   [      file=simpleslides-t-SuperEllipse,
+%D        version=2007.12.20, 
+%D          title=\CONTEXT\ Style File,
+%D       subtitle=Presentation Module quadblue,
+%D         author=Thomas A. Schmitz,
+%D           date=\PRESTITdate,
+%D      copyright={Thomas A. Schmitz}]
+%C
+%C Copyright 2007 Thomas A. Schmitz.
+%C This file may be distributed under the GNU General Public License v. 2.0.
+
+%D This file provides the \quotation{SuperEllipse} style for the presentation
+%D module. The design is inspired by Hans's "funny" presentation module
+%D (s-pre-03). It is loaded at runtime. 
+
+\writestatus{simpleslides}{loading SuperEllipse style}
+
+\startmodule[simpleslides-s-SuperEllipse]
+
+\unprotect
+
+%D First, we change the page layout.
+
+\setuplayout [width=fit,
+              height=fit,
+	      margin=0cm,
+              header=1.2cm, 
+              footer=0cm, 
+              topspace=1.8cm, 
+              backspace=1.5cm,
+              location=singlesided]
+
+%D These macros are used for placing figures/pictures:
+
+\define\NormalHeight{\textheight}
+\define\NormalWidth{.5\textwidth}
+\define\PictureFrameHeight{\textheight}
+\define\PictureFrameWidth{.5\textwidth}
+
+\setuplayer
+  [simpleslides:slidetitle]
+    [y=10mm,
+     x=15mm]
+
+%D We define our color scheme:
+
+\definecolor[simpleslides:outercolor]                [s=0]
+\definecolor[simpleslides:backgroundcolor]           [s=.8]
+\definecolor[simpleslides:contrastcolor]             [r=.5,g=0,b=0]
+\definecolor[simpleslides:altcontrastcolor][r=.9,g=0,b=0]
+\definecolor[simpleslides:itemize:color]             [r=.5]
+
+
+%D The macro for typesetting the SlideTitle; this is adapted from a sample
+%D document that Brooks Moses published on the wiki:
+
+\define[1]\SlideTitle{\page\setlayer[slidetitle]%
+     {\framed[frame=off,width=\textwidth,height=2.5cm,offset=0pt,top=\vss,bottom=\vss]{\switchtobodyfont[\TitleSize]\color[simpleslides:contrastcolor]{#1}}}}
+
+%D The macro \tex{MakeTitle} produces a default title page with the author, the
+%D title of the presentation, and the date. Using it is not mandatory.
+
+\define\MakeTitle{%
+\TitleBackground
+\null
+\vfill
+\midaligned{\switchtobodyfont[\TitleSize]\color[simpleslides:contrastcolor]{\PRESTITtitle}}
+\blank[2*line]
+\midaligned{\color[simpleslides:contrastcolor]{\PRESTITauthor}}
+\blank[3*line]
+\midaligned{\color[simpleslides:contrastcolor]{\PRESTITdate}}
+\vfill
+\null}
+
+%D The following parts are optional; if you don't use backgrounds and are
+%D content with CONTEXT's default itemization, you don't have to set these
+%D macros. 
+
+%D We let Metapost calculate the background:
+
+\startuseMPgraphic{left} 
+StartPage ;
+	fill Page withcolor \MPcolor{simpleslides:outercolor} ;
+	path p ; pair pa ; pair pb ;
+	p := Page enlarged (-15pt,-15pt) superellipsed .9 ;
+	fill p withcolor \MPcolor{simpleslides:backgroundcolor} ;
+	pickup pencircle scaled 20pt ;
+	draw p withcolor \MPcolor{simpleslides:contrastcolor} ;
+	if PageNumber>1:
+		pa := point (3 + (6*PageNumber) / NOfPages) of p ;
+		pb := point (3 + (6*(PageNumber-1)) / NOfPages) of p ; 
+		draw (p cutafter pa) cutbefore pb withcolor \MPcolor{simpleslides:altcontrastcolor} ;
+	fi ;
+%	draw point 1 of p withcolor \MPcolor{simpleslides:altcontrastcolor} ;
+%	draw point 8 of p withcolor blue ;
+%	draw point 4 of p withcolor green ;
+%	draw point 3 of p withcolor yellow ;
+%	draw point 2 of p withcolor cyan ;
+%	draw point 7 of p withcolor white ;
+StopPage ;
+\stopuseMPgraphic 
+
+%D We define these backgrounds as overlays:
+
+\defineoverlay 
+[lecbackground] 
+[\useMPgraphic{left}] 
+
+%D These are shortcuts to switch backgrounds:
+
+\define\HorizontalBackground{\setuplayout[header=1.5cm]\setupbackgrounds[page][background={lecbackground,slidetitle}]}
+\define\TitleBackground{\setuplayout[header=0cm]\setupbackgrounds[page][background=lecbackground]}
+\define\VerticalBackground{\setuplayout[header=0cm]\setupbackgrounds[page][background={lecbackground,slidetitle}]}
+\define\NoBackground{\setupbackgrounds[page][background=nobackground]}
+
+%D We use combinations for placing vertical pictures and text side by side, and
+%D we want a distance of 1.1 cm between both.
+
+\setupcombinations[distance=0cm]
+
+%D The symbol for the first level of itemizations. 
+
+\definesymbol[1][\useMPgraphic{ItSquare}]
+\setupitemize[1][color=simpleslides:contrastcolor]
+
+\protect
+\stopmodule
+
+\endinput
+

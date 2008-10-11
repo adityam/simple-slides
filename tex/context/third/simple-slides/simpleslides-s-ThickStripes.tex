@@ -54,12 +54,18 @@
 \definecolor [simpleslides:backgroundcolor]   [s=.9]
 \definecolor [simpleslides:variantcolor]      [r=.15,g=.15,b=.525]
 \definecolor [simpleslides:contrastcolor]     [r=.2,g=.2,b=.7]
-\definecolor [simpleslides:altcontranstcolor] [s=.4]
+\definecolor [simpleslides:altcontrastcolor] [s=.4]
 \definecolor [simpleslides:itemize:color]     [simpleslides:backgroundcolor]
 
 
 %D We use \METAPOST to draw the background. The background consists of two
 %D stripes and a "clock" at the bottom.
+
+\startuseMPgraphic{simpleslides:MP:title}
+StartPage ;
+fill Page withcolor \MPcolor{simpleslides:backgroundcolor} ;
+StopPage ;
+\stopuseMPgraphic
 
 \startuseMPgraphic{simpleslides:MP:ornament}
 StartPage ;
@@ -111,6 +117,9 @@ StopPage ;
   [simpleslides:background:ornament]
   [\useMPgraphic{simpleslides:MP:ornament}]
 
+\defineoverlay 
+  [simpleslides:background:title] 
+  [\useMPgraphic{simpleslides:MP:title}] 
 
 %D We want the title to placed in color. 
 

@@ -32,8 +32,8 @@
               location=singlesided]
 
 \setuplayout [simpleslides:layout:horizontal][header=2.1cm,backspace=1cm]
-\setuplayout [simpleslides:layout:vertical]  [backspace=1cm]
-\setuplayout [simpleslides:layout:title]     [header=0cm,bacspace=0.5cm]
+\setuplayout [simpleslides:layout:vertical]  [header=0cm,backspace=1cm]
+\setuplayout [simpleslides:layout:title]     [header=0cm,backspace=0.5cm]
 
 %D We also specify the position of the slidetitle.
 
@@ -42,9 +42,9 @@
 
 %D These macros are used for placing figures/pictures:
 
-\define\NormalHeight        {.93\textheight}
+\define\NormalHeight        {.975\textheight}
 \define\NormalWidth         {.485\textwidth}
-\define\PictureFrameHeight  {.93\textheight}
+\define\PictureFrameHeight  {.975\textheight}
 \define\PictureFrameWidth   {.485\textwidth}
 
 
@@ -54,7 +54,7 @@
 \definecolor [simpleslides:framecolor]        [r=.42, g=.42, b=.7]
 \definecolor [simpleslides:contrastcolor]     [r=0, g=0, b=.5]
 \definecolor [simpleslides:variantcolor]      [r=0, g=0, b=1]
-\definecolor [simpleslides:itemize:color]     [simpleslides:contrastcolor:1]
+\definecolor [simpleslides:itemize:color]     [simpleslides:contrastcolor]
 
 %D We let \METAPOST\ calculate the background. This style have two options for
 %D ornaments, square or stripes. We define both, and then choose one depending
@@ -194,8 +194,11 @@ StopPage;
 %D The title is typed in a slightly larger font.
 
 \setupTitle
-  [\c!title\c!style=\tfc,
+  [\c!title\c!color={simpleslides:contrastcolor},
+   \c!title\c!style=\tfc,
+   \c!author\c!color={simpleslides:contrastcolor},
    \c!author\c!style=\tfa,
+   \c!date\c!color={simpleslides:contrastcolor},
    \c!date\c!style=\tfa]
 
 %D The slide title is typeset in a layer
@@ -203,7 +206,7 @@ StopPage;
 \setupSlideTitle
   [\c!color={simpleslides:contrastcolor},
    \c!alternative=layer,
-   \c!align=\v!right,
+   \c!align=\v!center,
    \c!width=\textwidth,
    \c!height=2.1cm,
    \c!after=]
