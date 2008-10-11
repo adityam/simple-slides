@@ -1,0 +1,157 @@
+%D \module
+%D   [      file=simpleslides-s-Quads,
+%D        version=2007.07.17, 
+%D          title=\CONTEXT\ Style File,
+%D       subtitle=Presentation Module Quads,
+%D         author=Thomas A. Schmitz,
+%D           date=\PRESTITdate,
+%D      copyright={Thomas A. Schmitz}]
+%C
+%C Copyright 2007 Thomas A. Schmitz.
+%C This file may be distributed under the GNU General Public License v. 2.0.
+
+%D This file provides the \quotation{Quads} style for the presentation
+%D module. It is loaded at runtime. 
+
+\writestatus{simpleslides}{loading Quads style}
+
+\startmodule[simpleslides-s-Quads]
+
+\unprotect
+
+%D First, we define the page layout.
+
+\setuplayout [width=fit,
+	      height=middle,
+              margin=1.5cm,
+              height=fit,
+	      leftmargindistance=.4cm,
+	      rightmargindistance=0cm,
+              header=1.5cm, 
+              footer=0cm, 
+              topspace=1cm, 
+              backspace=2.5cm,
+	      cutspace=1.5cm,
+              location=singlesided]
+
+\setuplayout [simpleslides:layout:horizontal][header=15mm]
+\setuplayout [simpleslides:layout:vertical]  [header=0mm]
+\setuplayout [simpleslides:layout:title]     [header=0mm]
+
+%D These macros are used for placing figures/pictures:
+
+\define\NormalHeight{\textheight}
+\define\NormalWidth{.5\textwidth}
+\define\PictureFrameHeight{\textheight}
+\define\PictureFrameWidth{.5\textwidth}
+
+\setuplayer
+  [simpleslides:layer:slidetitle]
+    [x=25mm,
+     y=2mm]
+
+%D We define our color scheme:
+
+\definecolor[simpleslides:contrastcolor]	[r=0,g=0,b=.92]
+\definecolor[simpleslides:altcontrastcolor]	[r=0,g=0,b=.4]
+\definecolor[simpleslides:backgroundcolor]	[s=.98]
+\definecolor[simpleslides:itemize:color]	[r=0,g=0,b=.92]
+
+%D We let Metapost calculate the background:
+
+\startuseMPgraphic{simpleslides:MP:horizontal} 
+StartPage ;
+fill Page withcolor \MPcolor{simpleslides:backgroundcolor} ;
+z1 = ulcorner Page ;
+z5 = llcorner Page ;
+path q ;
+q = z1 -- z5 ;
+t := arclength (q) ;
+u := t/15 ;
+v := (PageNumber/NOfPages) ;
+z4 = (x1+1cm, y1-1cm) ;
+z3 = (x4, y1) ;
+z2 = (x1, y4) ;
+path m[] ;
+m[1] = z1 -- z2 -- z4 -- z3 -- cycle ;
+m[2] = m[1] shifted (0, -2*u) ;
+m[3] = m[1] shifted (0, -4*u) ;
+m[4] = m[1] shifted (0, -6*u) ;
+m[5] = m[1] shifted (0, -8*u) ;
+m[6] = m[1] shifted (0, -10*u) ;
+m[7] = m[1] shifted (0, -12*u) ;
+m[8] = m[1] shifted (0, (-14*u-0.5mm)) ;
+for i=1 upto 8:
+	fill m[i] withcolor\MPcolor{simpleslides:contrastcolor} ;
+endfor;
+if PageNumber=1:
+	fill m[1] withcolor \MPcolor{simpleslides:altcontrastcolor} ;
+elseif (v>.001) and (v<.167) :
+	fill m[2] withcolor \MPcolor{simpleslides:altcontrastcolor} ;	
+elseif (v>.166) and (v<.334):
+	fill m[3] withcolor \MPcolor{simpleslides:altcontrastcolor} ;	
+elseif (v>.333) and (v<.501):
+	fill m[4] withcolor \MPcolor{simpleslides:altcontrastcolor} ;	
+elseif (v>.5) and (v<.667):
+	fill m[5] withcolor \MPcolor{simpleslides:altcontrastcolor} ;	
+elseif (v>.666) and (v<.834):
+	fill m[6] withcolor \MPcolor{simpleslides:altcontrastcolor} ;	
+elseif (v>.833) and (v<1):
+	fill m[7] withcolor \MPcolor{simpleslides:altcontrastcolor} ;	
+elseif v=1:
+	fill m[8] withcolor \MPcolor{simpleslides:altcontrastcolor} ;
+fi ;
+StopPage ;
+\stopuseMPgraphic 
+
+%D We define these backgrounds as overlays:
+
+\defineoverlay 
+  [simpleslides:background:horizontal] 
+  [\useMPgraphic{simpleslides:MP:horizontal}] 
+
+\defineoverlay 
+  [simpleslides:background:vertical] 
+  [\useMPgraphic{simpleslides:MP:horizontal}] 
+
+\defineoverlay 
+  [simpleslides:background:title] 
+  [\useMPgraphic{simpleslides:MP:horizontal}] 
+
+\defineoverlay 
+  [simpleslides:background:ornament] 
+  [\useMPgraphic{simpleslides:MP:horizontal}] 
+
+%D We want the title to placed in color. 
+
+\setupTitle[\c!headcolor={simpleslides:contrastcolor}]
+
+%D This sets up the SlideTitle:
+
+\setupSlideTitle
+   [\c!after=,
+    \c!alternative=layer,
+    \c!width=\textwidth,
+    \c!align=\v!center,
+    \c!height=2.5cm,
+    \c!color=simpleslides:contrastcolor]
+
+%D We set up the titlepage:
+
+\setupTitle
+  [\c!title\c!color={simpleslides:contrastcolor},
+   \c!author\c!color={simpleslides:contrastcolor},
+   \c!date\c!color={simpleslides:contrastcolor}]
+
+\setupcombinations[distance=0cm]
+
+%D The symbol for the first level of itemizations. 
+
+\definesymbol[1][$\square$]
+\setupitemize[1][inmargin][color=simpleslides:itemize:color]
+
+\protect
+\stopmodule
+
+\endinput
+

@@ -1,0 +1,155 @@
+%D \module
+%D   [      file=simpleslides-s-NarrowStripes,
+%D        version=2007.07.25, 
+%D          title=\CONTEXT\ Style File,
+%D       subtitle=Presentation Module NarrowStripes,
+%D         author=Thomas A. Schmitz,
+%D           date=\currentdate,
+%D      copyright={Thomas A. Schmitz}]
+%C
+%C Copyright 2007 Thomas A. Schmitz.
+%C This file may be distributed under the GNU General Public License v. 2.0.
+
+%D This file provides the \quotation{NarrowStripes} style for the presentation
+%D module. It is loaded at runtime. The theme for this style is inspired by the
+%D \quotation{Berkeley} theme of the \LaTeX\ Beamer package.
+
+\writestatus{simpleslides}{loading NarrowStripes style}
+
+\startmodule[simpleslides-s-NarrowStripes]
+
+\unprotect
+
+%D First, we change the page layout.
+
+\setuplayout [width=fit,
+              leftmargin=1.5cm,
+	      rightmargin=0cm,
+              leftmargindistance=1.8cm,
+              rightmargindistance=0pt,
+              height=fit, 
+              header=2.5cm, 
+              footer=0cm, 
+              topspace=.4cm, 
+              backspace=3.2cm,
+	      cutspace=3.7cm,
+              bottomspace=0cm,
+              bottom=0pt,
+              location=singlesided]
+
+%D We also specify the position of the slidetitle.
+
+\setuplayer[simpleslides:layer:slidetitle]
+    [width=\paperwidth,
+    height=\paperheight,
+    x=32mm]
+
+%D These macros are used for placing figures/pictures:
+
+\define\NormalHeight{\textheight}
+\define\NormalWidth{.476\textwidth}
+\define\PictureFrameHeight{\textheight}
+\define\PictureFrameWidth{.476\textwidth}
+
+%D This module has three color schemes, blue, green and red.
+
+\startsetups simpleslides:setups:blue
+\definecolor [simpleslides:backgroundcolor]             [s=.95]
+\definecolor [simpleslides:altcontrastcolor]            [r=0,g=0,b=1]
+\definecolor [simpleslides:variantcolor]                [r=.69,g=.69,b=.97]
+\definecolor [simpleslides:contrastcolor]               [b=.8]
+\definecolor [simpleslides:itemize:color]               [b=.8]
+\stopsetups
+
+\startsetups simpleslides:setups:red
+\definecolor [simpleslides:itemize:color]               [r=.8]
+\definecolor [simpleslides:backgroundcolor]             [s=.95]
+\definecolor [simpleslides:altcontrastcolor]            [r=1]
+\definecolor [simpleslides:variantcolor]                [b=.69,g=.69,r=.97]
+\definecolor [simpleslides:contrastcolor]               [r=.8]
+\stopsetups
+
+\startsetups simpleslides:setups:green
+\definecolor [simpleslides:itemize:color]               [g=.4]
+\definecolor [simpleslides:backgroundcolor]             [s=.95]
+\definecolor [simpleslides:altcontrastcolor]            [g=.4]
+\definecolor [simpleslides:variantcolor]                [b=.68,r=.68,g=.79]
+\definecolor [simpleslides:contrastcolor]               [g=.4]
+\stopsetups
+
+%D Now we choose the scheme that the user asked for
+
+\setups{simpleslides:setups:blue}
+\setups{simpleslides:setups:\moduleparameter{simpleslides}{stylecolor}}
+
+%D We let Metapost calculate the background:
+
+\startuseMPgraphic{simpleslides:MP:ornament}
+StartPage ;
+numeric a ;
+numeric b ;
+numeric c ;
+c = PaperHeight - a/2 ;
+pair za[] ;
+path p[] ;
+a = 2.25cm ;
+b = 0.4 cm ;
+za1 = ulcorner Page shifted (0,-a) ;
+za2 = ulcorner Page shifted (0,-a-b) ;
+za3 = urcorner Page shifted (0,-a-b) ;
+za4 = urcorner Page shifted (0,-a) ;
+za5 = ulcorner Page shifted (a,0) ;
+za6 = ulcorner Page shifted (a+b,0) ;
+za7 = llcorner Page shifted (a+b,0) ;
+za8 = llcorner Page shifted (a,0) ;
+za9 = ulcorner Page shifted (a,-a) ;
+za10 = ulcorner Page shifted (a+b,-a) ;
+za11 = ulcorner Page shifted (a+b,-a-b) ;
+za12 = ulcorner Page shifted (a,-a-b) ;
+p[1] = za1 -- za2 -- za3 -- za4 -- cycle ;
+p[2] = za5 -- za6 -- za7 -- za8 -- cycle ;
+p[3] = za9 -- za10 --za11 -- za12 -- cycle ;
+linear_shade(p[1],1,\MPcolor{simpleslides:backgroundcolor},\MPcolor{simpleslides:altcontrastcolor}) ;
+linear_shade(p[2],2,\MPcolor{simpleslides:altcontrastcolor},\MPcolor{simpleslides:backgroundcolor}) ;
+fill p[3] withcolor \MPcolor{simpleslides:variantcolor} ;
+if PageNumber > 1:
+	draw \sometxt{\framed[frame=off,width=2.25cm,height=2.25cm]{\color[simpleslides:contrastcolor]{\switchtobodyfont[12pt] \folio}}} shifted (0,PaperHeight-a) ;
+fi ;
+StopPage ;
+\stopuseMPgraphic
+
+\defineoverlay
+  [simpleslides:background:ornament]
+  [\useMPgraphic{simpleslides:MP:ornament}]
+
+\defineoverlay 
+  [simpleslides:background:title] 
+  [\useMPgraphic{simpleslides:MP:ornament}] 
+
+%D This sets up the title page:
+
+\setupTitle
+  [\c!title\c!color={simpleslides:contrastcolor},
+   \c!author\c!color={simpleslides:contrastcolor},
+   \c!date\c!color={simpleslides:contrastcolor}]
+
+%D The slide title is typeset in a layer
+
+\setupSlideTitle
+  [\c!color={simpleslides:contrastcolor},
+   \c!alternative=layer,
+   \c!align=\v!center,
+   \c!width=\textwidth,
+   \c!height=2.25cm,
+   \c!after=]
+
+%D The symbol for the first level of itemizations. 
+
+\definesymbol[1][\useMPgraphic{simpleslides:itemize:square}]
+\setupitemize[1][inmargin][color={simpleslides:itemize:color}]
+
+\protect
+\stopmodule
+
+\endinput
+

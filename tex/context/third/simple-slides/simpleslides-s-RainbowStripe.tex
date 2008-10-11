@@ -1,0 +1,221 @@
+%D \module
+%D   [      file=simpleslides-t-RainbowStripe,
+%D        version=2007.07.17, 
+%D          title=\CONTEXT\ Style File,
+%D       subtitle=Presentation Module RainbowStripe,
+%D         author=Thomas A. Schmitz,
+%D           date=\PRESTITdate,
+%D      copyright={Thomas A. Schmitz}]
+%C
+%C Copyright 2007 Thomas A. Schmitz.
+%C This file may be distributed under the GNU General Public License v. 2.0.
+
+%D This file provides the \quotation{RainbowStripe} style for the presentation
+%D module. It is loaded at runtime. 
+
+\writestatus{simpleslides}{loading RainbowStripe style}
+
+\startmodule[simpleslides-s-RainbowStripe]
+
+\unprotect
+
+%D First, we provide the page layout.
+
+\setuplayout [width=fit,
+              margin=1.5cm,
+              height=fit,
+              header=11mm, 
+              footer=0cm, 
+              topspace=15mm, 
+              backspace=2cm,
+              location=singlesided]
+
+\setuplayout [simpleslides:layout:horizontal][header=11mm]
+\setuplayout [simpleslides:layout:vertical]  [header=0mm]
+\setuplayout [simpleslides:layout:title]     [header=0mm]
+
+
+%D These macros are used for placing figures/pictures:
+
+\define\NormalHeight{\textheight}
+\define\NormalWidth{.476\textwidth}
+\define\PictureFrameHeight{\textheight}
+\define\PictureFrameWidth{.476\textwidth}
+
+\setuplayer
+  [simpleslides:layer:slidetitle]
+    [y=12mm,
+     x=20mm]
+
+%D We define our colorscheme:
+
+\definecolor [simpleslides:backgroundcolor]	       [s=.88]
+\definecolor [simpleslides:itemize:color]              [s=0]
+\definecolor [simpleslides:rainbowone]                 [r=.5,g=0,b=.5]
+\definecolor [simpleslides:rainbowtwo] 	               [b=1]
+\definecolor [simpleslides:rainbowthree]               [g=1,b=1]
+\definecolor [simpleslides:rainbowfour]                [g=1]
+\definecolor [simpleslides:rainbowfive]                [r=1,g=1]
+\definecolor [simpleslides:rainbowsix]                 [r=1]
+
+%D In a first attempt to achieve the rainbow effect, I produced the rainbow
+%D background with asymptote and then converted it to a pdf file which was then
+%D used as a background. In that case, it was necessary to instruct \CONTEXT\
+%D to look in the default \TeX\ input paths for figures. The background spans
+%D the entire height of the page and the width of the text area; the gray
+%D background was then calculated so that the two stripes at the top and at the
+%D bottom were left unfilled so the rainbow background would then be visible.
+%D Here is the code:
+
+%\setupexternalfigures[location={global}]
+
+%\defineoverlay[rainb][{\externalfigure[rainbow.pdf][width=1.05\textwidth,height=1.4\textheight]}] 
+
+% \startuniqueMPgraphic{gray}
+% StartPage ;
+% pair zf[] ;
+% path gr[] ;
+% numeric a; a = 2cm ;
+% numeric b; b = 0.8cm ;
+% z.f1 = ulcorner Page shifted (a,0) ;
+% z.f2 = urcorner Page shifted (-a,0) ;
+% z.f3 = lrcorner Page shifted (-a,0) ;
+% z.f4 = llcorner Page shifted (a,0) ;
+% z.f5 = z.f1 shifted (0,-b) ;
+% z.f6 = z.f2 shifted (0,-b) ;
+% z.f7 = z.f3 shifted (0,b) ;
+% z.f8 = z.f4 shifted (0,b) ;
+% z.f9 = z.f5 shifted (0,-b) ;
+% z.f10 = z.f6 shifted (0,-b) ;
+% z.f11 = z.f7 shifted (0,b) ;
+% z.f12 = z.f8 shifted (0,b) ;
+% gr[1] = ulcorner Page -- urcorner Page -- lrcorner Page -- llcorner Page -- z.f8 -- z.f7 -- z.f6 -- z.f5 -- z.f4 -- llcorner Page -- cycle ;
+% gr[2] = z.f9 -- z.f10 -- z.f11 -- z.f12 -- cycle ;
+% gr[2] := gr[2] enlarged (.5cm,0cm) ;
+% fill gr[1] withcolor \MPcolor{a} ;
+% fill gr[2] withcolor \MPcolor{a} ;
+% StopPage ;
+% \stopuniqueMPgraphic
+
+%D However, it seemed more portable to let Metapost calculate the background.
+%D The rainbow effect takes some lines of code, but it's not too bad:
+
+\startuniqueMPgraphic{simpleslides:MP:horizontal}
+StartPage ;
+pair zf[] ;
+fill Page withcolor \MPcolor{simpleslides:backgroundcolor} ;
+path gr[] ;
+numeric a; a = 2cm ;
+numeric b; b = 0.4cm ;
+numeric c; c = 0.7cm ;
+z.f1 = ulcorner Page shifted (a,-c) ;
+z.f2 = urcorner Page shifted (-a,-c) ;
+z.f3 = z.f2 shifted (0,-b) ;
+z.f4 = z.f1 shifted (0,-b) ;
+gr[1] = z.f1 -- z.f2 ;
+gr[2] = z.f4 -- z.f3 ;
+z.f5 = point .2 along gr[1] ;
+z.f6 = point .2 along gr[2] ;
+z.f7 = point .4 along gr[1] ;
+z.f8 = point .4 along gr[2] ;
+z.f9 = point .6 along gr[1] ;
+z.f10 = point .6 along gr[2] ;
+z.f11 = point .8 along gr[1] ;
+z.f12 = point .8 along gr[2] ;
+gr[3] = z.f1 -- z.f5 -- z.f6 -- z.f4 -- cycle ;
+gr[4] = z.f7 -- z.f5 -- z.f6 -- z.f8 -- cycle ;
+gr[4] := gr[4] enlarged (.02cm,0) ;
+gr[5] = z.f9 -- z.f7 -- z.f8 -- z.f10 -- cycle ;
+gr[5] := gr[5] enlarged (.02cm,0) ;
+gr[6] = z.f11 -- z.f9 -- z.f10 -- z.f12 -- cycle ;
+gr[6] := gr[6] enlarged (.02cm,0) ;
+gr[7] = z.f11 -- z.f2 -- z.f3 -- z.f12 -- cycle ;
+linear_shade(gr[3],0,\MPcolor{simpleslides:rainbowone},\MPcolor{simpleslides:rainbowtwo}) ;
+linear_shade(gr[4],0,\MPcolor{simpleslides:rainbowtwo},\MPcolor{simpleslides:rainbowthree}) ;
+linear_shade(gr[5],0,\MPcolor{simpleslides:rainbowthree},\MPcolor{simpleslides:rainbowfour}) ;
+linear_shade(gr[6],0,\MPcolor{simpleslides:rainbowfour},\MPcolor{simpleslides:rainbowfive}) ;
+linear_shade(gr[7],0,\MPcolor{simpleslides:rainbowfive},\MPcolor{simpleslides:rainbowsix}) ;
+z.f21 = llcorner Page shifted (a,c) ;
+z.f22 = lrcorner Page shifted (-a,c) ;
+z.f23 = z.f22 shifted (0,b) ;
+z.f24 = z.f21 shifted (0,b) ;
+gr[21] = z.f21 -- z.f22 ;
+gr[22] = z.f24 -- z.f23 ;
+z.f25 = point .2 along gr[21] ;
+z.f26 = point .2 along gr[22] ;
+z.f27 = point .4 along gr[21] ;
+z.f28 = point .4 along gr[22] ;
+z.f29 = point .6 along gr[21] ;
+z.f30 = point .6 along gr[22] ;
+z.f31 = point .8 along gr[21] ;
+z.f32 = point .8 along gr[22] ;
+gr[23] = z.f21 -- z.f25 -- z.f26 -- z.f24 -- cycle ;
+gr[24] = z.f27 -- z.f25 -- z.f26 -- z.f28 -- cycle ;
+gr[24] := gr[24] enlarged (.02cm,0) ;
+gr[25] = z.f29 -- z.f27 -- z.f28 -- z.f30 -- cycle ;
+gr[25] := gr[25] enlarged (.02cm,0) ;
+gr[26] = z.f31 -- z.f29 -- z.f30 -- z.f32 -- cycle ;
+gr[26] := gr[26] enlarged (.02cm,0) ;
+gr[27] = z.f31 -- z.f22 -- z.f23 -- z.f32 -- cycle ;
+linear_shade(gr[23],0,\MPcolor{simpleslides:rainbowone},\MPcolor{simpleslides:rainbowtwo}) ;
+linear_shade(gr[24],0,\MPcolor{simpleslides:rainbowtwo},\MPcolor{simpleslides:rainbowthree}) ;
+linear_shade(gr[25],0,\MPcolor{simpleslides:rainbowthree},\MPcolor{simpleslides:rainbowfour}) ;
+linear_shade(gr[26],0,\MPcolor{simpleslides:rainbowfour},\MPcolor{simpleslides:rainbowfive}) ;
+linear_shade(gr[27],0,\MPcolor{simpleslides:rainbowfive},\MPcolor{simpleslides:rainbowsix}) ;
+StopPage ;
+\stopuniqueMPgraphic
+
+\startuseMPgraphic{simpleslides:MP:ornament}
+StartPage
+path p[] ;
+p[1] := unitsquare xyscaled(MakeupWidth,.4cm) shifted (2cm,0.7cm) ;
+numeric i; i = (PageNumber - 1)/(NOfPages - 1) ;
+p[2] = ulcorner p[1] -- urcorner p[1] ;
+p[3] = llcorner p[1] -- lrcorner p[1] ;
+pair o[] ;
+o[1] := point i along p[2] ;
+o[2] := point i along p[3] ;
+p[4] = o[1] -- o[2] ;
+p[4] := p[4] enlarged (0,-1pt) ;
+pickup pensquare scaled 2pt ;
+draw p[4] ;
+StopPage
+\stopuseMPgraphic
+
+%D We define these backgrounds as overlays:
+
+\defineoverlay 
+  [simpleslides:background:horizontal] 
+  [\useMPgraphic{simpleslides:MP:horizontal}] 
+
+\defineoverlay 
+  [simpleslides:background:vertical] 
+  [\useMPgraphic{simpleslides:MP:horizontal}] 
+
+\defineoverlay 
+  [simpleslides:background:title] 
+  [\useMPgraphic{simpleslides:MP:horizontal}] 
+
+\defineoverlay 
+  [simpleslides:background:ornament] 
+  [\useMPgraphic{simpleslides:MP:ornament}] 
+
+%D We set up our SlideTitles:
+
+\setupSlideTitle
+   [\c!after=,
+    \c!alternative=layer,
+    \c!width=\textwidth,
+    \c!align=\v!center,
+    \c!height=1.5cm]
+
+%D The symbol for the first level of itemizations. 
+
+\definesymbol[1][\useMPgraphic{ItSquare}]
+\setupitemize[1][inmargin]
+
+\protect
+\stopmodule
+
+\endinput
+
