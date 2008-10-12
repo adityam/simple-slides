@@ -1,0 +1,204 @@
+%D \module
+%D   [      file=simpleslides-s-Beams,
+%D        version=2007.07.17, 
+%D          title=\CONTEXT\ Style File,
+%D       subtitle=Presentation Module --- Beams style,
+%D         author=Thomas A. Schmitz,
+%D           date=\PRESTITdate,
+%D      copyright={Thomas A. Schmitz}]
+%C
+%C Copyright 2007 Thomas A. Schmitz.
+%C This file may be distributed under the GNU General Public License v. 2.0.
+
+%D This file provides the \quotation{Beams} style for the presentation
+%D module. It is loaded at runtime. The look of this style was inspired by the
+%D \quotation{Copenhagen} theme of the \LaTeX\ {\tt beamer} package.
+
+\writestatus{simpleslides}{loading Beams style}
+
+\startmodule[simpleslides-s-Beams]
+
+\unprotect
+
+%D The page layout:
+
+\setuplayout [width=fit,
+              margin=0cm,
+              height=14.7cm,
+              header=1.75cm, 
+              footer=1.5cm, 
+              topspace=1cm, 
+              backspace=1cm,
+              location=singlesided]
+
+\setuplayout [simpleslides:layout:horizontal][header=1.75cm]
+\setuplayout [simpleslides:layout:vertical]  [header=0cm]
+\setuplayout [simpleslides:layout:title]     [header=1.75cm]
+
+\setuplayer
+  [simpleslides:layer:slidetitle]
+  [x=10mm]
+
+%D These macros are used for placing figures/pictures:
+
+\define\NormalHeight        {.97\textheight}
+\define\NormalWidth         {.476\textwidth}
+\define\PictureFrameHeight  {.97\textheight}
+\define\PictureFrameWidth   {.476\textwidth}
+
+%D We define our color scheme:
+
+\definecolor [simpleslides:variantcolor]      [s=.97]
+\definecolor [simpleslides:backgroundcolor]   [s=.88]
+\definecolor [simpleslides:contrastcolor]     [r=.75]
+\definecolor [simpleslides:itemize:color]     [simpleslides:contrastcolor]
+
+%D We let \METAPOST\ calculate the background:
+
+%D Both horizontal and vertical group share this part of the background. 
+
+\startuseMPgraphic{simpleslides:MP:common} 
+save a, b ;
+numeric a; a=2.1cm ;
+numeric b; b=1.5cm ;
+
+fill Page withcolor \MPcolor{simpleslides:variantcolor} ;
+
+z1 = llcorner Page shifted (0,2*a) ;
+z2 = z1 shifted (0,2*a) ;
+z3 = lrcorner Page shifted (0,b) ;
+z4 = z3 shifted (0,b) ;
+z5 = z2 shifted (0,b) ;
+z6 = ulcorner Page  shifted (.1cm,0) ;
+z7 = z4 shifted (0,b/2) ;
+z8 = z7 shifted (0,b) ;
+z9 = ulcorner Page shifted (.1cm+a,0) ;
+z10 = z9 shifted (3*a,0) ;
+z11 = z8 shifted (0,b/2) ;
+z12 = z11 shifted (0,b) ;
+z13 = z10 shifted (a,0) ;
+z14 = z13 shifted (3*a,0) ;
+z15 = z12 shifted (0,b/2) ;
+z16 = z15 shifted (0,b) ;
+z17 = llcorner Page shifted (0,b) ;
+
+save p ;
+path p[] ;
+p[1] = z1 -- z2 -- z4 -- z3 -- cycle ;
+p[2] = z5 -- ulcorner Page -- z6 -- z8 -- z7 -- cycle ;
+p[3] = z9 -- z10 -- z12 -- z11 -- cycle ;
+p[4] = z13 -- z14 -- z16 -- z15 -- cycle ;
+p[5] = llcorner Page -- z17 -- z3 -- lrcorner Page -- cycle ;
+
+fill p[1] withcolor \MPcolor{simpleslides:backgroundcolor} ;
+fill p[2] withcolor \MPcolor{simpleslides:backgroundcolor} ;
+fill p[3] withcolor \MPcolor{simpleslides:backgroundcolor} ;
+fill p[4] withcolor \MPcolor{simpleslides:backgroundcolor} ;
+fill p[5] withcolor \MPcolor{simpleslides:contrastcolor} ;
+\stopuseMPgraphic 
+
+\startuniqueMPgraphic{simpleslides:MP:vertical}
+StartPage ;
+\includeMPgraphic{simpleslides:MP:common} ;
+StopPage ;
+\stopuniqueMPgraphic
+
+\startuniqueMPgraphic{simpleslides:MP:horizontal}
+StartPage ;
+\includeMPgraphic{simpleslides:MP:common} ;
+z18 = ulcorner Page shifted (0,-1.5*b) ;
+z19 = z18 shifted (0,-1pt) ;
+z20 = urcorner Page shifted (0,-1.5*b) ;
+z21 = z20 shifted (0,-1pt) ;
+
+p[6] = z18 -- z19 -- z21 -- z20 -- cycle ;
+
+linear_shade(p[6],0,
+             \MPcolor{simpleslides:contrastcolor},
+             \MPcolor{simpleslides:variantcolor}) ;
+
+p[7] = p[6] shifted (0,-3pt) ;
+
+linear_shade(p[7],0,
+             \MPcolor{simpleslides:contrastcolor},
+             \MPcolor{simpleslides:variantcolor}) ;
+
+StopPage ;
+\stopuniqueMPgraphic
+
+%D We define these backgrounds as overlays:
+
+\defineoverlay 
+  [simpleslides:background:title] 
+  [\useMPgraphic{simpleslides:MP:horizontal}] 
+
+\defineoverlay 
+  [simpleslides:background:horizontal] 
+  [\useMPgraphic{simpleslides:MP:horizontal}] 
+
+\defineoverlay 
+  [simpleslides:background:vertical] 
+  [\useMPgraphic{simpleslides:MP:vertical}] 
+
+%D We define the footer
+
+\setupfooter[\c!color=simpleslides:variantcolor,
+             \c!style={\switchtobodyfont[10pt]},
+             \c!strut=\v!yes]
+
+\setupfootertexts[{\framed[\c!frame=\v!off,
+                           \c!height=1cm,
+                           \c!width=\textwidth]
+                           {\simpleslidestitleparameter{title}
+                            \hfill \pagenumber\ of \lastpage}}]
+
+%D We want the title to placed in a framed box. We redefine all the keys of
+%D \type{\setupTitle}, so that the module is easier to maintain.
+
+\setupTitle
+  [\c!title=,
+   \c!author=,
+   \c!date=\currentdate,
+   \c!headstyle=,
+   \c!headcolor=simpleslides:contrastcolor,
+   \c!align=\v!middle,
+   \c!before={\vfill\getvalue{simpleslides:framed}
+              [\c!width=\textwidth,\c!height=.75\textheight,
+               \c!align=\v!middle, \c!strut=\v!no]
+              \bgroup},
+   \c!after={\egroup\vfill},
+   \c!title\c!style={\switchtobodyfont[\TitleSize]},
+   \c!title\c!color=,
+   \c!title\c!align=,%\v!middle,
+   \c!author\c!style=,
+   \c!author\c!color=,
+   \c!author\c!align=,%\v!middle, 
+   \c!date\c!style=,
+   \c!date\c!color=,
+   \c!date\c!align=,%\v!middle,
+   \c!before\c!title=,
+   \c!before\c!author=,
+   \c!before\c!date=,
+   \c!after\c!title={\blank[1*line]},
+   \c!after\c!author={\blank[2*line]},
+   \c!after\c!date=]
+
+\setupSlideTitle
+  [\c!after=,
+   \c!alternative=layer,
+   \c!width=\textwidth,
+   \c!height=2.25cm,
+   \c!color={simpleslides:contrastcolor}]
+
+
+%D The symbol for the first level of itemizations. 
+
+
+\definesymbol[1][\useMPgraphic{simpleslides:itemize:square}]
+\setupitemize[1][color={simpleslides:itemize:color}]
+
+\protect
+\stopmodule
+
+\endinput
+
