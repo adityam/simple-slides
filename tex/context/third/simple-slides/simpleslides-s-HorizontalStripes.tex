@@ -55,31 +55,32 @@
 
 %D These macros are used for placing figures/pictures:
 
-\define\NormalHeight{\textheight}
-\define\NormalWidth{.476\textwidth}
-\define\PictureFrameHeight{\textheight}
-\define\PictureFrameWidth{.476\textwidth}
+\define\NormalHeight        {\textheight}
+\define\NormalWidth         {.476\textwidth}
+\define\PictureFrameHeight  {\textheight}
+\define\PictureFrameWidth   {.476\textwidth}
 
 %D This module has three color schemes, blue, green and red.
+
 \startsetups simpleslides:setups:blue
-\definecolor [simpleslides:backgroundcolor]       [s=.95]
-\definecolor [simpleslides:altcontrastcolor]      [r=.58,g=.58,b=.82]
-\definecolor [simpleslides:contrastcolor]         [r=.2,g=.2,b=.73]
-\definecolor [simpleslides:itemize:color]         [simpleslides:contrastcolor]
+\definecolor [simpleslides:backgroundcolor]  [s=.95]
+\definecolor [simpleslides:framecolor]       [r=.58,g=.58,b=.82]
+\definecolor [simpleslides:contrastcolor]    [r=.2,g=.2,b=.73]
+\definecolor [simpleslides:itemize:color]    [simpleslides:contrastcolor]
 \stopsetups
 
 \startsetups simpleslides:setups:red
-\definecolor [simpleslides:backgroundcolor]       [s=.95]
-\definecolor [simpleslides:altcontrastcolor]      [r=.82,g=.58,b=.58]
-\definecolor [simpleslides:contrastcolor]         [r=.73,g=.2,b=.2]
-\definecolor [simpleslides:itemize:color]         [simpleslides:contrastcolor]
+\definecolor [simpleslides:backgroundcolor]  [s=.95]
+\definecolor [simpleslides:framecolor]       [r=.82,g=.58,b=.58]
+\definecolor [simpleslides:contrastcolor]    [r=.73,g=.2,b=.2]
+\definecolor [simpleslides:itemize:color]    [simpleslides:contrastcolor]
 \stopsetups
 
 \startsetups simpleslides:setups:green
-\definecolor [simpleslides:backgroundcolor]       [s=.95]
-\definecolor [simpleslides:altcontrastcolor]      [r=.58,g=.82,b=.58]
-\definecolor [simpleslides:contrastcolor]         [r=.2,g=.73,b=.2]
-\definecolor [simpleslides:itemize:color]         [simpleslides:contrastcolor]
+\definecolor [simpleslides:backgroundcolor]  [s=.95]
+\definecolor [simpleslides:framecolor]       [r=.58,g=.82,b=.58]
+\definecolor [simpleslides:contrastcolor]    [r=.2,g=.73,b=.2]
+\definecolor [simpleslides:itemize:color]    [simpleslides:contrastcolor]
 \stopsetups
 
 %D Now we choose the scheme that the user asked for
@@ -89,35 +90,40 @@
 
 %D We let Metapost calculate the background:
 
-\startuniqueMPgraphic{simpleslides:MP:horizontal} 
-StartPage ;
-numeric a ; a = 1.5mm ;
-pair zd[] ;
-path pb[] ;
-fill Page withcolor \MPcolor{simpleslides:backgroundcolor} ;
-z.d1 = ulcorner Page shifted (0,-a) ;
-z.d2 = urcorner Page shifted (0,-a) ;
-pb[1] = ulcorner Page -- z.d1 -- z.d2 -- urcorner Page -- cycle ;
-z.d3 = llcorner Page shifted (0,a) ;
-z.d4 = lrcorner Page shifted (0,a) ;
-pb[3] = llcorner Page -- z.d3 -- z.d4 -- lrcorner Page -- cycle ;
-pb[4] = pb[3] shifted (0,.75cm) ;
-fill pb[1] withcolor \MPcolor{simpleslides:altcontrastcolor} ;
-fill pb[3] withcolor \MPcolor{simpleslides:altcontrastcolor} ;
-fill pb[4] withcolor \MPcolor{simpleslides:altcontrastcolor} ;
-StopPage ;
-\stopuniqueMPgraphic 
+\startuseMPgraphic{simpleslides:MP:common} 
+save a ; numeric a ; 
+a = 1.5mm ;
 
-\startuniqueMPgraphic{simpleslides:MP:ornament}
+save p; path p[] ;
+
+fill Page withcolor \MPcolor{simpleslides:backgroundcolor} ;
+
+z1 = ulcorner Page shifted (0,-a) ;
+z2 = urcorner Page shifted (0,-a) ;
+z3 = llcorner Page shifted (0,a) ;
+z4 = lrcorner Page shifted (0,a) ;
+
+p[1] = ulcorner Page -- z1 -- z2 -- urcorner Page -- cycle ;
+p[3] = llcorner Page -- z3 -- z4 -- lrcorner Page -- cycle ;
+p[4] = p[3] shifted (0,.75cm) ;
+
+fill p[1] withcolor \MPcolor{simpleslides:framecolor} ;
+fill p[3] withcolor \MPcolor{simpleslides:framecolor} ;
+fill p[4] withcolor \MPcolor{simpleslides:framecolor} ;
+\stopuseMPgraphic 
+
+\startuniqueMPgraphic{simpleslides:MP:vertical}
 StartPage ;
-numeric a ; a = 1.5mm ;
-pair zd[] ;
-path pb[] ;
-z.d1 = ulcorner Page shifted (0,-a) ;
-z.d2 = urcorner Page shifted (0,-a) ;
-pb[1] = ulcorner Page -- z.d1 -- z.d2 -- urcorner Page -- cycle ;
-pb[2] = pb[1] shifted (0,-2cm) ;
-fill pb[2] withcolor \MPcolor{simpleslides:altcontrastcolor} ;
+\includeMPgraphic{simpleslides:MP:common} ;
+StopPage ;
+\stopuniqueMPgraphic
+
+\startuniqueMPgraphic{simpleslides:MP:horizontal}
+StartPage ;
+\includeMPgraphic{simpleslides:MP:common} ;
+
+p[2] = p[1] shifted (0,-2cm) ;
+fill p[2] withcolor \MPcolor{simpleslides:framecolor} ;
 StopPage ;
 \stopuniqueMPgraphic
 
@@ -133,11 +139,20 @@ StopPage ;
 
 \defineoverlay 
   [simpleslides:background:title] 
-  [\useMPgraphic{simpleslides:MP:horizontal}] 
+  [\useMPgraphic{simpleslides:MP:vertical}] 
 
-\defineoverlay 
-  [simpleslides:background:ornament] 
-  [\useMPgraphic{simpleslides:MP:ornament}] 
+%D We define the footer
+
+\setupfooter[\c!color=simpleslides:contrastcolor,
+             \c!style={\switchtobodyfont[10pt]},
+             \c!strut=\v!yes]
+
+\setupfootertexts[{\framed[\c!frame=\v!off,
+                           \c!height=0.65cm,
+                           \c!width=\textwidth]
+                           {\simpleslidestitleparameter{title}
+                            \hfill \pagenumber\ of \lastpage}}]
+
 
 %D this sets up the title page:
 
@@ -155,11 +170,6 @@ StopPage ;
    \c!width=\textwidth,
    \c!height=2.2cm,
    \c!after=]
-
-%D We define the footer
-
-\setupfooter[color=simpleslides:contrastcolor,style={\switchtobodyfont[10pt]},strut=yes]
-\setupfootertexts[{\framed[frame=off,height=0.65cm,width=\textwidth]{\moduleparameter{simpleslides:title}{title}\hfill \pagenumber \ of \lastpage}}]
 
 %D The symbol for the first level of itemizations. 
 
