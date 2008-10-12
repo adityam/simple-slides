@@ -37,10 +37,10 @@
 
 %D These macros are used for placing figures/pictures:
 
-\define\NormalHeight{\textheight}
-\define\NormalWidth{.5\textwidth}
-\define\PictureFrameHeight{\textheight}
-\define\PictureFrameWidth{.5\textwidth}
+\define\NormalHeight            {\textheight}
+\define\NormalWidth             {.5\textwidth}
+\define\PictureFrameHeight      {\textheight}
+\define\PictureFrameWidth       {.5\textwidth}
 
 \setuplayer
   [simpleslides:layer:slidetitle]
@@ -49,7 +49,7 @@
 
 %D We define our color scheme:
 
-\definecolor[simpleslides:outercolor]                [s=0]
+\definecolor[simpleslides:variantcolor]              [s=0]
 \definecolor[simpleslides:backgroundcolor]           [s=.8]
 \definecolor[simpleslides:contrastcolor]             [r=.5,g=0,b=0]
 \definecolor[simpleslides:altcontrastcolor]          [r=.9,g=0,b=0]
@@ -59,24 +59,27 @@
 
 \startuseMPgraphic{simpleslides:MP:horizontal}
 StartPage ;
-	fill Page withcolor \MPcolor{simpleslides:outercolor} ;
-	path p ; pair pa ; pair pb ;
-	p := Page enlarged (-15pt,-15pt) superellipsed .9 ;
-	fill p withcolor \MPcolor{simpleslides:backgroundcolor} ;
-	pickup pencircle scaled 20pt ;
-	draw p withcolor \MPcolor{simpleslides:contrastcolor} ;
+  fill Page withcolor \MPcolor{simpleslides:variantcolor} ;
+  save p ; path p ; 
+  p := Page enlarged (-15pt,-15pt) superellipsed .9 ;
+  fill p withcolor \MPcolor{simpleslides:backgroundcolor} ;
+  pickup pencircle scaled 20pt ;
+  draw p withcolor \MPcolor{simpleslides:contrastcolor} ;
 StopPage ;
 \stopuseMPgraphic
 
 \startuseMPgraphic{simpleslides:MP:ornament} 
 StartPage ;
-	p := Page enlarged (-15pt,-15pt) superellipsed .9 ;
-	pickup pencircle scaled 20pt ;
-	if PageNumber>1:
-		pa := point (3 + (6*PageNumber) / NOfPages) of p ;
-		pb := point (3 + (6*(PageNumber-1)) / NOfPages) of p ; 
-		draw (p cutafter pa) cutbefore pb withcolor \MPcolor{simpleslides:altcontrastcolor} ;
-	fi ;
+ save p ; path p ;
+ p := Page enlarged (-15pt,-15pt) superellipsed .9 ;
+ pickup pencircle scaled 20pt ;
+ save pa, pb; pair pa, pb ;
+ if PageNumber>1:
+  pa := point (3 + (6*PageNumber) / NOfPages) of p ;
+  pb := point (3 + (6*(PageNumber-1)) / NOfPages) of p ; 
+  draw (p cutafter pa) cutbefore pb 
+      withcolor \MPcolor{simpleslides:altcontrastcolor} ;
+ fi ;
 StopPage ;
 \stopuseMPgraphic 
 
@@ -116,8 +119,8 @@ StopPage ;
 
 %D The symbol for the first level of itemizations. 
 
-\definesymbol[1][\useMPgraphic{ItSquare}]
-\setupitemize[1][color=simpleslides:itemize:color]
+\definesymbol[1][\useMPgraphic{simpleslides:itemize:square}]
+\setupitemize[1][\c!color={simpleslides:itemize:color}]
 
 \protect
 \stopmodule
