@@ -2,7 +2,7 @@
 %D   [      file=simpleslides-s-FramedTitle,
 %D        version=2007.12.20, 
 %D          title=\CONTEXT\ Style File,
-%D       subtitle=Presentation Module FramedTitle,
+%D       subtitle=Presentation Module --- FramedTitle style,
 %D         author=Thomas A. Schmitz,
 %D           date=\PRESTITdate,
 %D      copyright={Thomas A. Schmitz}]
@@ -43,20 +43,19 @@
 
 %D These macros are used for placing figures/pictures:
 
-\define\NormalHeight{\textheight}
-\define\NormalWidth{.476\textwidth}
-\define\PictureFrameHeight{\textheight}
-\define\PictureFrameWidth{.476\textwidth}
+\define\NormalHeight        {\textheight}
+\define\NormalWidth         {.476\textwidth}
+\define\PictureFrameHeight  {\textheight}
+\define\PictureFrameWidth   {.476\textwidth}
 
 \setupframed[simpleslides:framed]
              [corner=round,
               background=color,backgroundcolor={simpleslides:contrastcolor}]
 
-%D We define our colorscheme:
+%D We define our color scheme:
 
 \definecolor [simpleslides:backgroundcolor]       [s=.9]
-\definecolor [simpleslides:variantcolor:1]        [s=.3]
-\definecolor [simpleslides:variantcolor:2]        [s=.7]
+\definecolor [simpleslides:variantcolor]        [s=.7]
 \definecolor [simpleslides:contrastcolor]         [r=.5]
 \definecolor [simpleslides:itemize:color]         [simpleslides:contrastcolor]
 
@@ -70,32 +69,23 @@ StopPage ;
 
 \startuseMPgraphic{simpleslides:MP:ornament}
 StartPage ;
-numeric a ;
-numeric b ;
-b = PaperWidth/2 - NOfPages * 2.5pt ;
+
+save a,b ;
+numeric a,b ;
 a = 7mm ;
-% z1 = (0,0) ;
-% z2 = (x1+2pt,y1+a) ;
-% numeric a; a=.5cm ;
+b = PaperWidth/2 - NOfPages * 2.5pt ;
+
+save p,q; path p,q ;
+p =((0,5mm)    -- (1mm,11mm)) shifted (b,0) ;
+q =((-8mm,5mm) -- (0,11mm)  ) shifted (b,0) ;
+
 pickup pencircle scaled 3pt ;
-for i := 1 upto NOfPages:
-	path p ;
-	path q ;
-	p = (0,5mm) -- (1mm,11mm) ;
-	p := p shifted (b,0) ;
-	q = (-8mm,5mm) -- (0,11mm) ;
-	q := q shifted (b,0) ;
-	if (i mod 5<>0):
-		draw p shifted (i*5pt,0pt) withcolor \MPcolor{simpleslides:variantcolor:2} ;
-		if (i <= PageNumber):
-			draw p shifted (i*5pt,0pt) ;
-		fi ;
-	else:
-		draw q shifted (i*5pt,0pt) withcolor \MPcolor{simpleslides:variantcolor:2} ;
-		if (i <= PageNumber):
-			draw q shifted (i*5pt,0pt) ;
-		fi ;
-	fi ;
+for i := NOfPages-1 downto 1:
+  draw (if i mod 5 = 0 : q else : p fi)
+       shifted (i*5pt, 0pt)
+       withcolor if i < PageNumber : \MPcolor{simpleslides:contrastcolor} 
+                 else :              \MPcolor{simpleslides:variantcolor}
+                 fi ;
 endfor ;
 StopPage ;
 \stopuseMPgraphic
@@ -149,14 +139,6 @@ StopPage ;
    \c!after\c!author={\blank[2*line]},
    \c!after\c!date=]
 
-% \define\MakeTitle{%
-% \TitleBackground
-% \null
-% \vfill
-% \framed[corner=round,background=color,backgroundcolor=simpleslides:contrastcolor,frame=off,width=\textwidth,height=.75\textheight,top=\vss,bottom=\vss,align=middle]{\switchtobodyfont[\TitleSize]\color[simpleslides:backgroundcolor]{\PRESTITtitle}\switchtobodyfont[\NormalSize]\blank[line]\color[simpleslides:backgroundcolor]{\PRESTITauthor\blank[2*line]\PRESTITdate}}
-% \vfill
-% \null}
-
 %D We also want the slide title in a framed box.
 
 \setupSlideTitle
@@ -166,8 +148,6 @@ StopPage ;
    \c!width=\textwidth,
    \c!color=simpleslides:backgroundcolor]
 
-% \define[1]\SlideTitle{\page\HorizontalBackground\setlayer[slidetitle]%
-%      {\framed[corner=round,background=color,backgroundcolor=simpleslides:contrastcolor,frame=off,width=\textwidth,height=2.1cm,offset=0pt,top=\vss,bottom=\vss]{\switchtobodyfont[\TitleSize]\color[simpleslides:backgroundcolor]{#1}}}}
 
 %D The symbol for the first level of itemizations. 
 
