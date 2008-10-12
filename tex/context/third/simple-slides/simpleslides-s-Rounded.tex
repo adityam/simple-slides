@@ -52,7 +52,7 @@
 \define\PictureFrameHeight   {\textheight}
 \define\PictureFrameWidth    {.476\textwidth}
 
-%D We define our colorscheme:
+%D We define our color scheme:
 
 \definecolor [simpleslides:backgroundcolor]  [s=.95]
 \definecolor [simpleslides:contrastcolor]    [r=.58,g=.81,b=.58]
@@ -60,89 +60,102 @@
 \definecolor [simpleslides:variantcolor]     [r=.04,g=.4,b=.4]
 \definecolor [simpleslides:itemize:color]    [simpleslides:textcolor]
 
-%D Textcolor is blue:
-
 \setupcolors[textcolor=simpleslides:textcolor]
 
-%D We let Metapost calculate the background:
+%D We let \METAPOST\ calculate the background:
 
-\startuseMPgraphic{simpleslides:MP:horizontal}
-StartPage ;
+\startuseMPgraphic{simpleslides:MP:common}
+save a,b,c,d;
+numeric a,b,c,d ;
+
+a = 2cm ;   b = 0.7cm ;
+c = 6cm ;   d = .7cm ;
+
+save p ; path p[] ;
+
 fill Page withcolor \MPcolor{simpleslides:backgroundcolor} ;
-numeric a ; a = 2cm ;
-numeric b ; b = 0.7cm ;
-numeric c ; c = 6cm ;
-numeric d ; d = .7cm ;
-pair zc[] ;
-zc1 = llcorner Page shifted (a,0) ;
-zc2 = ulcorner Page shifted (a,-a-b) ;
-zc3 = ulcorner Page shifted (a+b/4,-a-b/4) ;
-zc4 = ulcorner Page shifted (a+b,-a) ;
-zc5 = urcorner Page shifted (0,-a) ;
-zc6 = ulcorner Page shifted (c,0) ;
-zc7 = ulcorner Page shifted (c,-a) ;
-path pa[] ;
-pa[1] = llcorner Page -- zc1 -- zc2 .. zc3 .. zc4 -- zc7 -- zc6 -- ulcorner Page -- cycle ;
-fill pa[1] withcolor \MPcolor{simpleslides:contrastcolor} ;
-draw \sometxt{\framed[frame=off,width=2cm,height=2cm]{\color[simpleslides:backgroundcolor]{\pagenumber}}} ;
-StopPage ;
+
+z1 = llcorner Page shifted (a,0) ;
+z2 = ulcorner Page shifted (a,-a-b) ;
+z3 = ulcorner Page shifted (a+b/4,-a-b/4) ;
+z4 = ulcorner Page shifted (a+b,-a) ;
+z5 = urcorner Page shifted (0,-a) ;
+z6 = ulcorner Page shifted (c,0) ;
+z7 = ulcorner Page shifted (c,-a) ;
+
+
+p[1] = llcorner Page -- z1 -- z2 .. z3 .. z4 -- z7 -- z6 -- 
+       ulcorner Page -- cycle ;
+
+fill p[1] withcolor \MPcolor{simpleslides:contrastcolor} ;
+
+draw \sometxt{\framed[frame=off,width=2cm,height=2cm]%
+             {\color[simpleslides:backgroundcolor]{\pagenumber}}} ;
+
 \stopuseMPgraphic
 
-\startuniqueMPgraphic{simpleslides:MP:ornament}
+\startuniqueMPgraphic{simpleslides:MP:vertical}
 StartPage ;
-numeric a ; a = 2cm ;
-numeric b ; b = 0.7cm ;
-numeric c ; c = 6cm ;
-numeric d ; d = .7cm ;
-pair zc[] ;
-zc8 = ulcorner Page shifted (a/2,-2.2*a) ;
-zc9 = zc8 shifted (0,-d) ;
-zc10 = urcorner Page shifted (-a,-2.2*a-d) ;
-zc11 = zc10 shifted (0,d) ;
-zc12 = zc8 shifted (-d/2,-d/2) ;
-path pa[] ;
-pa[3] = zc8 .. zc12 .. zc9 -- zc10 -- zc11 -- cycle ;
-fill pa[3] withcolor \MPcolor{simpleslides:textcolor} ;
+\includeMPgraphic{simpleslides:MP:common} ;
+StopPage ;
+\stopuniqueMPgraphic
+
+\startuniqueMPgraphic{simpleslides:MP:horizontal}
+StartPage;
+
+\includeMPgraphic{simpleslides:MP:common} ;
+
+z8 = ulcorner Page shifted (a/2,-2.2*a) ;
+z9 = z8 shifted (0,-d) ;
+z10 = urcorner Page shifted (-a,-2.2*a-d) ;
+z11 = z10 shifted (0,d) ;
+z12 = z8 shifted (-d/2,-d/2) ;
+
+p[2] = z8 .. z12 .. z9 -- z10 -- z11 -- cycle ;
+
+fill p[2] withcolor \MPcolor{simpleslides:textcolor} ;
+
 StopPage ;
 \stopuniqueMPgraphic
 
 \startuniqueMPgraphic{simpleslides:MP:title}
 StartPage ;
-numeric a ; a = 4cm ;
-numeric b ; b = 3cm ;
-numeric c ; c = 8cm ;
-numeric d ; d = .7cm ;
-path pa[] ;
-pair zc [] ;
+
+save a,b,c,d;
+numeric a,b,c,d;
+
+a = 4cm ;   b = 3cm ;
+c = 8cm ;   d = .7cm ;
+
+save p; path p[] ;
+p[1] = ulcorner Page -- ulcorner Page shifted (PaperWidth/2,0) -- 
+       llcorner Page shifted (PaperWidth/2,0) -- llcorner Page -- cycle ;
+
 fill Page withcolor \MPcolor{simpleslides:backgroundcolor} ;
-pa[1] = ulcorner Page -- ulcorner Page shifted (PaperWidth/2,0) -- llcorner Page shifted (PaperWidth/2,0) -- llcorner Page -- cycle ;
-fill pa[1] withcolor \MPcolor{simpleslides:contrastcolor} ;
-zc1 = ulcorner Page shifted (PaperWidth/2,-b) ;
-zc2 = zc1 shifted (-c,0) ;
-zc3 = zc2 shifted (0,-a) ;
-zc4 = zc3 shifted (c,0) ;
-zc5 = zc2 shifted (-1.5cm,-a/2) ;
-pa[2] = zc1 -- zc2 .. zc5 .. zc3 -- zc4 -- cycle ;
-fill pa[2] withcolor \MPcolor{simpleslides:backgroundcolor} ;
-zc6 = llcorner Page shifted (PaperWidth/2,0) ;
-zc7 = 1/2[zc6,zc4] ;
-zc8 = zc7 shifted (-.75*b,d/2) ;
-zc9 = zc8 shifted (0,-d) ;
-zc10 = zc9 shifted (1.3*c,0) ;
-zc11 = zc10 shifted (0,d) ;
-zc12 = zc10 shifted (d/2,d/2) ;
-pa[3] = zc8 -- zc9 -- zc10 .. zc12 .. zc11 -- cycle ;
-fill pa[3] withcolor \MPcolor{simpleslides:textcolor} ;
+fill p[1] withcolor \MPcolor{simpleslides:contrastcolor} ;
+
+z1 = ulcorner Page shifted (PaperWidth/2,-b) ;
+z2 = z1 shifted (-c,0) ;
+z3 = z2 shifted (0,-a) ;
+z4 = z3 shifted (c,0) ;
+z5 = z2 shifted (-1.5cm,-a/2) ;
+
+p[2] = z1 -- z2 .. z5 .. z3 -- z4 -- cycle ;
+fill p[2] withcolor \MPcolor{simpleslides:backgroundcolor} ;
+
+z6  = llcorner Page shifted (PaperWidth/2,0) ;
+z7  = 1/2[z6,z4] ;
+z8  = z7 shifted (-.75*b,d/2) ;
+z9  = z8 shifted (0,-d) ;
+z10 = z9 shifted (1.3*c,0) ;
+z11 = z10 shifted (0,d) ;
+z12 = z10 shifted (d/2,d/2) ;
+
+p[3] = z8 -- z9 -- z10 .. z12 .. z11 -- cycle ;
+fill p[3] withcolor \MPcolor{simpleslides:textcolor} ;
+
 StopPage ;
 \stopuniqueMPgraphic
-
-%D In this style, we don't want the ornament background for vertical slides:
-
-\startsetups simpleslides:background:vertical
-  \setuplayout[simpleslides:layout:vertical]
-  \setupbackgrounds[\v!page]
-        [background={simpleslides:background:vertical}]
-\stopsetups
 
 %D We define these backgrounds as overlays:
 
@@ -151,12 +164,8 @@ StopPage ;
   [\useMPgraphic{simpleslides:MP:horizontal}] 
 
 \defineoverlay 
-  [simpleslides:background:ornament] 
-  [\useMPgraphic{simpleslides:MP:ornament}] 
-
-\defineoverlay 
   [simpleslides:background:vertical] 
-  [\useMPgraphic{simpleslides:MP:horizontal}] 
+  [\useMPgraphic{simpleslides:MP:vertical}] 
 
 \defineoverlay 
   [simpleslides:background:title] 
@@ -167,10 +176,15 @@ StopPage ;
 \setupTitle
   [\c!before=\strut{\blank[0.25cm]},
    \c!author\c!align=\v!right, 
-   \c!before\c!author={\blank[3.1cm]}\strut\hskip9cm,
+   \c!before\c!author={\blank[3.1cm]\setupnarrower[left=9cm]
+                       \startnarrower[left]},
+    \c!after\c!author={\stopnarrower},
    \c!date\c!align=\v!right, 
-   \c!before\c!date={\blank[3.7cm]}\strut\hskip9cm,
+   \c!before\c!date={\blank[3.7cm]\setupnarrower[left=9cm]
+                       \startnarrower[left]},
+    \c!after\c!date={\stopnarrower},
    \c!headcolor={simpleslides:textcolor}]
+
 
 %D The slide title is typeset in a layer
 
