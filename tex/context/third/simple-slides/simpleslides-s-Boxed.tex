@@ -108,7 +108,7 @@ numeric factor, allpages, shift ;
 
 factor :=(NOfPages div 18) + 1 ;
 allpages := if NOfPages <= 18 : NOfPages elseif odd NOfPages : NOfPages + 1
-            else : NOfPages ;
+            else : NOfPages fi ;
 
 shift := factor * (PaperWidth -2a)/allpages ;
 
