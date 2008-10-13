@@ -67,26 +67,15 @@
   [simpleslides-s]
   [default]
 
-% AM: Much cleaner than \processaction
-%     I am assuming that user style is named t-simpleslides-style.tex
-%     If you want to support style.tex that can be done by adding one 
-%     \doiffileelse 
-
-\usemodule
-  [simpleslides-s]
-  [\currentmoduleparameter{style}]
+\doiffileelse{\currentmoduleparameter{style}}
+  {\usemodule{\currentmoduleparameter{style}}}
+  {\usemodule[simpleslides-s][\currentmoduleparameter{style}]}
   [ color=\currentmoduleparameter{stylecolor},
    bottom=\currentmoduleparameter{stylebottom}]
 
 \usemodule
   [simpleslides-f]
   [default]
-
-%AM: This should define \NormalSize and \TitleSize, set up the proper font
-% and possibly font fallback
-\usemodule[simpleslides-f][fonts]
-          [font=\currentmoduleparament{font},
-           size=\currentmoduleparameter{size}]
 
 \protect
 
