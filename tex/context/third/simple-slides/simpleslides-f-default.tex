@@ -61,6 +61,166 @@
 \definebodyfontenvironment[\NormalSize]
 \definebodyfontenvironment[\TitleSize]
 
+%D Setups define which font will be used. The module provides simple keywords
+%D for using a small set of predefined fonts: Latin Modern, Latin Modern Sans,
+%D Adventor (the TeXGyre clone of Gothic), Schola (the TeXGyre clone of
+%D Schoolbook), Bonum (the TeXGyre clone of Bookman), Termes (the TeXGyre clone
+%D of Times), Pagella (the TeXGyre clone of Palatino), Heros (the TeXGyre clone
+%D of Helvetica), and Chancery (the TeXGyre clone of Chancery). Since the
+%D definition of typescripts etc. varies according to the \TeX-engine used, we
+%D have to branch the code here. This is awkward, but for the time being, I see
+%D no other way.
+
+\startsetups simpleslides:font:LatinModern
+\setupbodyfont[\NormalSize]
+\stopsetups
+
+\startsetups simpleslides:font:LatinModernSans
+\setupbodyfont[ss,\NormalSize]
+\stopsetups
+
+\beginLUATEX
+\usetypescriptfile[type-otf] %Isn't this included by default?
+\endLUATEX
+
+\beginXETEX
+\usetypescriptfile[type-otf]
+\endXETEX
+
+\beginOLDTEX
+\usetypescriptfile[type-gyr]
+\endOLDTEX
+
+%AM: For all the fonts, I have used traditional names rather than TeX Gyre
+%names.
+
+\startsetups simpleslides:font:Gothic
+  \starttypescript[gothic]
+    \definetypeface [gothic] [rm] [serif] [schola] [default]
+    \definetypeface [gothic] [ss] [sans]  [adventor] [default]
+    \definetypeface [gothic] [tt] [mono]  [modern]   [default] [rscale=1.075]
+    \definetypeface [gothic] [mm] [math]  [pagella] [default]
+  \stoptypescript
+  \usetypescript[gothic]
+  \setupbodyfont[gothic,ss,\NormalSize]
+\stopsetups
+
+\startsetups simpleslides:font:Bookman
+  \starttypescript[bookman]
+    \definetypeface [bookman] [rm] [serif] [bookman] [default]
+    \definetypeface [bookman] [ss] [sans]  [adventor] [default]
+    \definetypeface [bookman] [tt] [mono]  [modern]   [default] [rscale=1.075]
+    \definetypeface [bookman] [mm] [math]  [pagella] [default]
+  \stoptypescript
+  \usetypescript[bookman]
+  \setupbodyfont[bookman,\NormalSize]
+\stopsetups
+
+\beginLUATEX
+%AM: Was Chorus
+\startsetups simpleslides:font:Chancery
+  \stoptypescript
+
+  \starttypescript [serif] [chorus]
+    \definefontsynonym [Serif]           [ChanceryRoman] [features=default]
+    \definefontsynonym [SerifItalic]     [Serif]
+    \definefontsynonym [SerifBold]       [Serif]
+    \definefontsynonym [SerifBoldItalic] [Serif]
+    \definefontsynonym [SerifCaps]       [Serif]
+  \stoptypescript
+
+  \starttypescript [chancery]
+    \definetypeface [chancery] [rm] [serif] [chorus] [default]
+  \stoptypescript 
+  \usetypescript[chancery]
+  \setupbodyfont[chancery,\NormalSize]
+\stopsetups
+\endLUATEX
+
+\beginOLDTEX
+\startsetups simpleslides:font:Chancery
+  \loadmapfile[qzc-ec.map]
+  \starttypescript[serif] [chorus]
+    \definefontsynonym [ChanceryRoman]          [ec-qzcmi]  [encoding=ec]
+  \stoptypescript
+
+  \starttypescript [serif] [chorus]
+  \definefontsynonym [Serif]           [ChanceryRoman] 
+  \definefontsynonym [SerifItalic]     [Serif]
+  \definefontsynonym [SerifBold]       [Serif]
+  \definefontsynonym [SerifBoldItalic] [Serif]
+  \definefontsynonym [SerifCaps]       [Serif]
+\stoptypescript
+
+\starttypescript [chancery]
+  \definetypeface [chancery] [rm] [serif] [chorus] [encoding=ec]
+\stoptypescript 
+\usetypescript[chancery]
+\setupbodyfont[chancery,\NormalSize]
+\stopsetups
+\endOLDTEX
+
+\startsetups simpleslides:font:Helvetica
+  \usetypescript[postscript]
+  \setupbodyfont[postscript,ss,\NormalSize]
+\stopsetups
+
+
+\beginLUATEX
+%AM: Was Pagella
+\startsetups simpleslides:font:Palatino
+  \usetypescript[palatino]
+  \setupbodyfont[palatino,\NormalSize]
+\stopsetups
+\endLUATEX
+
+\beginOLDTEX
+\startsetups simpleslides:font:Palatino
+\definetypeface [palatino] [rm] [serif] [palatino] [default] [encoding=texnansi]
+\definetypeface [palatino] [tt] [mono]  [modern]   [default] [encoding=texnansi]
+\setupbodyfont[palatino,\NormalSize]
+\stopsetups
+\endOLDTEX
+
+\startsetups simpleslides:font:Schoolbook
+  \starttypescript[schoolbook]
+    \definetypeface [schoolbook] [rm] [serif] [schola] [default]
+    \definetypeface [schoolbook] [ss] [sans]  [adventor] [default]
+    \definetypeface [schoolbook] [tt] [mono]  [modern]   [default] [rscale=1.075]
+    \definetypeface [schoolbook] [mm] [math]  [pagella] [default]
+  \stoptypescript
+  \usetypescript[schoolbook]
+  \setupbodyfont[schoolbook,\NormalSize]
+\stopsetups
+
+\beginLUATEX
+\startsetups simpleslides:font:Times
+  \usetypescript[postscript]
+  \setupbodyfont[postscript,\NormalSize]
+\stopsetups
+\endLUATEX
+
+\beginOLDTEX
+\startsetups simpleslides:font:Times
+  \starttypescript [postscript]
+    \definetypeface [postscript] [rm] [serif] [times]     [default]
+    \definetypeface [postscript] [ss] [sans]  [helvetica] [default] [rscale=.9]
+    \definetypeface [postscript] [tt] [mono]  [courier]   [default] [rscale=1.1]
+    \definetypeface [postscript] [mm] [math]  [times]     [default]
+  \stoptypescript
+  \usetypescript[postscript]
+  \setupbodyfont[postscript,\NormalSize]
+\stopsetups
+\endOLDTEX
+
+
+\doifsetupselse{simpleslides:font:\moduleparameter{simpleslides}{font}}
+     {\setups{simpleslides:font:\moduleparameter{simpleslides}{font}}}
+     {\setups{simpleslides:font:LatinModern}%
+      \message{There is no setup for
+      "font=\moduleparameter{simpleslides}{font}". Latin Modern Sans will be
+      used as a fallback}}
+
 \protect
 
 \stopmodule
