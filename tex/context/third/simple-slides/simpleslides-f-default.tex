@@ -94,16 +94,11 @@
 %AM: For all the fonts, I have used traditional names rather than TeX Gyre
 %names.
 
-\startsetups simpleslides:font:Gothic
-  \starttypescript[gothic]
-    \definetypeface [gothic] [rm] [serif] [schola] [default]
-    \definetypeface [gothic] [ss] [sans]  [adventor] [default]
-    \definetypeface [gothic] [tt] [mono]  [modern]   [default] [rscale=1.075]
-    \definetypeface [gothic] [mm] [math]  [pagella] [default]
-  \stoptypescript
-  \usetypescript[gothic]
-  \setupbodyfont[gothic,ss,\NormalSize]
-\stopsetups
+%D It is difficult to write a typescript that will work with both \MKII\ and
+%D \MKIV. If the sixth arugment is absent, \CONTEXT\ does the right thing. When
+%D the sixth argument is present, e.g., \type{rscale=1.1}, then we also need
+%D \type{encoding=something} for the style to work in \MKII. We hope that \MKIV\
+%D simply ignores the \type{encoding} setting.
 
 \startsetups simpleslides:font:Bookman
   \starttypescript[bookman]
@@ -159,6 +154,19 @@
 \setupbodyfont[chancery,\NormalSize]
 \stopsetups
 \endOLDTEX
+
+\startsetups simpleslides:font:Gothic
+  \starttypescript[gothic]
+    \definetypeface [gothic] [rm] [serif] [schola] [default]
+    \definetypeface [gothic] [ss] [sans]  [adventor] [default]
+    \definetypeface [gothic] [tt] [mono]  [modern]   [default]
+                    [encoding=\defaultencoding,rscale=1.075]
+    \definetypeface [gothic] [mm] [math]  [palatino] [default]
+  \stoptypescript
+  \usetypescript[gothic]
+  \setupbodyfont[gothic,ss,\NormalSize]
+\stopsetups
+
 
 \startsetups simpleslides:font:Helvetica
   \usetypescript[postscript]
