@@ -70,8 +70,9 @@
 
 %D Now we choose the scheme that the user asked for
 
-\setups{simpleslides:setups:blue} % Default
-\setups{simpleslides:setups:\moduleparameter{simpleslides}{stylecolor}}
+\doifsetupselse{simpleslides:setups:\moduleparameter{simpleslides}{stylecolor}}
+    {\setups{simpleslides:setups:\moduleparameter{simpleslides}{stylecolor}}}
+    {\setups{simpleslides:setups:blue}}
 
 \setupcolors[textcolor={simpleslides:textcolor}]
 

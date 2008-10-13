@@ -33,7 +33,7 @@
               location=singlesided]
 
 \setuplayout [simpleslides:layout:horizontal][header=2.73cm]
-\setuplayout [simpleslides:layout:vertical]  [header=0cm]
+\setuplayout [simpleslides:layout:vertical]  [header=0.75cm]
 \setuplayout [simpleslides:layout:title]     [header=0cm]
 
 %D In this style, we don't want the ornament background for vertical slides:
@@ -85,8 +85,9 @@
 
 %D Now we choose the scheme that the user asked for
 
-\setups{simpleslides:setups:blue}
-\setups{simpleslides:setups:\moduleparameter{simpleslides}{stylecolor}}
+\doifsetupselse{simpleslides:setups:\moduleparameter{simpleslides}{stylecolor}}
+    {\setups{simpleslides:setups:\moduleparameter{simpleslides}{stylecolor}}}
+    {\setups{simpleslides:setups:blue}}
 
 %D We let Metapost calculate the background:
 
@@ -135,7 +136,7 @@ StopPage ;
  
 \defineoverlay 
   [simpleslides:background:vertical] 
-  [\useMPgraphic{simpleslides:MP:horizontal}] 
+  [\useMPgraphic{simpleslides:MP:vertical}] 
 
 \defineoverlay 
   [simpleslides:background:title] 
