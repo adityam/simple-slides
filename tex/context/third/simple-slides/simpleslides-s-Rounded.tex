@@ -94,13 +94,13 @@ draw \sometxt{\framed[frame=off,width=2cm,height=2cm]%
 
 \stopuseMPgraphic
 
-\startuniqueMPgraphic{simpleslides:MP:vertical}
+\startuseMPgraphic{simpleslides:MP:vertical}
 StartPage ;
 \includeMPgraphic{simpleslides:MP:common} ;
 StopPage ;
-\stopuniqueMPgraphic
+\stopuseMPgraphic
 
-\startuniqueMPgraphic{simpleslides:MP:horizontal}
+\startuseMPgraphic{simpleslides:MP:horizontal}
 StartPage;
 
 \includeMPgraphic{simpleslides:MP:common} ;
@@ -116,7 +116,7 @@ p[2] = z8 .. z12 .. z9 -- z10 -- z11 -- cycle ;
 fill p[2] withcolor \MPcolor{simpleslides:textcolor} ;
 
 StopPage ;
-\stopuniqueMPgraphic
+\stopuseMPgraphic
 
 \startuniqueMPgraphic{simpleslides:MP:title}
 StartPage ;
@@ -170,6 +170,11 @@ StopPage ;
 \defineoverlay 
   [simpleslides:background:title] 
   [\useMPgraphic{simpleslides:MP:title}] 
+
+\defineoverlay 
+  [simpleslides:background:ornament] 
+  [\useMPgraphic{simpleslides:MP:ornament}] 
+
 
 %D The title page:
 
