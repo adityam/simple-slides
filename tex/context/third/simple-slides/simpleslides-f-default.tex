@@ -114,7 +114,9 @@
 \beginLUATEX
 %AM: Was Chorus
 \startsetups simpleslides:font:Chancery
-  \stoptypescript
+\starttypescript[serif] [chorus]
+  \definefontsynonym [ChanceryRoman]          [file:texgyrechorus-mediumitalic]  [features=default]
+\stoptypescript
 
   \starttypescript [serif] [chorus]
     \definefontsynonym [Serif]           [ChanceryRoman] [features=default]
