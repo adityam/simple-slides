@@ -126,17 +126,33 @@ picture Left, Right ;
 Left  := \sometxt [simpleslides:sometxt:left]{\folio} ysized 6cm; 
 Right := \sometxt[simpleslides:sometxt:right]{\folio} ysized 6cm; 
 
-clip Left  to boundingbox Left  xyscaled(0,3cm) ;
+save LeftBox, RightBox ;
+path LeftBox, RightBox ;
 
-if PageNumber < 10:
-	clip Right to boundingbox Right xyscaled(0,3cm) shifted (bbwidth(Right)/2,0) ;
-	draw Left  shifted (14.3cm,-.5cm) ;
-	draw Right shifted (14.3cm,-.5cm) ;
-else :
-	clip Right to boundingbox Right xyscaled(0,3cm) shifted (bbwidth(Right)/1.5,0) ;
-	draw Left  shifted (12.63cm,-.5cm) ; 
-	draw Right shifted (12.63cm,-.5cm) ;
-fi
+save split ; numeric split ;
+split := if PageNumber < 10 : 1/2 else : 2/3 fi  ;
+
+LeftBox := llcorner Left -- split[llcorner Left, lrcorner Left]
+           -- split[ulcorner Left, urcorner Left] -- ulcorner Left --cycle ;
+           
+RightBox := lrcorner Right -- split[lrcorner Right, llcorner Right]
+           -- split[urcorner Right, ulcorner Right] -- urcorner Right --cycle ;
+
+if PageNumber >= 10 :
+RightBox := RightBox shifted  split[lrcorner Right, llcorner Right] ;
+fi;
+
+clip Left  to LeftBox  ;
+clip Right to RightBox ;
+
+save corner; pair corner ;
+corner := lrcorner Field[Text][Text] shifted (.2cm,-1cm) ; % same as x2
+
+labeloffset := 0bp;
+
+label.ulft(Left,  corner) ;
+label.urt (Right, corner) ;
+
 StopPage ;
 \stopuseMPgraphic
 
