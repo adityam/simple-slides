@@ -114,11 +114,11 @@
 \beginLUATEX
 %AM: Was Chorus
 \startsetups simpleslides:font:Chancery
-\starttypescript[serif] [chorus]
+\starttypescript[serif] [chancery]
   \definefontsynonym [ChanceryRoman]          [file:texgyrechorus-mediumitalic]  [features=default]
 \stoptypescript
 
-  \starttypescript [serif] [chorus]
+  \starttypescript [serif] [chancery]
     \definefontsynonym [Serif]           [ChanceryRoman] [features=default]
     \definefontsynonym [SerifItalic]     [Serif]
     \definefontsynonym [SerifBold]       [Serif]
@@ -127,7 +127,7 @@
   \stoptypescript
 
   \starttypescript [chancery]
-    \definetypeface [chancery] [rm] [serif] [chorus] [default]
+    \definetypeface [chancery] [rm] [serif] [chancery] [default]
   \stoptypescript 
   \usetypescript[chancery]
   \setupbodyfont[chancery,\NormalSize]
@@ -137,11 +137,11 @@
 \beginOLDTEX
 \startsetups simpleslides:font:Chancery
   \loadmapfile[qzc-ec.map]
-  \starttypescript[serif] [chorus]
+  \starttypescript[serif] [chancery]
     \definefontsynonym [ChanceryRoman]          [ec-qzcmi]  [encoding=ec]
   \stoptypescript
 
-  \starttypescript [serif] [chorus]
+  \starttypescript [serif] [chancery]
   \definefontsynonym [Serif]           [ChanceryRoman] 
   \definefontsynonym [SerifItalic]     [Serif]
   \definefontsynonym [SerifBold]       [Serif]
@@ -150,7 +150,7 @@
 \stoptypescript
 
 \starttypescript [chancery]
-  \definetypeface [chancery] [rm] [serif] [chorus] [encoding=ec]
+  \definetypeface [chancery] [rm] [serif] [chancery] [encoding=ec]
 \stoptypescript 
 \usetypescript[chancery]
 \setupbodyfont[chancery,\NormalSize]
