@@ -103,6 +103,9 @@
 \defineoverlay[simpleslides:background:vertical]
 \defineoverlay[simpleslides:background:ornament]
 
+\defineoverlay[simpleslides:background:highlight]
+              [\useMPgraphic{simpleslides:MP:highlight}]%
+
 \definelayer[simpleslides:layer:slidetitle]
     [\c!width=\paperwidth,
     \c!height=\paperheight]
@@ -136,7 +139,7 @@
                      simpleslides:background:ornament}]
 \stopsetups
 
-%D We also define some fallbacks for presentation backgrounds.
+%D We also define some fall backs for presentation backgrounds.
 
 \startsetups simpleslides:background:default
   \setups{simpleslides:background:horizontal}
@@ -260,9 +263,9 @@
   {\moduleparameter{simpleslides:slidetitle}}
 
 \def\defineSlideTitleAlternative
-  {\dosingleargument\dodefineSlideTitleAlternative}
+  {\dodoubleargument\dodefineSlideTitleAlternative}
 
-\def\dodefineSlideTitleAlternative[#1]% #2
+\def\dodefineSlideTitleAlternative[#1][#2]% #3
   {\setvalue{simpleslides:slidetitle:#1}}
 
 \defineSlideTitleAlternative[\v!normal]#1%
@@ -328,21 +331,80 @@
 %D variables. We set them up here to make sure that everything is properly
 %D initialized; these values will later be overwritten by the values supplied
 %D by user input.
+
 \setupMPvariables[HighlightSomething][tasscale=20mm,x=3,y=3,x2=0,y2=0,x3=0,y3=0,x4=0,y4=0,x5=0,y5=0,tasgrid=0,tashigh=0,tasform=1,opacity=60,direction=75,direction2=75,direction3=75,direction4=75,direction5=75]
+
 %D The user macro takes three arguments in brackets + an additional argument
 %D for typeset content. So we define it in two steps:
+
+\def\setupPicture
+  {\dosingleargument\dosetupPicture}
+
+\def\dosetupPicture[#1]%
+  {\setupmodule[simpleslides:picture]
+               [highlight=\v!no,
+                \c!width=,\c!height=,#1]}
+
+\setupPicture
+  [highlight=\v!no,%yes|no|default=no
+   \c!alternative=circle,%circle|arrow|gray|default=circle
+  ]
+
+\def\simpleslidesPictureParameter%#1
+  {\moduleparameter{simpleslides:picture}}
+
+
+\newconditional\simpleslidesHighlight   \setfalse\simpleslidesHighlight
+\newconditional\simpleslidesGrid        \setfalse\simpleslidesGrid
+
+\chardef\simpleslidesHighlightAlternative\plusone %1=circle, 2=arrow, 3=gray
 
 \def\IncludePicture%
    {\dotripleargument\doIncludePicture}
 
+
+\def\doIncludePicture[#1][#2][#3]#4% dir graphic options text
+  {\setupPicture[#3]%
+   \processaction
+     [\simpleslidesPictureParameter{highlight}]
+     [    \v!yes=>\settrue\simpleslidesHighlight,
+           \v!no=>\setfalse\simpleslidesHighlight,
+      \v!default=>\setfalse\simpleslidesHighlight,
+      \v!unknown=>\setfalse\simpleslidesHighlight]
+   %
+   \processaction
+     [\simpleslidesPictureParameter\c!grid]
+     [    \v!yes=>\settrue\simpleslidesGrid,
+           \v!no=>\setfalse\simpleslidesGrid,
+      \v!default=>\setfalse\simpleslidesGrid,
+      \v!unknown=>\setfalse\simpleslidesGrid]
+   %
+   \processaction
+     [\simpleslidesPictureParameter\c!alternative]
+     [    circle=>\chardef\simpleslidesHighlightAlternative\plusone,
+           arrow=>\chardef\simpleslidesHighlightAlternative\plustwo,
+            gray=>\chardef\simpleslidesHighlightAlternative\plusthree,
+      \v!default=>\chardef\simpleslidesHighlightAlternative\plusone,
+      \v!unknown=>\chardef\simpleslidesHighlightAlternative\plusone]
+   %
+    \processaction[#1]
+      [\v!horizontal=>{\doIncludePictureHorizontal[#2]{#4}},
+         \v!vertical=>{\doIncludePictureVertical[#2]{#4}},
+          \v!default=>{\doIncludePictureHorizontal[#2]{#4}},
+          \v!unknown=>{\doIncludePictureHorizontal[#2]{#4}}%
+                       \message{Keywords for positioning pictures are
+                         "horizontal" or "vertical." 
+                          Please specify one of them!}]}
+   
+
 %D Now comes the definition of the real macro. Watch out, it's complex!
 
-\def\doIncludePicture[#1][#2][#3]#4%
+\def\doIncludePictureOld[#1][#2][#3]#4%
 %D First, we define a namespace for the key = value assignments in the third
 %D argument and initialize them.
-  {\getparameters[HLP][width=0,height=0,highlight=,highlightform=,highlightcolor=,showgrid=,gridcolor=,scale=1mm,direction=,opacity=,#3]%
+  {\getparameters[HLP][width=0,height=0,highlight=,highlightform=,highlightcolor=,grid=,gridcolor=,scale=1mm,direction=,opacity=,#3]%
 %D Now we process these values one by one. "highlight," "highlightform," and
-%D "showgrid" all set the numeric value of \tex{MPvariable}s which will later
+%D "grid" all set the numeric value of \tex{MPvariable}s which will later
 %D be used for "if" tests in the metapost figure itself.
     \expandafter\processaction\expandafter[\HLPhighlight]%
                 [\v!yes=>{\setupMPvariables[HighlightSomething][tashigh=1]},
@@ -355,7 +417,7 @@
                    gray=>{\setupMPvariables[HighlightSomething][tasform=3]},
              \v!unknown=>{\setupMPvariables[HighlightSomething][tasform=1]},
              \v!default=>{\setupMPvariables[HighlightSomething][tasform=1]}]%
-    \expandafter\processaction\expandafter[\HLPshowgrid]%
+    \expandafter\processaction\expandafter[\HLPgrid]%
                 [\v!yes=>{\setupMPvariables[HighlightSomething][tasgrid=1]},
                   \v!no=>{\setupMPvariables[HighlightSomething][tasgrid=0]},
              \v!unknown=>{\setupMPvariables[HighlightSomething][tasgrid=0]},
@@ -379,7 +441,8 @@
          {\setupMPvariables[HighlightSomething][tasscale=\HLPscale mm]}%
          {\message{The value you have provided for the "scale" parameter is not a dimension. Please specify the scale!}\setupMPvariables[HighlightSomething][tasscale=1mm]}}%
 %D We define an overlay which uses the MPgraphic.
-    \defineoverlay[simpleslides:background:highlight][\useMPgraphic{HighlightSomething}{#3}]%
+    \defineoverlay[simpleslides:background:highlight]
+                  [\useMPgraphic{simpleslides:MP:highlight}]%
 %D And finally, we process the keyword in argument [#1]. If it is "vertical,"
 %D we set up a vertical slide; default is "horizontal." Both forms use the
 %D overlay we have just defined as a layer which will be placed on top of the
@@ -394,46 +457,44 @@
                          "horizontal" or "vertical." 
                           Please specify one of them!}]}
 
-%D We have to set the width
-%D or height for vertical and horizontal pictures separately. We test if the
-%D user has supplied values for the "width" and "height" key or if there are
-%D still at their default of "0." If they have been set, these are used for
-%D the width/height of the picture. If they are still 0, we determine the
-%D ratio of the picture and let it fill the available space. Small pictures
-%D will be enlarged, big pictures will be fit. This code was suggested by
-%D Wolfgang Schuster on the mailing list.
-\def\setPictureDimensionsTo#1#2% graphic width 
-  {\doifelse\HLPwidth{0}
-     {\doifelse\HLPheight{0}%
-      {\bgroup
-       \setbox\scratchbox\hbox{\externalfigure[#1]}
-       \!!dimena\ht\scratchbox%
-       \!!dimenb\wd\scratchbox%
-       \!!dimena\dimexpr\PictureFrameHeight/\!!dimena\relax
-       \!!dimenb\dimexpr#2/\!!dimenb\relax
-       \ifdim\!!dimena>\!!dimenb
-          \gdef\PICwidth{#2}
-          \gdef\PICheight{}
-       \else%
-          \gdef\PICwidth{}
-          \gdef\PICheight{\NormalHeight}
-       \fi\egroup}%
-      {\def\PICwidth{}
-       \def\PICheight{\HLPheight}}}
-    {\def\PICwidth{\HLPwidth}
-     \def\PICheight{}}}
+%D We have to set the width or height for vertical and horizontal pictures
+%D separately. We test if the user has supplied values for the "width" and
+%D "height" key. If they have been set, these are used for the width/height of
+%D the picture. If not, we determine the ratio of the picture and let it fill
+%D the available space. Small pictures will be enlarged, big pictures will be
+%D fit. This code was suggested by Wolfgang Schuster on the mailing list.
 
-%AM: A better name?
-\def\fancyPictureFrame[#1]#2%
+\def\setPictureDimensionsTo#1#2% graphic width 
+  {\doifelsenothing{\simpleslidesPictureParameter\c!width}
+     {\doifelsenothing{\simpleslidesPictureParameter\c!height}
+        {\setbox\scratchbox\hbox{\externalfigure[#1]}
+         \!!widtha=\wd\scratchbox
+         \!!heighta=\ht\scratchbox
+         \!!widtha=\dimexpr#2/\!!widtha\relax
+         \!!heighta=\dimexpr\PictureFrameHeight/\!!heighta\relax
+        \ifdim\!!heighta>\!!widtha\relax
+          %
+          \setvalue{simpleslides:picture:width}{#2}%
+          \setvalue{simpleslides:picture:height}{}%
+        \else
+          \setvalue{simpleslides:picture:width}{}%
+          \setvalue{simpleslides:picture:height}{\NormalHeight}%
+        \fi}
+     {\setvalue{simpleslides:picture:width}{}%
+      \setvalue{simpleslides:picture:height}{\simpleslidesPictureParameter\c!height}}}
+ {\setvalue{simpleslides:picture:width}{\simpleslidesPictureParameter\c!width}
+  \setvalue{simpleslides:picture:height}{}}}% not \simpleslidesPictureParameter\c!height
+
+\def\doplacePictureFrame[#1]#2%
   {\framed[\c!frame=\v!off,
-		framecolor=green,
-          \c!align=\v!middle,
-          \c!top=\vss,
-          \c!bottom=\vss,
-          \c!strut=\v!no,
-          \c!offset=\zeropoint,#1]
+           \c!framecolor=green,
+           \c!align=\v!middle,
+           \c!top=\vss,
+           \c!bottom=\vss,
+           \c!strut=\v!no,
+           \c!offset=\zeropoint,#1]
       {\framed[\c!frame=\v!off,
-		framecolor=red,
+		       \c!framecolor=red,
                \c!strut=\v!no,
                \c!offset=\zeropoint,
                \c!width=\v!fit,
@@ -445,20 +506,24 @@
 \def\doIncludePictureHorizontal[#1]#2% graphic text
  {\setPictureDimensionsTo{#1}\textwidth
   \SlideTitle{#2}%
-  \fancyPictureFrame
+  \doplacePictureFrame
     [\c!width=\textwidth,
      \c!height=\PictureFrameHeight]
-    {\externalfigure[#1][\c!height=\PICheight,\c!width=\PICwidth]}}
+    {\externalfigure[#1]
+                    [\c!height=\getvalue{simpleslides:picture:height},
+                      \c!width=\getvalue{simpleslides:picture:width}]}}
 
 \def\doIncludePictureVertical[#1]#2% graphic text
   {\setPictureDimensionsTo{#1}\NormalWidth
     \page
     \setupPageBackground[vertical]
     \startcombination[2]
-      {\fancyPictureFrame
+      {\doplacePictureFrame
         [\c!height=\textheight,
          \c!width=\PictureFrameWidth]
-         {\externalfigure[#1][\c!width=\PICwidth,\c!height=\PICheight]}}{}
+         {\externalfigure[#1]
+                    [\c!height=\getvalue{simpleslides:picture:height},
+                      \c!width=\getvalue{simpleslides:picture:width}]}}{}
        {\framed[\c!frame=\v!off,
                 \c!height=\textheight,
                 \c!width=\PictureFrameWidth,
@@ -472,7 +537,7 @@
 %D empty box to the dimensions of the frame into which it is put. Then, it
 %D performs a couple of tests: it includes other MPgraphics, depending on the
 %D value of \tex{MPvars} which we have set by processing the assignments in the
-%D \tex{IncludePicture} macro. If "highlight" is set to yes and if "showgrid"
+%D \tex{IncludePicture} macro. If "highlight" is set to yes and if "grid"
 %D is set to yes, the metapost grid is included; then, depending on the value
 %D of the \tex{MPvar} "tasform," one of the other highlighting MPgraphics.  The
 %D grid facilitates the precise positioning of the highlighted areas. This is
@@ -481,22 +546,25 @@
 %D original code for the circle was contributed by Mojca. Thanks to all of
 %D them!
 
-\startuseMPgraphic{HighlightSomething}{tashigh,tasscale,x,y,x2,y2,x3,y3,x4,y4,x5,y5,opacity,direction,direction2,direction3,direction4,direction5,tasgrid}
-path HLPbdg ; 
-HLPbdg := unitsquare xyscaled(OverlayWidth,OverlayHeight) ;
-if \MPvar{tashigh} = 1:
-   if \MPvar{tasgrid} = 1 :
-	\includeMPgraphic{ShowGrid}
-   fi ;
-   if \MPvar{tasform} = 1 :
-	\includeMPgraphic{HighCircle} ;
-   elseif \MPvar{tasform} = 2 :
-	\includeMPgraphic{HighArrow} ;
-   elseif \MPvar{tasform} = 3 :
-	\includeMPgraphic{HighGray} ;
-   fi ;
-fi ;
-setbounds currentpicture to HLPbdg ;
+\startuseMPgraphic{simpleslides:MP:highlight}
+\ifconditional \simpleslidesHighlight
+  \ifconditional \simpleslidesGrid
+	\includeMPgraphic{simpleslides:MP:highlight:grid}
+  \fi
+  \ifcase \simpleslidesHighlightAlternative \or
+  draw OverlayBox withcolor green ; \or
+  draw OverlayBox withcolor red  ; \or
+  draw OverlayBox withcolor blue ; \fi
+    
+   %if \MPvar{tasform} = 1 :
+%	\includeMPgraphic{HighCircle} ;
+   %elseif \MPvar{tasform} = 2 :
+%	\includeMPgraphic{HighArrow} ;
+   %elseif \MPvar{tasform} = 3 :
+%	\includeMPgraphic{HighGray} ;
+%   fi ;
+\fi
+setbounds currentpicture to OverlayBox ;
 \stopuseMPgraphic
 
 \startuseMPgraphic{HighCircle}{tasscale,x,y,x2,y2,x3,y3,x4,y4,x5,y5,direction,direction2,direction3,direction4,direction5}
@@ -538,7 +606,7 @@ if \MPvar{x5} <> 0:
 	pickup pencircle scaled 5pt ;
 	draw fullcircle scaled \MPvar{tasscale} shifted (\MPvar{x5}mm,\MPvar{y5}mm) withcolor \MPcolor{tashighlightcolor} ;
 fi ;
-setbounds currentpicture to HLPbdg ;
+setbounds currentpicture to OverlayBox ;
 \stopuseMPgraphic
 
 \startuseMPgraphic{HighArrow}{direction,x,y,x2,y2,x3,y3,x4,y4,x5,y5}
@@ -611,21 +679,21 @@ if \MPvar{x5} <> 0:
    pickup pencircle scaled 5pt ;
    drawarrow arrowbase -- arrowtip withcolor \MPcolor{tashighlightcolor} ;
 fi ;
-setbounds currentpicture to HLPbdg ;
+setbounds currentpicture to OverlayBox ;
 \stopuseMPgraphic
 
 \startuseMPgraphic{HighGray}{opacity,tasscale,x,y}
 op := \MPvar{opacity}/100 ;
 path Gfrg ;
 Gfrg := fullcircle scaled \MPvar{tasscale} shifted (\MPvar{x}mm,\MPvar{y}mm) ;
-fill HLPbdg--reverse Gfrg--cycle withcolor transparent (1,op,black) ;
+fill OverlayBox--reverse Gfrg--cycle withcolor transparent (1,op,black) ;
 \stopuseMPgraphic
 
-\startuseMPgraphic{ShowGrid}
+\startuseMPgraphic{simpleslides:MP:highlight:grid}
 defaultscale := 0.9 ;
 path gridenl ;
-pair rightedge ; rightedge = urcorner HLPbdg ;
-gridenl := HLPbdg enlarged (0.65cm,0.65cm) ;
+pair rightedge ; rightedge = urcorner OverlayBox ;
+gridenl := OverlayBox enlarged (0.65cm,0.65cm) ;
 pair ztasgridy[] ; 
 pair ztasgridx[] ;
 numeric gridmeasure ; gridmeasure = 5mm ;
@@ -647,7 +715,7 @@ for tasi = 2 step 2 until 24:
 	gridvalue := tasi * 5 ;
 	draw HorGrid shifted (0,tasi * gridmeasure) withcolor \MPcolor{tasgridcolor} ;
 endfor ;
-clip currentpicture to HLPbdg ;
+clip currentpicture to OverlayBox ;
 for tasi = 2 step 2 until 22:
  	gridvalue := tasi * 5 ;
  	ztasgridy[tasi] := (0,tasi * gridmeasure) ;
