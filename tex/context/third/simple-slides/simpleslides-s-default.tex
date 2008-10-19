@@ -343,11 +343,16 @@
 \def\dosetupPicture[#1]%
   {\setupmodule[simpleslides:picture]
                [highlight=\v!no,
+                steps=5,
                 \c!width=,\c!height=,#1]}
 
 \setupPicture
   [highlight=\v!no,%yes|no|default=no
    \c!alternative=circle,%circle|arrow|gray|default=circle
+   \c!grid\c!color=green,
+   \c!grid=\v!no,
+   \c!sub\c!grid=\v!no,
+   steps=5,%controls the number of subdivisions of the subgrid
   ]
 
 \def\simpleslidesPictureParameter%#1
@@ -356,6 +361,7 @@
 
 \newconditional\simpleslidesHighlight   \setfalse\simpleslidesHighlight
 \newconditional\simpleslidesGrid        \setfalse\simpleslidesGrid
+\newconditional\simpleslidesSubGrid     \setfalse\simpleslidesSubGrid
 
 \chardef\simpleslidesHighlightAlternative\plusone %1=circle, 2=arrow, 3=gray
 
@@ -378,6 +384,17 @@
            \v!no=>\setfalse\simpleslidesGrid,
       \v!default=>\setfalse\simpleslidesGrid,
       \v!unknown=>\setfalse\simpleslidesGrid]
+   %
+   \processaction
+     [\simpleslidesPictureParameter{\c!sub\c!grid}]
+     [    \v!yes=>\settrue\simpleslidesSubGrid,
+           \v!no=>\setfalse\simpleslidesSubGrid,
+      \v!default=>\setfalse\simpleslidesSubGrid,
+      \v!unknown=>\setfalse\simpleslidesSubGrid]
+   %
+   \edef\simpleslidesStepSize{\simpleslidesPictureParameter{steps}}%
+   \edef\simpleslidesGridColor{\simpleslidesPictureParameter{\c!grid\c!color}}%
+   \doifnothing{\simpleslidesGridColor}{\edef\simpleslidesGridColor{green}}%
    %
    \processaction
      [\simpleslidesPictureParameter\c!alternative]
@@ -551,6 +568,9 @@
   \ifconditional \simpleslidesGrid
 	\includeMPgraphic{simpleslides:MP:highlight:grid}
   \fi
+  \ifconditional \simpleslidesSubGrid
+	\includeMPgraphic{simpleslides:MP:highlight:subgrid}%
+  \fi
   \ifcase \simpleslidesHighlightAlternative \or
   draw OverlayBox withcolor green ; \or
   draw OverlayBox withcolor red  ; \or
@@ -690,6 +710,53 @@ fill OverlayBox--reverse Gfrg--cycle withcolor transparent (1,op,black) ;
 \stopuseMPgraphic
 
 \startuseMPgraphic{simpleslides:MP:highlight:grid}
+  save xaxis, yaxis ; path xaxis, yaxis ;
+  xaxis := leftboundary OverlayBox ;
+  yaxis := bottomboundary OverlayBox ;
+
+  drawoptions (withpen pencircle scaled (OverlayWidth/250) 
+               withcolor \MPcolor\simpleslidesGridColor) ;
+
+  for i = 0 upto 10 :
+    draw xaxis shifted (i/10*OverlayWidth, 0) ;
+    draw yaxis shifted (0,i/10*OverlayHeight) ;
+
+    label.bot(textext("\ix \color[simpleslides:textcolor]" & decimal i),
+              (i/10*OverlayWidth, 0)) ;
+    label.top(textext("\ix \color[simpleslides:textcolor]" & decimal i),
+              (i/10*OverlayWidth, OverlayHeight)) ;
+
+    label.lft(textext("\ix \color[simpleslides:textcolor]" & decimal i),
+              (0, i/10*OverlayHeight)) ;
+    label.rt(textext("\ix \color[simpleslides:textcolor]" & decimal i),
+              (OverlayWidth, i/10*OverlayHeight)) ;
+  endfor ;
+  setbounds currentpicture to OverlayBox ;
+\stopuseMPgraphic
+
+\startuseMPgraphic{simpleslides:MP:highlight:subgrid}
+  save xaxis, yaxis ; path xaxis, yaxis ;
+  xaxis := leftboundary OverlayBox ;
+  yaxis := bottomboundary OverlayBox ;
+
+  drawoptions (withpen pencircle scaled (OverlayWidth/500) 
+               withcolor \MPcolor\simpleslidesGridColor) ;
+
+  save stepSize ; numeric stepSize ;
+  stepSize := \simpleslidesStepSize + epsilon ;
+
+  for i = 0 step 10/stepSize until 100 :
+    if i mod 10 <> 0 :
+      draw xaxis shifted (i/100*OverlayWidth, 0) ;
+      draw yaxis shifted (0,i/100*OverlayHeight) ;
+    fi 
+
+  endfor ;
+  setbounds currentpicture to OverlayBox ;
+\stopuseMPgraphic
+
+
+\startuseMPgraphic{simpleslides:MP:highlight:oldgrid}
 defaultscale := 0.9 ;
 path gridenl ;
 pair rightedge ; rightedge = urcorner OverlayBox ;
