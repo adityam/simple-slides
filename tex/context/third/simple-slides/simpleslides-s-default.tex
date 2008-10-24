@@ -353,6 +353,14 @@
    \c!grid=\v!no,
    \c!sub\c!grid=\v!no,
    steps=5,%controls the number of subdivisions of the subgrid
+   \c!rulethickness={OverlayWidth/100},%for circle and arrow
+   \c!color=orange,% should this be called highlightcolor?
+   \c!x=5,
+   \c!y=5,
+   \c!x\c!scale=1,
+   \c!y\c!scale=1,
+   length=2cm,
+   direction=30,
   ]
 
 \def\simpleslidesPictureParameter%#1
@@ -412,7 +420,201 @@
                        \message{Keywords for positioning pictures are
                          "horizontal" or "vertical." 
                           Please specify one of them!}]}
+
+%D We have to set the width or height for vertical and horizontal pictures
+%D separately. We test if the user has supplied values for the "width" and
+%D "height" key. If they have been set, these are used for the width/height of
+%D the picture. If not, we determine the ratio of the picture and let it fill
+%D the available space. Small pictures will be enlarged, big pictures will be
+%D fit. This code was suggested by Wolfgang Schuster on the mailing list.
+
+\def\setPictureDimensionsTo#1#2% graphic width 
+  {\doifelsenothing{\simpleslidesPictureParameter\c!width}
+     {\doifelsenothing{\simpleslidesPictureParameter\c!height}
+        {\setbox\scratchbox\hbox{\externalfigure[#1]}
+         \!!widtha=\wd\scratchbox
+         \!!heighta=\ht\scratchbox
+         \!!widtha=\dimexpr#2/\!!widtha\relax
+         \!!heighta=\dimexpr\PictureFrameHeight/\!!heighta\relax
+        \ifdim\!!heighta>\!!widtha\relax
+          %
+          \setvalue{simpleslides:picture:width}{#2}%
+          \setvalue{simpleslides:picture:height}{}%
+        \else
+          \setvalue{simpleslides:picture:width}{}%
+          \setvalue{simpleslides:picture:height}{\NormalHeight}%
+        \fi}
+     {\setvalue{simpleslides:picture:width}{}%
+      \setvalue{simpleslides:picture:height}{\simpleslidesPictureParameter\c!height}}}
+ {\setvalue{simpleslides:picture:width}{\simpleslidesPictureParameter\c!width}
+  \setvalue{simpleslides:picture:height}{}}}% not \simpleslidesPictureParameter\c!height
+
+%D This macro places the picture centered both vertically and horizontally. 
+
+\def\doplacePictureFrame[#1]#2%
+  {\framed[\c!frame=\v!off,
+           \c!framecolor=green,
+           \c!align=\v!middle,
+           \c!top=\vss,
+           \c!bottom=\vss,
+           \c!strut=\v!no,
+           \c!offset=\zeropoint,#1]
+      {\framed[\c!frame=\v!off,
+		       \c!framecolor=red,
+               \c!strut=\v!no,
+               \c!offset=\zeropoint,
+               \c!width=\v!fit,
+               \c!height=\v!fit,
+               \c!background={foreground,simpleslides:background:highlight}]
+      {#2}}}
+
+
+%D This macro places the picture in horizontal mode.
+
+\def\doIncludePictureHorizontal[#1]#2% graphic text
+ {\setPictureDimensionsTo{#1}\textwidth
+  \SlideTitle{#2}%
+  \doplacePictureFrame
+    [\c!width=\textwidth,
+     \c!height=\PictureFrameHeight]
+    {\externalfigure[#1]
+                    [\c!height=\getvalue{simpleslides:picture:height},
+                      \c!width=\getvalue{simpleslides:picture:width}]}}
+
+%D This macro places the picture in vertical mode.
+
+\def\doIncludePictureVertical[#1]#2% graphic text
+  {\setPictureDimensionsTo{#1}\NormalWidth
+    \page
+    \setupPageBackground[vertical]
+    \startcombination[2]
+      {\doplacePictureFrame
+        [\c!height=\textheight,
+         \c!width=\PictureFrameWidth]
+         {\externalfigure[#1]
+                    [\c!height=\getvalue{simpleslides:picture:height},
+                      \c!width=\getvalue{simpleslides:picture:width}]}}{}
+       {\framed[\c!frame=\v!off,
+                \c!height=\textheight,
+                \c!width=\PictureFrameWidth,
+                \c!top=\vss,
+                \c!bottom=\vss,
+                \c!align=\v!middle,
+                \c!strut=\v!no]{#2}}{}
+    \stopcombination}
    
+%D Now, we define the main \METAPOST\ graphic to highlight the picture. It first
+%D checks if the user has asked for a grid, and if so, draws a grid and a
+%D subgrid. Then it checks which alternative (arrow, circle, gray) is requested
+%D and draws that. Notice that we have intermixed \TEX\ and \METAPOST, 
+%D exploiting the power of the MP-TEX interaction provided by \CONTEXT.
+
+\startuseMPgraphic{simpleslides:MP:highlight}
+\ifconditional \simpleslidesHighlight
+  \ifconditional \simpleslidesGrid
+	\includeMPgraphic{simpleslides:MP:highlight:grid}
+  \fi
+  \ifconditional \simpleslidesSubGrid
+	\includeMPgraphic{simpleslides:MP:highlight:subgrid}%
+  \fi
+ \ifcase \simpleslidesHighlightAlternative \or
+  \includeMPgraphic{simpleslides:MP:highligh:circle} \or
+  \includeMPgraphic{simpleslides:MP:highligh:arrow} \or
+   draw OverlayBox withcolor blue ; \fi
+  \fi
+  setbounds currentpicture to OverlayBox ;
+\stopuseMPgraphic
+
+%D Metapost graphic to draw a 10x10 grid on a picture. The width of the grid
+%D line is 1/250th of the width of the picture, so smaller picture have smaller
+%D grid lines.
+
+\startuseMPgraphic{simpleslides:MP:highlight:grid}
+  save xaxis, yaxis ; path xaxis, yaxis ;
+  xaxis := leftboundary OverlayBox ;
+  yaxis := bottomboundary OverlayBox ;
+
+
+  for i = 0 upto 10 :
+    drawoptions (withpen pencircle scaled (OverlayWidth/250) 
+                 withcolor \MPcolor\simpleslidesGridColor) ;
+
+    draw xaxis shifted (i/10*OverlayWidth, 0) ;
+    draw yaxis shifted (0,i/10*OverlayHeight) ;
+
+    drawoptions(); % Otherwise gridcolor is applied to labels in pdftex/xetex
+
+    label.bot(textext("\ix \color[simpleslides:textcolor]" & decimal i),
+              (i/10*OverlayWidth, 0)) ;
+    label.top(textext("\ix \color[simpleslides:textcolor]" & decimal i),
+              (i/10*OverlayWidth, OverlayHeight)) ;
+
+    label.lft(textext("\ix \color[simpleslides:textcolor]" & decimal i),
+              (0, i/10*OverlayHeight)) ;
+    label.rt(textext("\ix \color[simpleslides:textcolor]" & decimal i),
+              (OverlayWidth, i/10*OverlayHeight)) ;
+  endfor ;
+  setbounds currentpicture to OverlayBox ;
+\stopuseMPgraphic
+
+%D The Metapost graphic draws a fine grid on the picture. The number of grid
+%D lines is controlled by \type{steps} parameter of \type{\setupPicture}. Each
+%D grid box of the 10x10 grid drawn above is subdivided into \type{steps} number
+%D of finer lines. 
+
+\startuseMPgraphic{simpleslides:MP:highlight:subgrid}
+  save xaxis, yaxis ; path xaxis, yaxis ;
+  xaxis := leftboundary OverlayBox ;
+  yaxis := bottomboundary OverlayBox ;
+
+  drawoptions (withpen pencircle scaled (OverlayWidth/500) 
+               withcolor \MPcolor\simpleslidesGridColor) ;
+
+  save stepSize ; numeric stepSize ;
+  stepSize := \simpleslidesStepSize + epsilon ;
+
+  for i = 0 step 10/stepSize until 100 :
+    if i mod 10 <> 0 :
+      draw xaxis shifted (i/100*OverlayWidth, 0) ;
+      draw yaxis shifted (0,i/100*OverlayHeight) ;
+    fi 
+
+  endfor ;
+  setbounds currentpicture to OverlayBox ;
+\stopuseMPgraphic
+
+
+%D Metapost graphic to draw a circle. The circle (actually an ellipse) 
+%D is centered at (x,y) with a x-radius equal to \type{xscale} and y-radius
+%D equal to \type{y-scale}. The thickness of the circle is \type{rulethickness}
+%D and the color is \type{color}. 
+%D
+%D TODO: We can add \type{direction} and \type{shadow} keys.
+
+\startuseMPgraphic{simpleslides:MP:highligh:circle}
+  draw fullcircle xyscaled 
+        % The dimensions are divided by 5 rather than 10, since the scale 
+        % measures the radius, rather than the diameter.
+       (\simpleslidesPictureParameter{\c!x\c!scale}*OverlayWidth/5,
+        \simpleslidesPictureParameter{\c!y\c!scale}*OverlayHeight/5) 
+       shifted
+       (\simpleslidesPictureParameter\c!x *OverlayWidth/10,
+        \simpleslidesPictureParameter\c!y *OverlayHeight/10)  
+       withcolor \MPcolor{\simpleslidesPictureParameter\c!color} 
+       withpen pencircle scaled (\simpleslidesPictureParameter\c!rulethickness);
+\stopuseMPgraphic
+
+\startuseMPgraphic{simpleslides:MP:highligh:arrow}
+  autoarrows := true ; % so that arrow heads are scaled correctly.
+  z1 = (\simpleslidesPictureParameter\c!x *OverlayWidth/10,
+        \simpleslidesPictureParameter\c!y *OverlayHeight/10)   ;
+  z2 = z1 + \simpleslidesPictureParameter{length} *
+            dir(\simpleslidesPictureParameter{direction}) ;
+  drawarrow z2 -- z1   
+       withcolor \MPcolor{\simpleslidesPictureParameter\c!color} 
+       withpen pencircle scaled (2*\simpleslidesPictureParameter\c!rulethickness);
+\stopuseMPgraphic
+
 
 %D Now comes the definition of the real macro. Watch out, it's complex!
 
@@ -474,81 +676,6 @@
                          "horizontal" or "vertical." 
                           Please specify one of them!}]}
 
-%D We have to set the width or height for vertical and horizontal pictures
-%D separately. We test if the user has supplied values for the "width" and
-%D "height" key. If they have been set, these are used for the width/height of
-%D the picture. If not, we determine the ratio of the picture and let it fill
-%D the available space. Small pictures will be enlarged, big pictures will be
-%D fit. This code was suggested by Wolfgang Schuster on the mailing list.
-
-\def\setPictureDimensionsTo#1#2% graphic width 
-  {\doifelsenothing{\simpleslidesPictureParameter\c!width}
-     {\doifelsenothing{\simpleslidesPictureParameter\c!height}
-        {\setbox\scratchbox\hbox{\externalfigure[#1]}
-         \!!widtha=\wd\scratchbox
-         \!!heighta=\ht\scratchbox
-         \!!widtha=\dimexpr#2/\!!widtha\relax
-         \!!heighta=\dimexpr\PictureFrameHeight/\!!heighta\relax
-        \ifdim\!!heighta>\!!widtha\relax
-          %
-          \setvalue{simpleslides:picture:width}{#2}%
-          \setvalue{simpleslides:picture:height}{}%
-        \else
-          \setvalue{simpleslides:picture:width}{}%
-          \setvalue{simpleslides:picture:height}{\NormalHeight}%
-        \fi}
-     {\setvalue{simpleslides:picture:width}{}%
-      \setvalue{simpleslides:picture:height}{\simpleslidesPictureParameter\c!height}}}
- {\setvalue{simpleslides:picture:width}{\simpleslidesPictureParameter\c!width}
-  \setvalue{simpleslides:picture:height}{}}}% not \simpleslidesPictureParameter\c!height
-
-\def\doplacePictureFrame[#1]#2%
-  {\framed[\c!frame=\v!off,
-           \c!framecolor=green,
-           \c!align=\v!middle,
-           \c!top=\vss,
-           \c!bottom=\vss,
-           \c!strut=\v!no,
-           \c!offset=\zeropoint,#1]
-      {\framed[\c!frame=\v!off,
-		       \c!framecolor=red,
-               \c!strut=\v!no,
-               \c!offset=\zeropoint,
-               \c!width=\v!fit,
-               \c!height=\v!fit,
-               \c!background={foreground,simpleslides:background:highlight}]
-      {#2}}}
-
-
-\def\doIncludePictureHorizontal[#1]#2% graphic text
- {\setPictureDimensionsTo{#1}\textwidth
-  \SlideTitle{#2}%
-  \doplacePictureFrame
-    [\c!width=\textwidth,
-     \c!height=\PictureFrameHeight]
-    {\externalfigure[#1]
-                    [\c!height=\getvalue{simpleslides:picture:height},
-                      \c!width=\getvalue{simpleslides:picture:width}]}}
-
-\def\doIncludePictureVertical[#1]#2% graphic text
-  {\setPictureDimensionsTo{#1}\NormalWidth
-    \page
-    \setupPageBackground[vertical]
-    \startcombination[2]
-      {\doplacePictureFrame
-        [\c!height=\textheight,
-         \c!width=\PictureFrameWidth]
-         {\externalfigure[#1]
-                    [\c!height=\getvalue{simpleslides:picture:height},
-                      \c!width=\getvalue{simpleslides:picture:width}]}}{}
-       {\framed[\c!frame=\v!off,
-                \c!height=\textheight,
-                \c!width=\PictureFrameWidth,
-                \c!top=\vss,
-                \c!bottom=\vss,
-                \c!align=\v!middle,
-                \c!strut=\v!no]{#2}}{}
-    \stopcombination}
       
 %D Now we define the MPgraphic for the overlay. Initially, it contains just an
 %D empty box to the dimensions of the frame into which it is put. Then, it
@@ -563,29 +690,10 @@
 %D original code for the circle was contributed by Mojca. Thanks to all of
 %D them!
 
-\startuseMPgraphic{simpleslides:MP:highlight}
-\ifconditional \simpleslidesHighlight
-  \ifconditional \simpleslidesGrid
-	\includeMPgraphic{simpleslides:MP:highlight:grid}
-  \fi
-  \ifconditional \simpleslidesSubGrid
-	\includeMPgraphic{simpleslides:MP:highlight:subgrid}%
-  \fi
-  \ifcase \simpleslidesHighlightAlternative \or
-  draw OverlayBox withcolor green ; \or
-  draw OverlayBox withcolor red  ; \or
-  draw OverlayBox withcolor blue ; \fi
-    
-   %if \MPvar{tasform} = 1 :
-%	\includeMPgraphic{HighCircle} ;
-   %elseif \MPvar{tasform} = 2 :
-%	\includeMPgraphic{HighArrow} ;
-   %elseif \MPvar{tasform} = 3 :
-%	\includeMPgraphic{HighGray} ;
-%   fi ;
-\fi
-setbounds currentpicture to OverlayBox ;
-\stopuseMPgraphic
+
+
+
+
 
 \startuseMPgraphic{HighCircle}{tasscale,x,y,x2,y2,x3,y3,x4,y4,x5,y5,direction,direction2,direction3,direction4,direction5}
 for i=1 upto 18:
@@ -708,53 +816,6 @@ path Gfrg ;
 Gfrg := fullcircle scaled \MPvar{tasscale} shifted (\MPvar{x}mm,\MPvar{y}mm) ;
 fill OverlayBox--reverse Gfrg--cycle withcolor transparent (1,op,black) ;
 \stopuseMPgraphic
-
-\startuseMPgraphic{simpleslides:MP:highlight:grid}
-  save xaxis, yaxis ; path xaxis, yaxis ;
-  xaxis := leftboundary OverlayBox ;
-  yaxis := bottomboundary OverlayBox ;
-
-  drawoptions (withpen pencircle scaled (OverlayWidth/250) 
-               withcolor \MPcolor\simpleslidesGridColor) ;
-
-  for i = 0 upto 10 :
-    draw xaxis shifted (i/10*OverlayWidth, 0) ;
-    draw yaxis shifted (0,i/10*OverlayHeight) ;
-
-    label.bot(textext("\ix \color[simpleslides:textcolor]" & decimal i),
-              (i/10*OverlayWidth, 0)) ;
-    label.top(textext("\ix \color[simpleslides:textcolor]" & decimal i),
-              (i/10*OverlayWidth, OverlayHeight)) ;
-
-    label.lft(textext("\ix \color[simpleslides:textcolor]" & decimal i),
-              (0, i/10*OverlayHeight)) ;
-    label.rt(textext("\ix \color[simpleslides:textcolor]" & decimal i),
-              (OverlayWidth, i/10*OverlayHeight)) ;
-  endfor ;
-  setbounds currentpicture to OverlayBox ;
-\stopuseMPgraphic
-
-\startuseMPgraphic{simpleslides:MP:highlight:subgrid}
-  save xaxis, yaxis ; path xaxis, yaxis ;
-  xaxis := leftboundary OverlayBox ;
-  yaxis := bottomboundary OverlayBox ;
-
-  drawoptions (withpen pencircle scaled (OverlayWidth/500) 
-               withcolor \MPcolor\simpleslidesGridColor) ;
-
-  save stepSize ; numeric stepSize ;
-  stepSize := \simpleslidesStepSize + epsilon ;
-
-  for i = 0 step 10/stepSize until 100 :
-    if i mod 10 <> 0 :
-      draw xaxis shifted (i/100*OverlayWidth, 0) ;
-      draw yaxis shifted (0,i/100*OverlayHeight) ;
-    fi 
-
-  endfor ;
-  setbounds currentpicture to OverlayBox ;
-\stopuseMPgraphic
-
 
 \startuseMPgraphic{simpleslides:MP:highlight:oldgrid}
 defaultscale := 0.9 ;
