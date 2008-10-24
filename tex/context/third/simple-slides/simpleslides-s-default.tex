@@ -604,6 +604,13 @@
        withpen pencircle scaled (\simpleslidesPictureParameter\c!rulethickness);
 \stopuseMPgraphic
 
+%D Metapost graphic to draw an arrow. The arrow's tip is at \type{(x,y)}, and it
+%D is \type{length} long in the direction specified by \type{direction}. The
+%D arrow is \type{2×rulethickness} thick (the factor of 2 is there so that the
+%D same default works for both circle and arrows) and is on \type{color} color.
+%D
+%D TODO: Add \type{shadow} key.
+
 \startuseMPgraphic{simpleslides:MP:highligh:arrow}
   autoarrows := true ; % so that arrow heads are scaled correctly.
   z1 = (\simpleslidesPictureParameter\c!x *OverlayWidth/10,
