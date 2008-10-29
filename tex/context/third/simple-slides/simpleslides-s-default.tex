@@ -26,7 +26,7 @@
 
 \setuppapersize[S6][S6]
 
-%D We do not want page numbers, but we sometimes want to use the pagenumbering
+%D We do not want page numbers, but we sometimes want to use the page numbering
 %D mechanism, so we make sure pages are counted, but the numbers are not
 %D displayed. 
 
@@ -323,16 +323,6 @@
 %D placed either in a \tex{SlideTitle} environment (for horizontal pictures) or
 %D opposite the picture, centered horizontally and vertically, for vertical
 %D pictures.
-%D
-%D This quite a big macro, so I document everything (as much for my own benefit
-%D as for others who might look into the source ;-)
-
-%D We will be using a metapost graphic "HighlightSomething" which takes some
-%D variables. We set them up here to make sure that everything is properly
-%D initialized; these values will later be overwritten by the values supplied
-%D by user input.
-
-\setupMPvariables[HighlightSomething][tasscale=20mm,x=3,y=3,x2=0,y2=0,x3=0,y3=0,x4=0,y4=0,x5=0,y5=0,tasgrid=0,tashigh=0,tasform=1,opacity=60,direction=75,direction2=75,direction3=75,direction4=75,direction5=75]
 
 %D The user macro takes three arguments in brackets + an additional argument
 %D for typeset content. So we define it in two steps:
@@ -360,7 +350,9 @@
    \c!x\c!scale=1,
    \c!y\c!scale=1,
    length=2cm,
-   direction=30,
+   direction=0,
+   shadow=\v!no,
+   shadow\c!color=gray,
   ]
 
 \def\simpleslidesPictureParameter%#1
@@ -372,6 +364,8 @@
 \newconditional\simpleslidesSubGrid     \setfalse\simpleslidesSubGrid
 
 \chardef\simpleslidesHighlightAlternative\plusone %1=circle, 2=arrow, 3=gray
+\chardef\simpleslidesShadow\zerocount %0=no, 1=topleft, 2=topright,
+                                      %3=bottomright, 4=bottomleft
 
 \def\IncludePicture%
    {\dotripleargument\doIncludePicture}
@@ -399,6 +393,17 @@
            \v!no=>\setfalse\simpleslidesSubGrid,
       \v!default=>\setfalse\simpleslidesSubGrid,
       \v!unknown=>\setfalse\simpleslidesSubGrid]
+   %
+   \processaction
+     [\simpleslidesPictureParameter{shadow}]
+       [     \v!no=>\chardef\simpleslidesShadow\zerocount,
+     \v!top\v!left=>\chardef\simpleslidesShadow\plusone,
+    \v!top\v!right=>\chardef\simpleslidesShadow\plustwo,
+ \v!bottom\v!right=>\chardef\simpleslidesShadow\plusthree,
+  \v!bottom\v!left=>\chardef\simpleslidesShadow\plusfour,
+        \v!default=>\chardef\simpleslidesShadow\zerocount,
+        \v!unknown=>\chardef\simpleslidesShadow\zerocount]
+  \message{Shadow = \the\simpleslidesShadow }
    %
    \edef\simpleslidesStepSize{\simpleslidesPictureParameter{steps}}%
    \edef\simpleslidesGridColor{\simpleslidesPictureParameter{\c!grid\c!color}}%
@@ -519,7 +524,7 @@
   \fi
  \ifcase \simpleslidesHighlightAlternative \or
   \includeMPgraphic{simpleslides:MP:highligh:circle} \or
-  \includeMPgraphic{simpleslides:MP:highligh:arrow} \or
+  \includeMPgraphic{simpleslides:MP:highligh:arrow}  \or
    draw OverlayBox withcolor blue ; \fi
   \fi
   setbounds currentpicture to OverlayBox ;
@@ -587,21 +592,40 @@
 %D Metapost graphic to draw a circle. The circle (actually an ellipse) 
 %D is centered at (x,y) with a x-radius equal to \type{xscale} and y-radius
 %D equal to \type{y-scale}. The thickness of the circle is \type{rulethickness}
-%D and the color is \type{color}. 
-%D
-%D TODO: We can add \type{direction} and \type{shadow} keys.
+%D and the color is \type{color}. The circle is rotated by an angle
+%D \type{direction}
 
 \startuseMPgraphic{simpleslides:MP:highligh:circle}
-  draw fullcircle xyscaled 
+  save p; path p;
+  p := fullcircle xyscaled 
         % The dimensions are divided by 5 rather than 10, since the scale 
         % measures the radius, rather than the diameter.
        (\simpleslidesPictureParameter{\c!x\c!scale}*OverlayWidth/5,
         \simpleslidesPictureParameter{\c!y\c!scale}*OverlayHeight/5) 
+       rotated (\simpleslidesPictureParameter\c!direction) 
        shifted
        (\simpleslidesPictureParameter\c!x *OverlayWidth/10,
-        \simpleslidesPictureParameter\c!y *OverlayHeight/10)  
-       withcolor \MPcolor{\simpleslidesPictureParameter\c!color} 
+        \simpleslidesPictureParameter\c!y *OverlayHeight/10)  ;
+
+  \ifcase \simpleslidesShadow \else
+  
+  save shadow_direction ; pair shadow_direction ;
+  shadow_direction =\simpleslidesPictureParameter\c!rulethickness * 
+     \ifcase \simpleslidesShadow \or
+          (-1,1) \or (1,1) \or (1,-1) \or (-1,-1) \fi ;
+
+
+  save shadow_thickness ; numeric shadow_thickness ;
+  shadow_thickness := 1.5\simpleslidesPictureParameter\c!rulethickness ;
+
+  def shadow_draw = draw enddef ;
+
+  \includeMPgraphic{simpleslides:MP:highligh:shadow}
+  \fi
+
+  draw p withcolor \MPcolor{\simpleslidesPictureParameter\c!color} 
        withpen pencircle scaled (\simpleslidesPictureParameter\c!rulethickness);
+
 \stopuseMPgraphic
 
 %D Metapost graphic to draw an arrow. The arrow's tip is at \type{(x,y)}, and it
@@ -613,260 +637,52 @@
 
 \startuseMPgraphic{simpleslides:MP:highligh:arrow}
   autoarrows := true ; % so that arrow heads are scaled correctly.
+
   z1 = (\simpleslidesPictureParameter\c!x *OverlayWidth/10,
         \simpleslidesPictureParameter\c!y *OverlayHeight/10)   ;
   z2 = z1 + \simpleslidesPictureParameter{length} *
             dir(\simpleslidesPictureParameter{direction}) ;
-  drawarrow z2 -- z1   
+
+  save p ; path p ;
+  p := z2 -- z1 ;
+
+  \ifcase \simpleslidesShadow \else
+  save shadow_direction ; pair shadow_direction ;
+  shadow_direction =3*\simpleslidesPictureParameter\c!rulethickness * 
+     dir(\simpleslidesPictureParameter{direction} + 
+     \ifcase \simpleslidesShadow \or 
+          135 \or 45 \or -45 \or -135 \fi ) ;
+
+  save shadow_thickness ; numeric shadow_thickness ;
+  shadow_thickness := 2*\simpleslidesPictureParameter\c!rulethickness ;
+
+  def shadow_draw = drawarrow enddef ;
+
+  \includeMPgraphic{simpleslides:MP:highligh:shadow}
+  \fi
+
+  drawarrow p
        withcolor \MPcolor{\simpleslidesPictureParameter\c!color} 
        withpen pencircle scaled (2*\simpleslidesPictureParameter\c!rulethickness);
+
 \stopuseMPgraphic
 
+%D The next Metapost graphic draws an arrow. To ensure code re-usability, we
+%D assume that the shape of the shadow is stored as a path \type{p}, it is
+%D shifted by amount \type{shadow_direction} and its thickness is
+%D \type{shadow_thickness}. It is the responsibility of the calling function to
+%D ensure that this is done. There are four options for the shadow,
+%D \type{topleft}, \type{topright}, \type{bottomright}, and \type{bottomleft}.
+%D (TODO: Keep this thickness configurable). The shadow is drawn in color
+%D \type{shadowcolor}.
 
-%D Now comes the definition of the real macro. Watch out, it's complex!
-
-\def\doIncludePictureOld[#1][#2][#3]#4%
-%D First, we define a namespace for the key = value assignments in the third
-%D argument and initialize them.
-  {\getparameters[HLP][width=0,height=0,highlight=,highlightform=,highlightcolor=,grid=,gridcolor=,scale=1mm,direction=,opacity=,#3]%
-%D Now we process these values one by one. "highlight," "highlightform," and
-%D "grid" all set the numeric value of \tex{MPvariable}s which will later
-%D be used for "if" tests in the metapost figure itself.
-    \expandafter\processaction\expandafter[\HLPhighlight]%
-                [\v!yes=>{\setupMPvariables[HighlightSomething][tashigh=1]},
-                  \v!no=>{\setupMPvariables[HighlightSomething][tashigh=0]},
-             \v!unknown=>{\setupMPvariables[HighlightSomething][tashigh=0]},
-             \v!default=>{\setupMPvariables[HighlightSomething][tashigh=0]}]%
-    \expandafter\processaction\expandafter[\HLPhighlightform]%
-                [circle=>{\setupMPvariables[HighlightSomething][tasform=1]},
-                  arrow=>{\setupMPvariables[HighlightSomething][tasform=2]},
-                   gray=>{\setupMPvariables[HighlightSomething][tasform=3]},
-             \v!unknown=>{\setupMPvariables[HighlightSomething][tasform=1]},
-             \v!default=>{\setupMPvariables[HighlightSomething][tasform=1]}]%
-    \expandafter\processaction\expandafter[\HLPgrid]%
-                [\v!yes=>{\setupMPvariables[HighlightSomething][tasgrid=1]},
-                  \v!no=>{\setupMPvariables[HighlightSomething][tasgrid=0]},
-             \v!unknown=>{\setupMPvariables[HighlightSomething][tasgrid=0]},
-             \v!default=>{\setupMPvariables[HighlightSomething][tasgrid=0]}]%
-%D "highlightcolor" and "gridcolor" simply define colors.
-    \expandafter\processaction\expandafter[\HLPhighlightcolor]%
-            [\v!unknown=>{\definecolor[tashighlightcolor][\HLPhighlightcolor]},
-             \v!default=>{\definecolor[tashighlightcolor][red]
-                          \message{You haven't set a highlightcolor. I have chosen "red" for you.}}]%
-    \expandafter\processaction\expandafter[\HLPgridcolor]%
-            [\v!unknown=>{\definecolor[tasgridcolor][\HLPgridcolor]},
-             \v!default=>{\definecolor[tasgridcolor][black]
-                         \message{You haven't set a gridcolor. I have chosen "black" for you.}}]%
-%D "scale" can be either a dimension or a number (in which case the default
-%D unit is "mm"). So we first test whether it's a dimension; if it isn't, we
-%D test whether it's a number, and append "mm." If it isn't a number, we set an
-%D absurd value and warn the user.
-    \doifdimensionelse\HLPscale
-       {\setupMPvariables[HighlightSomething][tasscale=\HLPscale]}% 
-       {\doifnumberelse\HLPscale
-         {\setupMPvariables[HighlightSomething][tasscale=\HLPscale mm]}%
-         {\message{The value you have provided for the "scale" parameter is not a dimension. Please specify the scale!}\setupMPvariables[HighlightSomething][tasscale=1mm]}}%
-%D We define an overlay which uses the MPgraphic.
-    \defineoverlay[simpleslides:background:highlight]
-                  [\useMPgraphic{simpleslides:MP:highlight}]%
-%D And finally, we process the keyword in argument [#1]. If it is "vertical,"
-%D we set up a vertical slide; default is "horizontal." Both forms use the
-%D overlay we have just defined as a layer which will be placed on top of the
-%D picture. Breaking the page, switching of background,
-%D placing the text is all wrapped into this macro. 
-    \processaction[#1]
-      [\v!horizontal=>{\doIncludePictureHorizontal[#2]{#4}},
-         \v!vertical=>{\doIncludePictureVertical[#2]{#4}},
-          \v!default=>{\doIncludePictureHorizontal[#2]{#4}},
-          \v!unknown=>{\doIncludePictureHorizontal[#2]{#4}}%
-                       \message{Keywords for positioning pictures are
-                         "horizontal" or "vertical." 
-                          Please specify one of them!}]}
-
-      
-%D Now we define the MPgraphic for the overlay. Initially, it contains just an
-%D empty box to the dimensions of the frame into which it is put. Then, it
-%D performs a couple of tests: it includes other MPgraphics, depending on the
-%D value of \tex{MPvars} which we have set by processing the assignments in the
-%D \tex{IncludePicture} macro. If "highlight" is set to yes and if "grid"
-%D is set to yes, the metapost grid is included; then, depending on the value
-%D of the \tex{MPvar} "tasform," one of the other highlighting MPgraphics.  The
-%D grid facilitates the precise positioning of the highlighted areas. This is
-%D an idea Taco suggested at the \CONTEXT\ meeting at Bohinj.  The code for the
-%D gray overlay has been contributed by Wolfgang Schuster and Peter Rolf.  The
-%D original code for the circle was contributed by Mojca. Thanks to all of
-%D them!
-
-
-
-
-
-
-\startuseMPgraphic{HighCircle}{tasscale,x,y,x2,y2,x3,y3,x4,y4,x5,y5,direction,direction2,direction3,direction4,direction5}
-for i=1 upto 18:
- 	pickup pencircle scaled (i*0.333pt) ;
- 	draw fullcircle scaled \MPvar{tasscale} shifted (\MPvar{x}mm + 1.5mm,\MPvar{y}mm - 1.5mm) withcolor transparent (1,0.025,black) ;
- endfor ;
-pickup pencircle scaled 5pt ;
-draw fullcircle scaled \MPvar{tasscale} shifted (\MPvar{x}mm,\MPvar{y}mm) withcolor \MPcolor{tashighlightcolor} ;
-if \MPvar{x2} <> 0:
-	for i=1 upto 18:
- 		pickup pencircle scaled (i*0.333pt) ;
- 		draw fullcircle scaled \MPvar{tasscale} shifted (\MPvar{x2}mm + 1.5mm,\MPvar{y2}mm - 1.5mm) withcolor transparent (1,0.025,black) ;
-	 endfor ;
-	pickup pencircle scaled 5pt ;
-	draw fullcircle scaled \MPvar{tasscale} shifted (\MPvar{x2}mm,\MPvar{y2}mm) withcolor \MPcolor{tashighlightcolor} ;
-fi ;
-if \MPvar{x3} <> 0:
-	for i=1 upto 18:
- 		pickup pencircle scaled (i*0.333pt) ;
- 		draw fullcircle scaled \MPvar{tasscale} shifted (\MPvar{x3}mm + 1.5mm,\MPvar{y3}mm - 1.5mm) withcolor transparent (1,0.025,black) ;
-	 endfor ;
-	pickup pencircle scaled 5pt ;
-	draw fullcircle scaled \MPvar{tasscale} shifted (\MPvar{x3}mm,\MPvar{y3}mm) withcolor \MPcolor{tashighlightcolor} ;
-fi ;
-if \MPvar{x4} <> 0:
-	for i=1 upto 18:
- 		pickup pencircle scaled (i*0.333pt) ;
- 		draw fullcircle scaled \MPvar{tasscale} shifted (\MPvar{x4}mm + 1.5mm,\MPvar{y4}mm - 1.5mm) withcolor transparent (1,0.025,black) ;
-	 endfor ;
-	pickup pencircle scaled 5pt ;
-	draw fullcircle scaled \MPvar{tasscale} shifted (\MPvar{x4}mm,\MPvar{y4}mm) withcolor \MPcolor{tashighlightcolor} ;
-fi ;
-if \MPvar{x5} <> 0:
-	for i=1 upto 18:
- 		pickup pencircle scaled (i*0.333pt) ;
- 		draw fullcircle scaled \MPvar{tasscale} shifted (\MPvar{x5}mm + 1.5mm,\MPvar{y5}mm - 1.5mm) withcolor transparent (1,0.025,black) ;
-	 endfor ;
-	pickup pencircle scaled 5pt ;
-	draw fullcircle scaled \MPvar{tasscale} shifted (\MPvar{x5}mm,\MPvar{y5}mm) withcolor \MPcolor{tashighlightcolor} ;
-fi ;
-setbounds currentpicture to OverlayBox ;
+\startuseMPgraphic{simpleslides:MP:highligh:shadow}
+  shadow_draw p shifted shadow_direction 
+       withcolor transparent (1,0.5,
+         \MPcolor{\simpleslidesPictureParameter{shadow\c!color}}) 
+       withpen pencircle scaled (shadow_thickness) ;
 \stopuseMPgraphic
 
-\startuseMPgraphic{HighArrow}{direction,x,y,x2,y2,x3,y3,x4,y4,x5,y5}
-pair arrowtip, arrowbase, shiftedtip, shiftedbase ;
-arrowtip := (\MPvar{x}mm,\MPvar{y}mm) ;
-arrowbase := arrowtip + 2.5cm*dir(\MPvar{direction}) ;
-shiftedtip := arrowtip shifted (1.5mm,-1.5mm) ;
-shiftedbase := arrowbase shifted (1.5mm,-1.5mm) ;
-for i=1 upto 18:
-	ahlength := (i*0.833pt) ;
-	pickup pencircle scaled (i*0.277pt) ;
-	drawarrow shiftedbase -- shiftedtip withcolor transparent (1,0.025,black) ;
-endfor ;
-ahlength := 15pt ;
-pickup pencircle scaled 5pt ;
-drawarrow arrowbase -- arrowtip withcolor \MPcolor{tashighlightcolor} ;
-if \MPvar{x2} <> 0:
-   arrowtip := (\MPvar{x2}mm,\MPvar{y2}mm) ;
-   arrowbase := arrowtip + 2.5cm*dir(\MPvar{direction2}) ;
-   shiftedtip := arrowtip shifted (1.5mm,-1.5mm) ;
-   shiftedbase := arrowbase shifted (1.5mm,-1.5mm) ;
-   for i=1 upto 18:
-   	ahlength := (i*0.833pt) ;
-   	pickup pencircle scaled (i*0.277pt) ;
-   	drawarrow shiftedbase -- shiftedtip withcolor transparent (1,0.025,black) ;
-   endfor ;
-   ahlength := 15pt ;
-   pickup pencircle scaled 5pt ;
-   drawarrow arrowbase -- arrowtip withcolor \MPcolor{tashighlightcolor} ;
-fi ;
-if \MPvar{x3} <> 0:
-   arrowtip := (\MPvar{x3}mm,\MPvar{y3}mm) ;
-   arrowbase := arrowtip + 2.5cm*dir(\MPvar{direction3}) ;
-   shiftedtip := arrowtip shifted (1.5mm,-1.5mm) ;
-   shiftedbase := arrowbase shifted (1.5mm,-1.5mm) ;
-   for i=1 upto 18:
-   	ahlength := (i*0.833pt) ;
-   	pickup pencircle scaled (i*0.277pt) ;
-   	drawarrow shiftedbase -- shiftedtip withcolor transparent (1,0.025,black) ;
-   endfor ;
-   ahlength := 15pt ;
-   pickup pencircle scaled 5pt ;
-   drawarrow arrowbase -- arrowtip withcolor \MPcolor{tashighlightcolor} ;
-fi ;
-if \MPvar{x4} <> 0:
-   arrowtip := (\MPvar{x4}mm,\MPvar{y4}mm) ;
-   arrowbase := arrowtip + 2.5cm*dir(\MPvar{direction4}) ;
-   shiftedtip := arrowtip shifted (1.5mm,-1.5mm) ;
-   shiftedbase := arrowbase shifted (1.5mm,-1.5mm) ;
-   for i=1 upto 18:
-   	ahlength := (i*0.833pt) ;
-   	pickup pencircle scaled (i*0.277pt) ;
-   	drawarrow shiftedbase -- shiftedtip withcolor transparent (1,0.025,black) ;
-   endfor ;
-   ahlength := 15pt ;
-   pickup pencircle scaled 5pt ;
-   drawarrow arrowbase -- arrowtip withcolor \MPcolor{tashighlightcolor} ;
-fi ;
-if \MPvar{x5} <> 0:
-   arrowtip := (\MPvar{x5}mm,\MPvar{y5}mm) ;
-   arrowbase := arrowtip + 2.5cm*dir(\MPvar{direction5}) ;
-   shiftedtip := arrowtip shifted (1.5mm,-1.5mm) ;
-   shiftedbase := arrowbase shifted (1.5mm,-1.5mm) ;
-   for i=1 upto 18:
-   	ahlength := (i*0.833pt) ;
-   	pickup pencircle scaled (i*0.277pt) ;
-   	drawarrow shiftedbase -- shiftedtip withcolor transparent (1,0.025,black) ;
-   endfor ;
-   ahlength := 15pt ;
-   pickup pencircle scaled 5pt ;
-   drawarrow arrowbase -- arrowtip withcolor \MPcolor{tashighlightcolor} ;
-fi ;
-setbounds currentpicture to OverlayBox ;
-\stopuseMPgraphic
-
-\startuseMPgraphic{HighGray}{opacity,tasscale,x,y}
-op := \MPvar{opacity}/100 ;
-path Gfrg ;
-Gfrg := fullcircle scaled \MPvar{tasscale} shifted (\MPvar{x}mm,\MPvar{y}mm) ;
-fill OverlayBox--reverse Gfrg--cycle withcolor transparent (1,op,black) ;
-\stopuseMPgraphic
-
-\startuseMPgraphic{simpleslides:MP:highlight:oldgrid}
-defaultscale := 0.9 ;
-path gridenl ;
-pair rightedge ; rightedge = urcorner OverlayBox ;
-gridenl := OverlayBox enlarged (0.65cm,0.65cm) ;
-pair ztasgridy[] ; 
-pair ztasgridx[] ;
-numeric gridmeasure ; gridmeasure = 5mm ;
-path VertGrid ; VertGrid = (0,0) -- (0,12cm) ;
-path HorGrid ; HorGrid = (0,0) -- (19cm,0) ;
-pickup pencircle scaled 0.1pt ;
-for tasi = 0 upto 38:
-	draw VertGrid shifted (tasi * gridmeasure,0) withcolor \MPcolor{tasgridcolor} ;
-endfor ;
-for tasi = 0 upto 24:
-	draw HorGrid shifted (0,tasi * gridmeasure) withcolor \MPcolor{tasgridcolor} ;
-endfor ;
-pickup pencircle scaled 1pt ;
-for tasi = 2 step 2 until 38:
-	gridvalue := tasi * 5 ;
-	draw VertGrid shifted (tasi * gridmeasure,0) withcolor \MPcolor{tasgridcolor} ;
-endfor ;
-for tasi = 2 step 2 until 24:
-	gridvalue := tasi * 5 ;
-	draw HorGrid shifted (0,tasi * gridmeasure) withcolor \MPcolor{tasgridcolor} ;
-endfor ;
-clip currentpicture to OverlayBox ;
-for tasi = 2 step 2 until 22:
- 	gridvalue := tasi * 5 ;
- 	ztasgridy[tasi] := (0,tasi * gridmeasure) ;
- 	label.rt(decimal gridvalue,(xpart rightedge, ypart ztasgridy[tasi])) ;
-	ztasgridy[tasi] := (0,tasi * gridmeasure) ;
-	label.lft(decimal gridvalue,ztasgridy[tasi]) ;
-endfor ;
-for tasi = 2 step 2 until 36:
-  	gridvalue := tasi * 5 ;
-	ztasgridx[tasi] := (tasi * gridmeasure,OverlayHeight) ;
-	label.top(decimal gridvalue,ztasgridx[tasi]) ;
-  	ztasgridx[tasi] := (tasi * gridmeasure,0) ;
-  	label.bot(decimal gridvalue,ztasgridx[tasi]) ;
-endfor ;
-clip currentpicture to gridenl ;
-\stopuseMPgraphic
 
 %D This is a small square which will be used for itemizations; it will be
 %D placed in the margin. 
