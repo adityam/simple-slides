@@ -334,6 +334,7 @@
   {\setupmodule[simpleslides:picture]
                [highlight=\v!no,
                 steps=5,
+                opacity=0.5,
                 \c!width=,\c!height=,#1]}
 
 \setupPicture
@@ -351,6 +352,7 @@
    \c!y\c!scale=1,
    length=2cm,
    direction=0,
+   opacity=0.5,
    shadow=\v!no,
    shadow\c!color=gray,
   ]
@@ -363,7 +365,7 @@
 \newconditional\simpleslidesGrid        \setfalse\simpleslidesGrid
 \newconditional\simpleslidesSubGrid     \setfalse\simpleslidesSubGrid
 
-\chardef\simpleslidesHighlightAlternative\plusone %1=circle, 2=arrow, 3=gray
+\chardef\simpleslidesHighlightAlternative\plusone %1=circle, 2=arrow, 3=focus
 \chardef\simpleslidesShadow\zerocount %0=no, 1=topleft, 2=topright,
                                       %3=bottomright, 4=bottomleft
 
@@ -372,7 +374,8 @@
 
 
 \def\doIncludePicture[#1][#2][#3]#4% dir graphic options text
-  {\setupPicture[#3]%
+  {\begingroup % Else the settings of \setupPicture are global 
+   \setupPicture[#3]%
    \processaction
      [\simpleslidesPictureParameter{highlight}]
      [    \v!yes=>\settrue\simpleslidesHighlight,
@@ -403,9 +406,7 @@
   \v!bottom\v!left=>\chardef\simpleslidesShadow\plusfour,
         \v!default=>\chardef\simpleslidesShadow\zerocount,
         \v!unknown=>\chardef\simpleslidesShadow\zerocount]
-  \message{Shadow = \the\simpleslidesShadow }
    %
-   \edef\simpleslidesStepSize{\simpleslidesPictureParameter{steps}}%
    \edef\simpleslidesGridColor{\simpleslidesPictureParameter{\c!grid\c!color}}%
    \doifnothing{\simpleslidesGridColor}{\edef\simpleslidesGridColor{green}}%
    %
@@ -413,7 +414,7 @@
      [\simpleslidesPictureParameter\c!alternative]
      [    circle=>\chardef\simpleslidesHighlightAlternative\plusone,
            arrow=>\chardef\simpleslidesHighlightAlternative\plustwo,
-            gray=>\chardef\simpleslidesHighlightAlternative\plusthree,
+           focus=>\chardef\simpleslidesHighlightAlternative\plusthree,
       \v!default=>\chardef\simpleslidesHighlightAlternative\plusone,
       \v!unknown=>\chardef\simpleslidesHighlightAlternative\plusone]
    %
@@ -424,7 +425,8 @@
           \v!unknown=>{\doIncludePictureHorizontal[#2]{#4}}%
                        \message{Keywords for positioning pictures are
                          "horizontal" or "vertical." 
-                          Please specify one of them!}]}
+                          Please specify one of them!}]
+     \endgroup}
 
 %D We have to set the width or height for vertical and horizontal pictures
 %D separately. We test if the user has supplied values for the "width" and
@@ -525,7 +527,7 @@
  \ifcase \simpleslidesHighlightAlternative \or
   \includeMPgraphic{simpleslides:MP:highligh:circle} \or
   \includeMPgraphic{simpleslides:MP:highligh:arrow}  \or
-   draw OverlayBox withcolor blue ; \fi
+  \includeMPgraphic{simpleslides:MP:highligh:focus}  \fi
   \fi
   setbounds currentpicture to OverlayBox ;
 \stopuseMPgraphic
@@ -541,13 +543,14 @@
 
 
   for i = 0 upto 10 :
-    drawoptions (withpen pencircle scaled (OverlayWidth/250) 
-                 withcolor \MPcolor\simpleslidesGridColor) ;
 
-    draw xaxis shifted (i/10*OverlayWidth, 0) ;
-    draw yaxis shifted (0,i/10*OverlayHeight) ;
+    draw xaxis shifted (i/10*OverlayWidth, 0) 
+               withpen pencircle scaled (OverlayWidth/250) 
+               withcolor \MPcolor\simpleslidesGridColor ;
 
-    drawoptions(); % Otherwise gridcolor is applied to labels in pdftex/xetex
+    draw yaxis shifted (0,i/10*OverlayHeight) 
+               withpen pencircle scaled (OverlayWidth/250) 
+               withcolor \MPcolor\simpleslidesGridColor ;
 
     label.bot(textext("\ix \color[simpleslides:textcolor]" & decimal i),
               (i/10*OverlayWidth, 0)) ;
@@ -572,16 +575,18 @@
   xaxis := leftboundary OverlayBox ;
   yaxis := bottomboundary OverlayBox ;
 
-  drawoptions (withpen pencircle scaled (OverlayWidth/500) 
-               withcolor \MPcolor\simpleslidesGridColor) ;
 
   save stepSize ; numeric stepSize ;
-  stepSize := \simpleslidesStepSize + epsilon ;
+  stepSize := \simpleslidesPictureParameter{steps} + epsilon ;
 
   for i = 0 step 10/stepSize until 100 :
     if i mod 10 <> 0 :
-      draw xaxis shifted (i/100*OverlayWidth, 0) ;
-      draw yaxis shifted (0,i/100*OverlayHeight) ;
+      draw xaxis shifted (i/100*OverlayWidth, 0) 
+                 withpen pencircle scaled (OverlayWidth/500) 
+                 withcolor \MPcolor\simpleslidesGridColor ;
+      draw yaxis shifted (0,i/100*OverlayHeight) 
+                 withpen pencircle scaled (OverlayWidth/500) 
+                 withcolor \MPcolor\simpleslidesGridColor ;
     fi 
 
   endfor ;
@@ -648,7 +653,7 @@
 
   \ifcase \simpleslidesShadow \else
   save shadow_direction ; pair shadow_direction ;
-  shadow_direction =3*\simpleslidesPictureParameter\c!rulethickness * 
+  shadow_direction =2*\simpleslidesPictureParameter\c!rulethickness * 
      dir(\simpleslidesPictureParameter{direction} + 
      \ifcase \simpleslidesShadow \or 
           135 \or 45 \or -45 \or -135 \fi ) ;
@@ -667,6 +672,29 @@
 
 \stopuseMPgraphic
 
+%D Metapost graphic to focus on a particular area. The coordinates of the focus
+%D area are equivalent to that of \type{alternative=circle}. The "unfocussed"
+%D area is covered with \type{shadowcolor} made transparent by
+%D \type{opacity} amount.
+
+\startuseMPgraphic{simpleslides:MP:highligh:focus}
+  save p; path p;
+  p := fullcircle xyscaled 
+        % The dimensions are divided by 5 rather than 10, since the scale 
+        % measures the radius, rather than the diameter.
+       (\simpleslidesPictureParameter{\c!x\c!scale}*OverlayWidth/5,
+        \simpleslidesPictureParameter{\c!y\c!scale}*OverlayHeight/5) 
+       rotated (\simpleslidesPictureParameter\c!direction) 
+       shifted
+       (\simpleslidesPictureParameter\c!x *OverlayWidth/10,
+        \simpleslidesPictureParameter\c!y *OverlayHeight/10)  ;
+
+  fill OverlayBox -- reverse p -- cycle
+       withcolor transparent ("normal",
+         \simpleslidesPictureParameter{opacity},
+         \MPcolor{\simpleslidesPictureParameter{shadow\c!color}}) ;
+\stopuseMPgraphic
+
 %D The next Metapost graphic draws an arrow. To ensure code re-usability, we
 %D assume that the shape of the shadow is stored as a path \type{p}, it is
 %D shifted by amount \type{shadow_direction} and its thickness is
@@ -674,11 +702,13 @@
 %D ensure that this is done. There are four options for the shadow,
 %D \type{topleft}, \type{topright}, \type{bottomright}, and \type{bottomleft}.
 %D (TODO: Keep this thickness configurable). The shadow is drawn in color
-%D \type{shadowcolor}.
+%D \type{shadowcolor}. The arrow is drawn with a transparent color whose opacity
+%D is given by \type{opacity}.
 
 \startuseMPgraphic{simpleslides:MP:highligh:shadow}
   shadow_draw p shifted shadow_direction 
-       withcolor transparent (1,0.5,
+       withcolor transparent ("normal",
+         \simpleslidesPictureParameter{opacity},
          \MPcolor{\simpleslidesPictureParameter{shadow\c!color}}) 
        withpen pencircle scaled (shadow_thickness) ;
 \stopuseMPgraphic
