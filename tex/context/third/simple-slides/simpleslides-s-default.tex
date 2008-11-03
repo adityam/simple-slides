@@ -339,7 +339,7 @@
 
 \setupPicture
   [highlight=\v!no,%yes|no|default=no
-   \c!alternative=circle,%circle|arrow|gray|default=circle
+   \c!alternative=\v!none,%none|circle|arrow|gray|default=none
    \c!grid\c!color=green,
    \c!grid=\v!no,
    \c!sub\c!grid=\v!no,
@@ -354,7 +354,7 @@
    direction=0,
    opacity=0.5,
    shadow=\v!no,
-   shadow\c!color=gray,
+   shadow\c!color=black,
   ]
 
 \def\simpleslidesPictureParameter%#1
@@ -365,7 +365,8 @@
 \newconditional\simpleslidesGrid        \setfalse\simpleslidesGrid
 \newconditional\simpleslidesSubGrid     \setfalse\simpleslidesSubGrid
 
-\chardef\simpleslidesHighlightAlternative\plusone %1=circle, 2=arrow, 3=focus
+\chardef\simpleslidesHighlightAlternative\zerocount %0=none, 1=circle, 
+                                                    %2=arrow, 3=focus
 \chardef\simpleslidesShadow\zerocount %0=no, 1=topleft, 2=topright,
                                       %3=bottomright, 4=bottomleft
 
@@ -400,6 +401,7 @@
    \processaction
      [\simpleslidesPictureParameter{shadow}]
        [     \v!no=>\chardef\simpleslidesShadow\zerocount,
+            \v!yes=>\chardef\simpleslidesShadow\plusthree,
      \v!top\v!left=>\chardef\simpleslidesShadow\plusone,
     \v!top\v!right=>\chardef\simpleslidesShadow\plustwo,
  \v!bottom\v!right=>\chardef\simpleslidesShadow\plusthree,
@@ -415,8 +417,8 @@
      [    circle=>\chardef\simpleslidesHighlightAlternative\plusone,
            arrow=>\chardef\simpleslidesHighlightAlternative\plustwo,
            focus=>\chardef\simpleslidesHighlightAlternative\plusthree,
-      \v!default=>\chardef\simpleslidesHighlightAlternative\plusone,
-      \v!unknown=>\chardef\simpleslidesHighlightAlternative\plusone]
+      \v!default=>\chardef\simpleslidesHighlightAlternative\zerocount,
+      \v!unknown=>\chardef\simpleslidesHighlightAlternative\zerocount]
    %
     \processaction[#1]
       [\v!horizontal=>{\doIncludePictureHorizontal[#2]{#4}},
@@ -486,7 +488,8 @@
      \c!height=\PictureFrameHeight]
     {\externalfigure[#1]
                     [\c!height=\getvalue{simpleslides:picture:height},
-                      \c!width=\getvalue{simpleslides:picture:width}]}}
+                      \c!width=\getvalue{simpleslides:picture:width}]}%
+    \page}% Otherwise last page is not correct in \MKII.
 
 %D This macro places the picture in vertical mode.
 
@@ -508,7 +511,8 @@
                 \c!bottom=\vss,
                 \c!align=\v!middle,
                 \c!strut=\v!no]{#2}}{}
-    \stopcombination}
+    \stopcombination
+    \page}% Otherwise last page is not correct in \MKII.
    
 %D Now, we define the main \METAPOST\ graphic to highlight the picture. It first
 %D checks if the user has asked for a grid, and if so, draws a grid and a
@@ -621,7 +625,7 @@
 
 
   save shadow_thickness ; numeric shadow_thickness ;
-  shadow_thickness := 1.5\simpleslidesPictureParameter\c!rulethickness ;
+  shadow_thickness := 2.5\simpleslidesPictureParameter\c!rulethickness ;
 
   def shadow_draw = draw enddef ;
 
@@ -706,11 +710,14 @@
 %D is given by \type{opacity}.
 
 \startuseMPgraphic{simpleslides:MP:highligh:shadow}
+  %% I hope there were a better way to do this.
+  for i = 1 upto 10 :
   shadow_draw p shifted shadow_direction 
        withcolor transparent ("normal",
-         \simpleslidesPictureParameter{opacity},
+         \simpleslidesPictureParameter{opacity}*(20-i)/20,
          \MPcolor{\simpleslidesPictureParameter{shadow\c!color}}) 
-       withpen pencircle scaled (shadow_thickness) ;
+       withpen pencircle scaled (i*shadow_thickness/10) ;
+  endfor 
 \stopuseMPgraphic
 
 
