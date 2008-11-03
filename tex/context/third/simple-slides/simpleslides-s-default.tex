@@ -340,7 +340,7 @@
 \setupPicture
   [highlight=\v!no,%yes|no|default=no
    \c!alternative=\v!none,%none|circle|arrow|gray|default=none
-   \c!grid\c!color=green,
+   \c!grid\c!color=darkgreen,
    \c!grid=\v!no,
    \c!sub\c!grid=\v!no,
    steps=5,%controls the number of subdivisions of the subgrid
@@ -524,9 +524,9 @@
 \ifconditional \simpleslidesHighlight
   \ifconditional \simpleslidesGrid
 	\includeMPgraphic{simpleslides:MP:highlight:grid}
-  \fi
-  \ifconditional \simpleslidesSubGrid
-	\includeMPgraphic{simpleslides:MP:highlight:subgrid}%
+    \ifconditional \simpleslidesSubGrid
+      \includeMPgraphic{simpleslides:MP:highlight:subgrid}%
+    \fi
   \fi
  \ifcase \simpleslidesHighlightAlternative \or
   \includeMPgraphic{simpleslides:MP:highligh:circle} \or
