@@ -625,7 +625,7 @@
 
 
   save shadow_thickness ; numeric shadow_thickness ;
-  shadow_thickness := 2.5\simpleslidesPictureParameter\c!rulethickness ;
+  shadow_thickness := 2.7\simpleslidesPictureParameter\c!rulethickness ;
 
   def shadow_draw = draw enddef ;
 
@@ -711,12 +711,12 @@
 
 \startuseMPgraphic{simpleslides:MP:highligh:shadow}
   %% I hope there were a better way to do this.
-  for i = 1 upto 10 :
+  for i = 1 upto 20 :
   shadow_draw p shifted shadow_direction 
        withcolor transparent ("normal",
-         \simpleslidesPictureParameter{opacity}*(20-i)/20,
+         \simpleslidesPictureParameter{opacity}/10, % 0.1,
          \MPcolor{\simpleslidesPictureParameter{shadow\c!color}}) 
-       withpen pencircle scaled (i*shadow_thickness/10) ;
+       withpen pencircle scaled (i*shadow_thickness/20) ;
   endfor 
 \stopuseMPgraphic
 
