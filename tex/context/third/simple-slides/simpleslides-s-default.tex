@@ -339,12 +339,12 @@
 
 \setupPicture
   [highlight=\v!no,%yes|no|default=no
-   \c!alternative=\v!none,%none|circle|arrow|gray|default=none
+   \c!alternative=\v!none,%none|ellipse|arrow|gray|default=none
    \c!grid\c!color=darkgreen,
    \c!grid=\v!no,
    \c!sub\c!grid=\v!no,
    steps=5,%controls the number of subdivisions of the subgrid
-   \c!rulethickness={OverlayWidth/100},%for circle and arrow
+   \c!rulethickness={OverlayWidth/100},%for ellipse and arrow
    \c!color=orange,% should this be called highlightcolor?
    \c!x=5,
    \c!y=5,
@@ -365,7 +365,7 @@
 \newconditional\simpleslidesGrid        \setfalse\simpleslidesGrid
 \newconditional\simpleslidesSubGrid     \setfalse\simpleslidesSubGrid
 
-\chardef\simpleslidesHighlightAlternative\zerocount %0=none, 1=circle, 
+\chardef\simpleslidesHighlightAlternative\zerocount %0=none, 1=ellipse, 
                                                     %2=arrow, 3=focus
 \chardef\simpleslidesShadow\zerocount %0=no, 1=topleft, 2=topright,
                                       %3=bottomright, 4=bottomleft
@@ -414,7 +414,8 @@
    %
    \processaction
      [\simpleslidesPictureParameter\c!alternative]
-     [    circle=>\chardef\simpleslidesHighlightAlternative\plusone,
+     [   ellipse=>\chardef\simpleslidesHighlightAlternative\plusone
+                  \simpleslidesSetEllipseDimensions,
            arrow=>\chardef\simpleslidesHighlightAlternative\plustwo,
            focus=>\chardef\simpleslidesHighlightAlternative\plusthree,
       \v!default=>\chardef\simpleslidesHighlightAlternative\zerocount,
@@ -516,7 +517,7 @@
    
 %D Now, we define the main \METAPOST\ graphic to highlight the picture. It first
 %D checks if the user has asked for a grid, and if so, draws a grid and a
-%D subgrid. Then it checks which alternative (arrow, circle, gray) is requested
+%D subgrid. Then it checks which alternative (arrow, ellipse, gray) is requested
 %D and draws that. Notice that we have intermixed \TEX\ and \METAPOST, 
 %D exploiting the power of the MP-TEX interaction provided by \CONTEXT.
 
@@ -529,7 +530,7 @@
     \fi
   \fi
  \ifcase \simpleslidesHighlightAlternative \or
-  \includeMPgraphic{simpleslides:MP:highligh:circle} \or
+  \includeMPgraphic{simpleslides:MP:highligh:ellipse} \or
   \includeMPgraphic{simpleslides:MP:highligh:arrow}  \or
   \includeMPgraphic{simpleslides:MP:highligh:focus}  \fi
   \fi
@@ -598,19 +599,40 @@
 \stopuseMPgraphic
 
 
-%D Metapost graphic to draw a circle. The circle (actually an ellipse) 
-%D is centered at (x,y) with a x-radius equal to \type{xscale} and y-radius
-%D equal to \type{y-scale}. The thickness of the circle is \type{rulethickness}
-%D and the color is \type{color}. The circle is rotated by an angle
-%D \type{direction}
+%D This is a helper macro to get the dimensions for the ellipse. Taking care of
+%D expansion inside Metapost is tricky, so we define an external macro to set
+%D the x and y scales correctly. This macro does not check if both x and y are
+%D equal to 'couple'. We should probably catch that error inside Metapost, and
+%D give an error message on the terminal if that is the case.
 
-\startuseMPgraphic{simpleslides:MP:highligh:circle}
+
+\def\simpleslidesSetEllipseDimensions%
+  {\edef\simpleslidesCurrentXscale{\simpleslidesPictureParameter{\c!x\c!scale}}
+   \edef\simpleslidesCurrentYscale{\simpleslidesPictureParameter{\c!y\c!scale}}
+      \message{: X=\simpleslidesCurrentXscale, Y=\simpleslidesCurrentYscale}
+   \processaction
+     [\simpleslidesCurrentXscale]
+     [    couple=>\edef\simpleslidesCurrentXscale{\simpleslidesCurrentYscale*OverlayHeight/5},
+      \v!unknown=>\edef\simpleslidesCurrentXscale{\simpleslidesCurrentXscale*OverlayWidth/5}]
+   \processaction
+     [\simpleslidesCurrentYscale]
+     [    couple=>\edef\simpleslidesCurrentYscale{\simpleslidesCurrentXscale}, % no *OverlayWidth/5, it has already been scaled
+      \v!unknown=>\edef\simpleslidesCurrentYscale{\simpleslidesCurrentYscale*OverlayHeight/5}]
+      \message{X=\simpleslidesCurrentXscale, Y=\simpleslidesCurrentYscale}}
+
+%D Metapost graphic to draw a ellipse. The ellipse is centered at (x,y) with a
+%D x-radius equal to \type{xscale} and y-radius equal to \type{yscale}. If
+%D either \type{xscale} or \type{yscale} equals \type{couple}, a circle is drawn
+%D with radius equal to the other (non-couple) scale parameter. The thickness of
+%D the ellipse is \type{rulethickness} and the color is \type{color}. The
+%D ellipse is rotated by an angle \type{direction}
+
+\startuseMPgraphic{simpleslides:MP:highligh:ellipse}
   save p; path p;
   p := fullcircle xyscaled 
         % The dimensions are divided by 5 rather than 10, since the scale 
         % measures the radius, rather than the diameter.
-       (\simpleslidesPictureParameter{\c!x\c!scale}*OverlayWidth/5,
-        \simpleslidesPictureParameter{\c!y\c!scale}*OverlayHeight/5) 
+        (\simpleslidesCurrentXscale, \simpleslidesCurrentYscale)
        rotated (\simpleslidesPictureParameter\c!direction) 
        shifted
        (\simpleslidesPictureParameter\c!x *OverlayWidth/10,
@@ -640,7 +662,7 @@
 %D Metapost graphic to draw an arrow. The arrow's tip is at \type{(x,y)}, and it
 %D is \type{length} long in the direction specified by \type{direction}. The
 %D arrow is \type{2×rulethickness} thick (the factor of 2 is there so that the
-%D same default works for both circle and arrows) and is on \type{color} color.
+%D same default works for both ellipse and arrows) and is on \type{color} color.
 %D
 %D TODO: Add \type{shadow} key.
 
@@ -677,7 +699,7 @@
 \stopuseMPgraphic
 
 %D Metapost graphic to focus on a particular area. The coordinates of the focus
-%D area are equivalent to that of \type{alternative=circle}. The "unfocussed"
+%D area are equivalent to that of \type{alternative=ellipse}. The "unfocussed"
 %D area is covered with \type{shadowcolor} made transparent by
 %D \type{opacity} amount.
 
