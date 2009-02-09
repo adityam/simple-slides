@@ -1,0 +1,235 @@
+%D \module
+%D   [      file=simpleslides-s-Swoosh,
+%D        version=2009.02.04, 
+%D          title=\CONTEXT\ Style File,
+%D       subtitle=Presentation Module -- Swoosh Style,
+%D         author=Thomas A. Schmitz,
+%D           date=\currentdate,
+%D      copyright={Thomas A. Schmitz}]
+%C
+%C Copyright 2009 Thomas A. Schmitz.
+%C This file may be distributed under the GNU General Public License v. 2.0.
+
+%D This file provides the \quotation{Swoosh} style for the presentation
+%D module. It is loaded at runtime.
+
+\writestatus{simpleslides}{loading Swoosh style}
+
+\startmodule[simpleslides-s-Swoosh]
+
+\unprotect
+
+%D First we change the page layout, adding more space on the top.
+
+\setuplayout [width=fit,
+              margin=0cm,
+              height=fit,
+              header=3cm, 
+              footer=0.8cm, 
+              topspace=.6cm, 
+              backspace=1cm,
+              location=singlesided]
+
+\setuplayout [simpleslides:layout:horizontal][header=3cm]
+\setuplayout [simpleslides:layout:vertical]  [header=0.8cm]
+\setuplayout [simpleslides:layout:title]     [header=0.8cm]
+
+%D We also specify the position of the slidetitle.
+
+\setuplayer[simpleslides:layer:slidetitle]
+    [x=10mm,y=2mm]
+
+\setupcombinations[distance=1.85cm]
+
+%D These macros are used for placing figures/pictures:
+
+\define\NormalHeight        {\textheight}
+\define\NormalWidth         {.45\textwidth}
+\define\PictureFrameHeight  {\textheight}
+\define\PictureFrameWidth   {.45\textwidth}
+
+\defineframed[simpleslides:framed]
+             [frame=off,offset=0pt,
+              top=\vss,bottom=\vss]
+
+%D We define our color scheme:
+
+\definecolor [simpleslides:backgroundcolor]     [r=.88,g=.92,b=.95]
+\definecolor [simpleslides:contrastcolor]	[r=.4,g=.6,b=.8]
+\definecolor [simpleslides:altcontrastcolor]	[r=.1,g=.1,b=.4]
+\definecolor [simpleslides:itemize:color]       [simpleslides:contrastcolor]
+\definecolor [simpleslides:textcolor]  		[simpleslides:altcontrastcolor] 
+
+\setupcolors[textcolor=simpleslides:textcolor]
+
+%D We use \METAPOST\ to draw backgrounds.
+
+\startuniqueMPgraphic{simpleslides:MP:horizontal} 
+StartPage ;
+save a, b;
+numeric a ; a = 2.5cm ;
+numeric b ; b = 0.7cm ;
+fill Page withcolor \MPcolor{simpleslides:backgroundcolor} ;
+
+z1 = ulcorner Page ;
+z2 = urcorner Page ;
+z3 = (x1,y1-0.7*a) ;
+z4 = (x1+5cm,y1-a-b) ;
+z5 = (x1+12cm,y1-a) ;
+z6 = (x1+14cm,y1-a+0.3cm) ;
+z7 = (x2,y2-a-b) ;
+
+save p ;
+path p ;
+p = z1--z3..z4..z5..z6..z7--z2--cycle ;
+fill p withcolor \MPcolor{simpleslides:contrastcolor} ;
+pickup pencircle scaled 4pt ;
+draw z3..z4..z5..z6..z7 withcolor white ;
+StopPage ;
+\stopuniqueMPgraphic 
+
+\startuniqueMPgraphic{simpleslides:MP:vertical} 
+StartPage ;
+
+save a,b;
+numeric a ; a = 2cm ;
+numeric b ; b = 1cm ;
+pair  t[] ;
+
+fill Page withcolor \MPcolor{simpleslides:backgroundcolor} ;
+z1 = ulcorner Page ;
+z2 = llcorner Page ;
+z3 = center Page ;
+z4 = (x3,y1) ;
+z5 = (x3+b,y1-4cm) ;
+z6 = (x3+b/2,y1-7cm) ;
+z7 = (x3-b/2,y2+2cm) ;
+z8 = (x3,y2) ;
+
+save p;
+path p[] ;
+p[1] = z1--z4..z5..z6..z7..z8--z2--cycle ;
+fill p[1] withcolor \MPcolor{simpleslides:contrastcolor} ;
+pickup pencircle scaled 4pt ;
+draw z4..z5..z6..z7..z8 withcolor white ;
+StopPage ;
+\stopuniqueMPgraphic 
+
+\startuseMPgraphic{simpleslides:MP:ornament}
+save b, s, t, p, circcenter, theta, pic ;
+path p[] ;
+pair t[] ;
+pair s[] ;
+pair circcenter ; circcenter = lrcorner Page shifted (-1cm, 1cm) ;
+picture pic ;
+b = 1.5cm ;
+StartPage ;
+if \realfolio > 1:
+	theta = (PageNumber - 1)/(NOfPages - 1) ;
+	p[4] = fullcircle scaled b rotated 90 ;
+	fill p[4] withcolor  \MPcolor{simpleslides:altcontrastcolor} ;
+	t[0] = center p[4] ;
+	t[1] = point 1 along p[4] ;
+	t[2] = point -theta along p[4] ;
+	t[3] = point -theta/2 along p[4] ;
+	p[5] = t[0] -- t[1] .. t[3] .. t[2] -- cycle ;
+	fill p[5] withcolor \MPcolor{simpleslides:contrastcolor} ;
+	for i = 1 upto NOfPages :
+		s[i] = point i/(NOfPages -1) along p[4] ;
+		pickup pencircle scaled 1pt ;
+		draw s[i] -- t[0] withcolor \MPcolor{simpleslides:backgroundcolor} ;
+	endfor ;
+	p[3] = p[4] scaled 0.4 ;
+	fill p[3] withcolor \MPcolor{simpleslides:contrastcolor} ;
+	draw p[3] withcolor \MPcolor{simpleslides:backgroundcolor} ;
+	label(textext("\switchtobodyfont[10pt]\color[simpleslides:backgroundcolor]\pagenumber"),origin) ;
+	currentpicture := currentpicture shifted circcenter ;
+fi ;
+StopPage ;
+\stopuseMPgraphic 
+
+%D We define these backgrounds as overlays:
+
+\defineoverlay 
+  [simpleslides:background:title] 
+  [\useMPgraphic{simpleslides:MP:horizontal}] 
+
+\defineoverlay 
+  [simpleslides:background:horizontal] 
+  [\useMPgraphic{simpleslides:MP:horizontal}] 
+
+\defineoverlay 
+  [simpleslides:background:vertical] 
+  [\useMPgraphic{simpleslides:MP:vertical}] 
+
+\defineoverlay
+  [simpleslides:background:ornament]
+  [\useMPgraphic{simpleslides:MP:ornament}]
+
+\setupTitle
+  [\c!headcolor={simpleslides:altcontrastcolor}]
+
+%D We want the title to placed in a framed box. We redefine all the keys of
+%D \type{\setupTitle}, so that the module is easier to maintain.
+
+\setupSlideTitle
+  [\c!color=simpleslides:backgroundcolor,
+   \c!alternative=layer,
+   \c!align=\v!center,
+   \c!width=\textwidth,
+   \c!height=2cm,
+   \c!after=]
+
+
+% \setupTitle
+%   [\c!title=,
+%    \c!author=,
+%    \c!date=\currentdate,
+%    \c!headstyle=,
+%    \c!headcolor=,
+%    \c!align=\v!middle,
+%    \c!before={\vfill\getvalue{simpleslides:framed}
+%               [\c!width=\textwidth,\c!height=.75\textheight,
+%               \c!align=\v!middle, \c!strut=\v!no]
+%               \bgroup},
+%    \c!after={\egroup\vfill},
+%    \c!title\c!style={\switchtobodyfont[\TitleSize]},
+%    \c!title\c!color=,
+%    \c!title\c!align=,%\v!middle,
+%    \c!author\c!style=,
+%    \c!author\c!color=,
+%    \c!author\c!align=,%\v!middle, 
+%    \c!date\c!style=,
+%    \c!date\c!color=,
+%    \c!date\c!align=,%\v!middle,
+%    \c!before\c!title=,
+%    \c!before\c!author=,
+%    \c!before\c!date=,
+%    \c!after\c!title={\blank[1*line]},
+%    \c!after\c!author={\blank[2*line]},
+%    \c!after\c!date=]
+% 
+% %D We want the title to be of a specific height
+% 
+% \setuphead[SlideTitle]
+%    [\c!after=,
+%     \c!alternative=\v!text,
+%     \c!color=white,
+%     \c!command=\doSlideTitle]
+% 
+% \define[2]\doSlideTitle
+%   {\setlayer[simpleslides:layer:slidetitle]%
+%      {\getvalue{simpleslides:framed}[\c!width=\textwidth,\c!height=1.1cm,
+%                 \c!align=\v!right]
+%                {#1#2}}} 
+
+%D The symbol for the first level of itemizations. 
+
+\definesymbol[1][\useMPgraphic{simpleslides:itemize:square}]
+\setupitemize[1][color=simpleslides:itemize:color]
+
+\protect
+\stopmodule
+
+\endinput
+
