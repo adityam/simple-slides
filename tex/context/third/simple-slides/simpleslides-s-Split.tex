@@ -73,17 +73,17 @@
 %D We use \METAPOST\ to draw backgrounds. First, we define a few helper macros
 %D to place text inside \METAPOST
 
-\definetextext[simpleslides:sometxt:left] {\TaspresentSometxtLeft}
-\definetextext[simpleslides:sometxt:right]{\TaspresentSometxtRight}
+\definetextext[simpleslides:sometxt:left] {\SimpleSlidesSometxtLeft}
+\definetextext[simpleslides:sometxt:right]{\SimpleSlidesSometxtRight}
 
-\unexpanded\def\TaspresentSometxtLeft#1%
+\unexpanded\def\SimpleSlidesSometxtLeft#1%
   {\getvalue{simpleslides:framed:small}[align=left]
-                       {\ix\color[simpleslides:backgroundcolor]
+                       {\switchtobodyfont[9pt]\color[simpleslides:backgroundcolor]
                        {#1\quad\strut}}}
 
-\unexpanded\def\TaspresentSometxtRight#1%
+\unexpanded\def\SimpleSlidesSometxtRight#1%
   {\getvalue{simpleslides:framed:small}[align=right]
-                       {\ix\color[simpleslides:backgroundcolor]
+                       {\switchtobodyfont[9pt]\color[simpleslides:backgroundcolor]
                        {\strut\quad#1}}}
 
 %D Now we use \METAPOST\ to draw a page ornament, which will then be inherited
@@ -117,16 +117,16 @@ fill p[2] withcolor \MPcolor{simpleslides:variantcolor} ;
 fill p[3] withcolor \MPcolor{simpleslides:variantcolor} ;
 fill p[4] withcolor \MPcolor{simpleslides:contrastcolor} ;
 
-draw \sometxt[simpleslides:sometxt:left]{\moduleparameter{simpleslides:title}{date}}
+draw \sometxt[simpleslides:sometxt:left]{\noexpand\moduleparameter{simpleslides:title}{date}}
      shifted (1cm,y1) ;
 
 draw \sometxt[simpleslides:sometxt:right]{\folio\ of \lastpage}
      shifted (x5,y1) ;
 
-draw \sometxt[simpleslides:sometxt:left]{\moduleparameter{simpleslides:title}{author}}
+draw \sometxt[simpleslides:sometxt:left]{\noexpand\moduleparameter{simpleslides:title}{author}}
      shifted (1cm,0) ;
 
-draw \sometxt[simpleslides:sometxt:right]{\moduleparameter{simpleslides:title}{title}}
+draw \sometxt[simpleslides:sometxt:right]{\noexpand\moduleparameter{simpleslides:title}{title}}
       shifted (x5,0) ;
 
 StopPage ;
