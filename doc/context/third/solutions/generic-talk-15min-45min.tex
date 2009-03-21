@@ -1,0 +1,170 @@
+% This file is a solution template for:
+
+% - Giving a talk on some subject.
+% - The talk is between 15min and 45min long.
+% - Style is ornate.
+
+% This is adapted from the example by Till Tantau <tantau@users.sourceforge.net>
+% included as part of the beamer package in LaTeX
+%
+% In principle, this file can be redistributed and/or modified under
+% the terms of the GNU Public License, version 2.
+%
+% However, this file is supposed to be a template to be modified
+% for your own needs. For this reason, if you use this file as a
+% template and not specifically distribute it as part of a another
+% package/program, the author grants the extra permission to freely
+% copy and  modify this file as you see fit and even to delete this
+% copyright notice. 
+
+\usemodule
+  [simpleslides]
+  [style=BigNumber,
+    font=Helvetica]
+
+
+\setupTitle
+  [title={Presentation Title},
+   author={F.~Author, S.~Another},
+   date={Date / Occasion}]
+
+% In order to use sample images distributed with ConTeXt
+\setupexternalfigures[location={local,global,default}] 
+
+\starttext
+
+\placeTitle
+
+% Since this a solution template for a generic talk, very little can
+% be said about how it should be structured. However, the talk length
+% of between 15min and 45min and the theme suggest that you stick to
+% the following rules:  
+
+% - Exactly two or three sections (other than the summary).
+% - At *most* three subsections per section.
+% - Talk about 30s to 2min per slide. So there should be between about
+%   15 and 30 slides, all told.
+
+
+\SlideTitle{Make Titles Informative}
+% - A title should summarize the slide in an understandable fashion
+%   for anyone how does not follow everything on the slide itself.
+
+\startitemize
+  \item Use bullets points when appropriate.
+  \item Use pictures when possible
+  \item Do not put too much information on one slide
+\stopitemize
+
+% You can include full slide pictures. There are some helper commands to
+% decorate the picture. 
+
+% To include a full slide picute.
+\IncludePicture
+  [horizontal]
+  [cow] % Name of the image
+  {A Dutch Cow} % Title of the slide
+
+% We can decorate the picture using circles, arrows, and focus. In order to
+% determine where to draw the decorations, it is helpful to draw a grid.
+
+\IncludePicture
+  [horizontal]
+  [cow] % Name of the image
+  [highlight=yes,
+   grid=yes]
+  {A Dutch Cow with a grid} % Title of the slide
+
+% Sometimes you need a finer grip to fine tune the exact position
+\IncludePicture
+  [horizontal]
+  [cow] % Name of the image
+  [highlight=yes,
+   grid=yes,
+   steps=5, % Each grid block is broken into these many parts.
+   subgrid=yes]
+  {A Dutch Cow with a fine grid} % Title of the slide
+
+% Now lets try to draw a circle around the cow's head
+\IncludePicture
+  [horizontal]
+  [cow] % Name of the image
+  [highlight=yes,
+   grid=yes,
+   subgrid=yes,
+   alternative=circle,
+   color=orange,
+   x=1.4,
+   y=8.2,
+   xscale=1.5,
+   yscale=couple, % To ensure that we get a circle and not an ellipse
+   shadow=bottomleft]
+  {The head of a dutch cow} % Title of the slide
+
+
+% Now that we have found the correct location to place the circle, we can remove
+% the helper grid.
+\IncludePicture
+  [horizontal]
+  [cow] % Name of the image
+  [highlight=yes,
+   grid=no,
+   subgrid=no,
+   alternative=circle,
+   color=orange,
+   x=1.4,
+   y=8.2,
+   xscale=1.5,
+   yscale=couple, % To ensure that we get a circle
+   shadow=bottomleft]
+   {The head of a dutch cow} % Title of the slide
+
+% We can also draw arrows.
+\IncludePicture
+  [horizontal]
+  [cow] % Name of the image
+  [highlight=yes,
+   grid=no,
+   subgrid=no,
+   alternative=arrow,
+   color=orange,
+   x=0.4,
+   y=6.8,
+   direction=-90, 
+   length=3cm,
+   shadow=topright] % The shadow direction gets rotated with the arrow
+   {The mouth of a dutch cow} % Title of the slide
+
+% We can also highlight specific parts of the picture
+\IncludePicture
+  [horizontal]
+  [cow] % Name of the image
+  [highlight=yes,
+   grid=no,
+   subgrid=no,
+   alternative=focus,
+   color=orange,
+   x=1.4,
+   y=8.2,
+   xscale=1.5,
+   yscale=couple, % To ensure that we get a circle
+   opacity=0.5]
+   {The head of a dutch cow} % Title of the slide
+
+% You can also include a picture with some text along side it.
+
+\IncludePicture
+  [vertical]
+  [mill] % Name of the image
+  {The windmills are an example of a green energy source.} % Slide title
+
+\SlideTitle{Summary}
+
+\startitemize
+  \item The {\em first main message} of your talk in one or two lines.
+  \item The {\em second main message} of your talk in one or two lines.
+  \item Perhaps a {\em third message}, but not more than that.
+\stopitemize
+
+\stoptext
+

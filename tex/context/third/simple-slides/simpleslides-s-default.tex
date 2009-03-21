@@ -443,11 +443,10 @@
   {\doifelsenothing{\simpleslidesPictureParameter\c!width}
      {\doifelsenothing{\simpleslidesPictureParameter\c!height}
         {\setbox\scratchbox\hbox{\externalfigure[#1]}
-         \!!widtha=\wd\scratchbox
-         \!!heighta=\ht\scratchbox
-         \!!widtha=\dimexpr#2/\!!widtha\relax
-         \!!heighta=\dimexpr\PictureFrameHeight/\!!heighta\relax
-        \ifdim\dimexpr\PictureFrameHeight*\!!widtha>\dimexpr#2*\!!heighta
+         \!!dimena=\dimexpr#2/\PictureFrameHeight\relax
+         \!!dimenb=\dimexpr\wd\scratchbox/\ht\scratchbox\relax
+         %TODO: Fix this
+        \ifdim\!!dimenb>\!!dimena
           %
           \setvalue{simpleslides:picture:width}{#2}%
           \setvalue{simpleslides:picture:height}{}%
