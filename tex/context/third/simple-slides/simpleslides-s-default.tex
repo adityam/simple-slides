@@ -557,14 +557,18 @@
                withpen pencircle scaled (OverlayWidth/250) 
                withcolor \MPcolor\simpleslidesGridColor ;
 
-    label.bot(textext("\ix \color[simpleslides:textcolor]" & decimal i),
+    label.bot(textext("\switchtobodyfont[9pt]\startcolor[simpleslides:textcolor]" 
+                     & decimal i & "\stopcolor"),
               (i/10*OverlayWidth, 0)) ;
-    label.top(textext("\ix \color[simpleslides:textcolor]" & decimal i),
+    label.top(textext("\switchtobodyfont[9pt]\startcolor[simpleslides:textcolor]" 
+                      & decimal i & "\stopcolor"),
               (i/10*OverlayWidth, OverlayHeight)) ;
 
-    label.lft(textext("\ix \color[simpleslides:textcolor]" & decimal i),
+    label.lft(textext("\switchtobodyfont[9pt]\startcolor[simpleslides:textcolor]" 
+                     & decimal i & "\stopcolor"),
               (0, i/10*OverlayHeight)) ;
-    label.rt(textext("\ix \color[simpleslides:textcolor]" & decimal i),
+    label.rt(textext("\switchtobodyfont[9pt]\startcolor[simpleslides:textcolor]" 
+                    & decimal i & "\stopcolor"),
               (OverlayWidth, i/10*OverlayHeight)) ;
   endfor ;
   setbounds currentpicture to OverlayBox ;
