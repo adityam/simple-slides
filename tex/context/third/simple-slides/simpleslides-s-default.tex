@@ -443,10 +443,9 @@
   {\doifelsenothing{\simpleslidesPictureParameter\c!width}
      {\doifelsenothing{\simpleslidesPictureParameter\c!height}
         {\setbox\scratchbox\hbox{\externalfigure[#1]}
-         \!!dimena=\dimexpr#2/\PictureFrameHeight\relax
-         \!!dimenb=\dimexpr\wd\scratchbox/\ht\scratchbox\relax
-         %TODO: Fix this
-        \ifdim\!!dimenb>\!!dimena
+        % Courtsey Wolfgang Schuster
+        \ifdim\dimexpr#2*100/\wd\scratchbox\relax < 
+              \dimexpr\PictureFrameHeight*100/\ht\scratchbox\relax
           %
           \setvalue{simpleslides:picture:width}{#2}%
           \setvalue{simpleslides:picture:height}{}%
@@ -613,7 +612,6 @@
 \def\simpleslidesSetEllipseDimensions%
   {\edef\simpleslidesCurrentXscale{\simpleslidesPictureParameter{\c!x\c!scale}}
    \edef\simpleslidesCurrentYscale{\simpleslidesPictureParameter{\c!y\c!scale}}
-      \message{: X=\simpleslidesCurrentXscale, Y=\simpleslidesCurrentYscale}
    \processaction
      [\simpleslidesCurrentXscale]
      [    couple=>\edef\simpleslidesCurrentXscale{\simpleslidesCurrentYscale*OverlayHeight/5},
@@ -621,8 +619,7 @@
    \processaction
      [\simpleslidesCurrentYscale]
      [    couple=>\edef\simpleslidesCurrentYscale{\simpleslidesCurrentXscale}, % no *OverlayWidth/5, it has already been scaled
-      \v!unknown=>\edef\simpleslidesCurrentYscale{\simpleslidesCurrentYscale*OverlayHeight/5}]
-      \message{X=\simpleslidesCurrentXscale, Y=\simpleslidesCurrentYscale}}
+      \v!unknown=>\edef\simpleslidesCurrentYscale{\simpleslidesCurrentYscale*OverlayHeight/5}]}
 
 %D Metapost graphic to draw a circle. The circle is centered at (x,y) with a
 %D x-radius equal to \type{xscale} and y-radius equal to \type{yscale}. If

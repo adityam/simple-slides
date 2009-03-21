@@ -2,7 +2,6 @@
 
 % - Giving a talk on some subject.
 % - The talk is between 15min and 45min long.
-% - Style is ornate.
 
 % This is adapted from the example by Till Tantau <tantau@users.sourceforge.net>
 % included as part of the beamer package in LaTeX
@@ -19,8 +18,63 @@
 
 \usemodule
   [simpleslides]
-  [style=BigNumber,
-    font=Helvetica]
+  [%%%%%%%%%%%%%%%%%%%%%
+   % Choose a style
+  %%%%%%%%%%%%%%%%%%%%%%
+    style=BigNumber,            % stylecolor=blue|red
+  % style=BottomSquares,
+  % style=Boxed,
+  % style=default,
+  % style=Ellipse,
+  % style=Embossed,
+  % style=Framed,               % stylebottom=square|stripes
+  % style=FramedTitle,
+  % style=HorizontalStripes,    % stylecolor=blue|green|red
+  % style=NarrowStripes,        % stylecolor=blue|green|red
+  % style=RainbowStripe,
+  % style=Rounded,
+  % style=Shaded,               % stylecolor=blue|green
+  % style=SideSquares,
+  % style=Split,
+  % style=Sunrise,
+  % style=Swoosh,
+  % style=ThickStripes,
+  %%%%%%%%%%%%%%%%%%%%%%%
+   % Choose a font
+  %%%%%%%%%%%%%%%%%%%%%%%
+    font=Bookman,
+  % font=Chancery,
+  % font=Gothic,
+  % font=Helevetica,
+  % font=LatinModern,
+  % font=LatinModernSans,
+  % font=Palatino,
+  % font=Schoolbook,
+  % font=Times,
+  %%%%%%%%%%%%%%%%%%%%%%%%%
+    % Choose a font size
+  %%%%%%%%%%%%%%%%%%%%%%%%%
+    size=17pt, % Default is 17pt
+  %%%%%%%%%%%%%%%%%%%%%%%%%
+    % Choose a stylecolor.
+    % Only a few styles support stylecolor
+  %%%%%%%%%%%%%%%%%%%%%%%%%
+    stylecolor=blue, % supported by:
+    % BigNumber, HorizontalStripes, NarrowStripes, Shaded
+  % stylecolor=red, % supported by:
+    % BigNumber, HorizontalStripes, NarrowStripes
+  % stylecolor=green, % supported by:
+    % HorizontalStripes, NarrowStripes, Shaded
+  %%%%%%%%%%%%%%%%%%%%%%%%%
+    % Choose a stylebottom.
+    % Only one style support stylebottom
+  %%%%%%%%%%%%%%%%%%%%%%%%%
+    stylebottom=square, % supported by:
+    % Framed
+  % stylebottom=stripes, % supported by:
+    % Framed
+  ]
+
 
 
 \setupTitle
