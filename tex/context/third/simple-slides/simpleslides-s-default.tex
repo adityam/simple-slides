@@ -339,7 +339,7 @@
 
 \setupPicture
   [highlight=\v!no,%yes|no|default=no
-   \c!alternative=\v!none,%none|ellipse|arrow|gray|default=none
+   \c!alternative=\v!none,%none|ellipse|arrow|focus|default=none
    \c!grid\c!color=darkgreen,
    \c!grid=\v!no,
    \c!sub\c!grid=\v!no,
@@ -417,7 +417,8 @@
      [   ellipse=>\chardef\simpleslidesHighlightAlternative\plusone
                   \simpleslidesSetEllipseDimensions,
            arrow=>\chardef\simpleslidesHighlightAlternative\plustwo,
-           focus=>\chardef\simpleslidesHighlightAlternative\plusthree,
+           focus=>\chardef\simpleslidesHighlightAlternative\plusthree
+                  \simpleslidesSetEllipseDimensions,
       \v!default=>\chardef\simpleslidesHighlightAlternative\zerocount,
       \v!unknown=>\chardef\simpleslidesHighlightAlternative\zerocount]
    %
@@ -517,7 +518,7 @@
    
 %D Now, we define the main \METAPOST\ graphic to highlight the picture. It first
 %D checks if the user has asked for a grid, and if so, draws a grid and a
-%D subgrid. Then it checks which alternative (arrow, ellipse, gray) is requested
+%D subgrid. Then it checks which alternative (arrow, ellipse, focus) is requested
 %D and draws that. Notice that we have intermixed \TEX\ and \METAPOST, 
 %D exploiting the power of the MP-TEX interaction provided by \CONTEXT.
 
@@ -712,8 +713,7 @@
   p := fullcircle xyscaled 
         % The dimensions are divided by 5 rather than 10, since the scale 
         % measures the radius, rather than the diameter.
-       (\simpleslidesPictureParameter{\c!x\c!scale}*OverlayWidth/5,
-        \simpleslidesPictureParameter{\c!y\c!scale}*OverlayHeight/5) 
+        (\simpleslidesCurrentXscale, \simpleslidesCurrentYscale)
        rotated (\simpleslidesPictureParameter\c!direction) 
        shifted
        (\simpleslidesPictureParameter\c!x *OverlayWidth/10,
