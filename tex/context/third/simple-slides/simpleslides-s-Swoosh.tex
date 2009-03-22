@@ -117,13 +117,13 @@ StopPage ;
 
 \startuseMPgraphic{simpleslides:MP:ornament}
 save b, s, t, p, circcenter, theta, pic ;
+StartPage ;
 path p[] ;
 pair t[] ;
 pair s[] ;
 pair circcenter ; circcenter = lrcorner Page shifted (-1cm, 1cm) ;
 picture pic ;
 b = 1.5cm ;
-StartPage ;
 if \realfolio > 1:
 	theta = (PageNumber - 1)/(NOfPages - 1) ;
 	p[4] = fullcircle scaled b rotated 90 ;
