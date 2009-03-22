@@ -89,14 +89,15 @@ p[1] = llcorner Page -- z1 -- z2 .. z3 .. z4 -- z7 -- z6 --
 
 fill p[1] withcolor \MPcolor{simpleslides:contrastcolor} ;
 
-draw \sometxt{\framed[frame=off,width=2cm,height=2cm]%
-             {\color[simpleslides:backgroundcolor]{\pagenumber}}} ;
-
 \stopuseMPgraphic
 
 \startuseMPgraphic{simpleslides:MP:vertical}
 StartPage ;
 \includeMPgraphic{simpleslides:MP:common} ;
+% The pagenumber cannot be part of MP:common otherwise pdftex ignores it.
+draw \sometxt{\framed[frame=off,width=2cm,height=2cm]%
+             {\color[simpleslides:backgroundcolor]{\pagenumber}}} ;
+
 StopPage ;
 \stopuseMPgraphic
 
@@ -104,6 +105,9 @@ StopPage ;
 StartPage;
 
 \includeMPgraphic{simpleslides:MP:common} ;
+draw \sometxt{\framed[frame=off,width=2cm,height=2cm]%
+             {\color[simpleslides:backgroundcolor]{\pagenumber}}} ;
+
 
 z8 = ulcorner Page shifted (a/2,-2.2*a) ;
 z9 = z8 shifted (0,-d) ;
