@@ -60,8 +60,8 @@
   [style=DoubleFrame,
    font=LatinModernSans,
    size=17pt,
-   stylecolor=blue,
-   stylebottom=square]
+   color=blue,
+   bottom=square]
 
 \usemodule
   [simpleslides-s]
@@ -70,8 +70,8 @@
 \doiffileelse{\currentmoduleparameter{style}}
   {\usemodule{\currentmoduleparameter{style}}}
   {\usemodule[simpleslides-s][\currentmoduleparameter{style}]}
-  [ color=\currentmoduleparameter{stylecolor},
-   bottom=\currentmoduleparameter{stylebottom}]
+  [ color=\currentmoduleparameter{color},
+   bottom=\currentmoduleparameter{bottom}]
 
 \usemodule
   [simpleslides-f]
