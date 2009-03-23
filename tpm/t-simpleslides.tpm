@@ -1,0 +1,74 @@
+<!DOCTYPE rdf:RDF SYSTEM "tpm.dtd">
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:TPM="http://texlive.dante.de/">
+  <rdf:Description about="http://dl.contextgarden.net/modules/t-vim">
+    <TPM:Name>t-simpleslides</TPM:Name>
+    <TPM:Type>Module</TPM:Type>
+    <TPM:Date>2009-03-24 00:00:00</TPM:Date>
+    <TPM:Version>2009-03-24</TPM:Version>
+    <TPM:Creator>Aditya Mahajan and Thomas A. Schmitz</TPM:Creator>
+    <TPM:Title>Simple slides in ConTeXt</TPM:Title>
+    <TPM:Description>
+      A module to create simple slides in ConTeXt
+    </TPM:Description>
+    <TPM:Author>Aditya Mahajan and Thomas A. Schmitz</TPM:Author>
+    <TPM:Size>4677942</TPM:Size>
+    <TPM:Build/>
+    <TPM:RunFiles size="134654">
+      tex/context/third/simple-slides/t-simpleslides.tex
+      tex/context/third/simple-slides/simpleslides-f-default.tex
+      tex/context/third/simple-slides/simpleslides-s-BigNumber.tex
+      tex/context/third/simple-slides/simpleslides-s-BottomSquares.tex
+      tex/context/third/simple-slides/simpleslides-s-Boxed.tex
+      tex/context/third/simple-slides/simpleslides-s-default.tex
+      tex/context/third/simple-slides/simpleslides-s-Ellipse.tex
+      tex/context/third/simple-slides/simpleslides-s-Embossed.tex
+      tex/context/third/simple-slides/simpleslides-s-Framed.tex
+      tex/context/third/simple-slides/simpleslides-s-FramedTitle.tex
+      tex/context/third/simple-slides/simpleslides-s-HorizontalStripes.tex
+      tex/context/third/simple-slides/simpleslides-s-NarrowStripes.tex
+      tex/context/third/simple-slides/simpleslides-s-RainbowStripe.tex
+      tex/context/third/simple-slides/simpleslides-s-Rounded.tex
+      tex/context/third/simple-slides/simpleslides-s-Shaded.tex
+      tex/context/third/simple-slides/simpleslides-s-SideSquares.tex
+      tex/context/third/simple-slides/simpleslides-s-Split.tex
+      tex/context/third/simple-slides/simpleslides-s-Sunrise.tex
+      tex/context/third/simple-slides/simpleslides-s-Swoosh.tex
+      tex/context/third/simple-slides/simpleslides-s-ThickStripes.tex
+      scripts/context/lua/third/simple-slides/mtx-simpleslides.lua
+    </TPM:RunFiles>
+    <TPM:DocFiles size="4543288">
+      doc/context/third/simple-slides/simple-slides.tex
+      doc/context/third/simple-slides/solutions/generic-talk-15min-45min.tex
+      doc/context/third/simple-slides/solutions/speaker_introduction-2min.tex
+      doc/context/third/simple-slides/styles/BigNumber-blue.pdf
+      doc/context/third/simple-slides/styles/BigNumber-red.pdf
+      doc/context/third/simple-slides/styles/BottomSquares.pdf
+      doc/context/third/simple-slides/styles/Boxed.pdf
+      doc/context/third/simple-slides/styles/Ellipse.pdf
+      doc/context/third/simple-slides/styles/Embossed.pdf
+      doc/context/third/simple-slides/styles/Framed-square.pdf
+      doc/context/third/simple-slides/styles/Framed-stripe.pdf
+      doc/context/third/simple-slides/styles/FramedTitle.pdf
+      doc/context/third/simple-slides/styles/HorizontalStripes-blue.pdf
+      doc/context/third/simple-slides/styles/HorizontalStripes-green.pdf
+      doc/context/third/simple-slides/styles/HorizontalStripes-red.pdf
+      doc/context/third/simple-slides/styles/NarrowStripes-blue.pdf
+      doc/context/third/simple-slides/styles/NarrowStripes-green.pdf
+      doc/context/third/simple-slides/styles/NarrowStripes-red.pdf
+      doc/context/third/simple-slides/styles/RainbowStripe.pdf
+      doc/context/third/simple-slides/styles/Rounded.pdf
+      doc/context/third/simple-slides/styles/Shaded-blue.pdf
+      doc/context/third/simple-slides/styles/Shaded-green.pdf
+      doc/context/third/simple-slides/styles/SideSquares.pdf
+      doc/context/third/simple-slides/styles/Split.pdf
+      doc/context/third/simple-slides/styles/Sunrise.pdf
+      doc/context/third/simple-slides/styles/Swoosh.pdf
+      doc/context/third/simple-slides/styles/ThickStripes.pdf
+      tpm/t-simpleslides.tpm
+    </TPM:DocFiles>
+    <TPM:Requires>
+      <TPM:Package name="context"/>
+    </TPM:Requires>
+    <TPM:Provides>t-simpleslides</TPM:Provides>
+  </rdf:Description>
+</rdf:RDF>
