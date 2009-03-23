@@ -335,6 +335,8 @@
                [highlight=\v!no,
                 steps=5,
                 opacity=0.5,
+                \c!x\c!scale=couple,
+                \c!y\c!scale=couple,
                 \c!width=,\c!height=,#1]}
 
 \setupPicture
@@ -348,8 +350,8 @@
    \c!color=orange,% should this be called highlightcolor?
    \c!x=5,
    \c!y=5,
-   \c!x\c!scale=1,
-   \c!y\c!scale=1,
+   \c!x\c!scale=couple,
+   \c!y\c!scale=couple,
    length=2cm,
    direction=0,
    opacity=0.5,
@@ -612,7 +614,15 @@
 \def\simpleslidesSetEllipseDimensions%
   {\edef\simpleslidesCurrentXscale{\simpleslidesPictureParameter{\c!x\c!scale}}
    \edef\simpleslidesCurrentYscale{\simpleslidesPictureParameter{\c!y\c!scale}}
-   \processaction
+   \doifelse{\simpleslidesCurrentXscale}{couple}
+     {\doifelse{\simpleslidesCurrentYscale}{couple}
+       {\edef\simpleslidesCurrentXscale{1}
+        \edef\simpleslidesCurrentYscale{1}}
+       {\dosimpleslidesSetEllipseDimensions}}
+    {\dosimpleslidesSetEllipseDimensions}}
+
+\def\dosimpleslidesSetEllipseDimensions%
+  {\processaction
      [\simpleslidesCurrentXscale]
      [    couple=>\edef\simpleslidesCurrentXscale{\simpleslidesCurrentYscale*OverlayHeight/5},
       \v!unknown=>\edef\simpleslidesCurrentXscale{\simpleslidesCurrentXscale*OverlayWidth/5}]
