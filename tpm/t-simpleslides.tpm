@@ -34,6 +34,7 @@
       tex/context/third/simple-slides/simpleslides-s-Sunrise.tex
       tex/context/third/simple-slides/simpleslides-s-Swoosh.tex
       tex/context/third/simple-slides/simpleslides-s-ThickStripes.tex
+      tex/context/interface/third/t-simpleslides.xml
       scripts/context/lua/third/simple-slides/mtx-simpleslides.lua
     </TPM:RunFiles>
     <TPM:DocFiles size="4543288">
