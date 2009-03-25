@@ -1,0 +1,382 @@
+\setupcolors[state=start]
+
+\usemodule[int-load]
+
+\usemodule[abr-01]
+
+\setupcolors[state=start]
+
+\loadsetups[cont-en.xml]
+\loadsetups[simpleslides.xml]
+
+\definetype[typeTEX][option=tex,style=type]
+
+\setuphead[title][alternative=middle] % Will make it fancy later
+
+\useURL[practex][http://www.tug.org/pracjourn/2006-2/schmitz/]
+
+\setupexternalfigures[location={local,global,default}] 
+
+\starttext
+
+\title
+  Simple Slides \\
+  A \CONTEXT\ module for making slides 
+
+\section Introduction
+
+This module provides an easy|-|to|-|use interface
+for creating simple slides|/|presentations in \CONTEXT. 
+The salient feature of this module are:
+\startitemize[intro]
+  \item The module is meant for presentations which will be shown on a
+    digital projector. They have no interactive elements (such as buttons or
+    hyperlinks) and no navigational tools (such as table of contents).
+  \item The module comes with several predefined styles; these styles are sober
+    in appearance and meant for academic presentations. It also provides some
+    macros to help in presenting slides with both pictures and text.
+  \item Most styles allow for some degree of user|-|reconfigurability. Designing
+    a new style is also easy.
+\stopitemize
+
+This module provides a simple structure that will be suitable for beginning or
+intermediate users of \CONTEXT, or someone who does not want to spend too much
+time playing around with different configuration options for \CONTEXT. As such
+it focusses on different users than Hans's presentation modules which have larger
+and fancier features. This module also offers much less features than the
+\LATEX\ \filename{beamer} package. Its main strength is its ease of use; you
+should be able to write your first presentation after spending five minutes with
+this manual.
+
+\section A bit of history
+
+The idea of a module suitable for simple presentations took shape when Thomas
+started using \CONTEXT\ for preparing his course presentations. \CONTEXT\ comes
+with a bunch of modules for presentations (the files \filename{s-pre-??.tex} in
+\filename{$TEXMF/tex/context/base}) which are written by Hans Hagen. Hans
+usually creates a new presentation style whenever he gives a talk about
+\CONTEXT. As such, his presentation styles highlight the fancy and bleeding edge
+features of \CONTEXT, and are not the most suitable starting point for academic
+presentations. 
+
+\CONTEXT\ does make creating your own presentation style relatively easy. So
+Thomas wrote some presentation related macros (see the Prac\TEX\ article
+{\tt\from[practex]}). With time, Thomas extended these macros into a collection
+of styles providing different visual effects, and later collected all of them in
+the \filename{taspresent} module. He gave a talk about the \filename{taspresent}
+module in in the second \CONTEXT\ user meeting at Bohinj, and in the ensuing
+discussions, Aditya and Thomas decided to modularize and
+\quotation{\CONTEXT{ize}} some of the internals of the module, giving rise to
+the current module. 
+
+\section{Installation}
+
+The module is installed in the usual way: simply unzip the archive
+\filename{t-simpleslides-<data>.zip} into one of your \filename{$TEXMF} tree,
+and from a terminal run \type{mktexlsr} (for \MKII) and \type{luatools
+--generate} (for \MKIV). To verify that everything was installed correctly, from
+a terminal run \type{kpsewhich t-simpleslides.tex} (for \MKII) and
+\type{luatools t-simpleslides.tex} (for \MKIV); these commands should return the
+complete path of the files that you just installed.
+
+\section{Quick start}
+
+Here's an example of the most basic way of using the module:
+
+\startTEX
+\usemodule[simpleslides]
+	  [style=Swoosh,
+	   font=Palatino,
+	   size=17pt]
+ 
+\setupTitle
+       [title={Title of the presentation},
+       author={Author of the presentation},
+         date={date of the presentation}]
+ 
+\starttext
+\placeTitle
+ 
+\SlideTitle{First Slide}
+ 
+Your text goes here.
+
+\SlideTitle{Second Slide}
+
+More text.
+ 
+\stoptext
+\stopTEX
+
+The command \typeTEX{\SlideTitle} begins a new slide, typesets its argument as
+the title of this slide, takes care of increasing counters and progress
+bars, and sets up backgrounds; the content of your slides follows after
+this command. Your slide is just a normal \CONTEXT\ environment, so you can
+use any commands and environments you want. If you want to have slides with
+illustrations, there are two ways to place pictures: in the
+\quotation{horizontal} structure, the picture is placed under the title of
+the slide; in the \quotation{vertical} structure, the picture is placed on
+the left-hand side of the slide and the text opposite it. Pictures are
+placed with this command:
+
+\startTEX
+\IncludePicture[horizontal]
+               [NAME]
+	       [width=\textwidth]
+	       {This text will be the title of the slide}
+
+\IncludePicture[vertical]
+               [NAME]
+	       [width=\NormalWidth]
+	       {This text will be placed opposite the picture}
+\stopTEX
+
+The macros \tex{NormalWidth} and \tex{NormalHeight} make sure that
+your vertical picture fills the available space.
+
+\section{Using the Module}
+
+\subsection{The setup command}
+
+To use the module, you put this line into your source file:
+
+\setup{simpleslides}
+
+The second argument takes a list of {\tt key=value} assignments which you
+can also set with this command:
+
+\setup{setupsimpleslides}
+
+The values for the different keys will be explained in the following
+sections. 
+
+\subsubsection{The {\tt style} Key}
+
+The {\tt style} key determines the look of your presentation; it defines
+the background, borders, elements of the slides, etc.  There are nineteen
+predefined options for this key; the appendix shows what they look like. 
+
+\subsubsection{The {\tt size} Key}
+
+This selects the font size for the main text. The value has to be a
+dimension; it is stored in the macro \tex{NormalSize}. The \tex{TitleSize}
+is calculated according to the main text size.
+
+\subsubsection{The {\tt font} Key}
+
+You can use any fonts and typescripts with the module. In order to
+facilitate choosing a font, especially for beginners, the module provides
+shortcuts for using the \TeX Gyre font collection and for Latin
+Modern. These predefined fonts should work on any \TeX\ installation that
+has the complete \TeX Gyre collection; this is the case for the \CONTEXT\
+minimals and for \TeX Live since 2008. They are selected by setting the
+{\tt font} key.
+
+\starttabulate[|l|p|]
+\NC {\tt LatinModern}     \NC typesets in LatinModern Serif     \NC \NR
+\NC {\tt LatinModernSans} \NC typesets in LatinModern Sans      \NC \NR
+\NC {\tt Bookman}         \NC typesets in \TeX Gyre Bonum       \NC \NR
+\NC {\tt Chancery}        \NC typesets in \TeX Gyre Chorus
+    \footnote{Please be aware that Chorus is a calligraphic font. It has no
+    italic or bold.}                                            \NC \NR
+\NC {\tt Gothic}          \NC typesets in \TeX Gyre Adventor    \NC \NR
+\NC {\tt Helvetica}       \NC typesets in \TeX Gyre Heros       \NC \NR
+\NC {\tt Palatino}        \NC typesets in \TeX Gyre Pagella     \NC \NR
+\NC {\tt Schoolbook}      \NC typesets in \TeX Gyre Schola      \NC \NR
+\NC {\tt Times}           \NC typesets in \TeX Gyre Termes      \NC \NR
+\stoptabulate
+ 
+If you set your own font, please remember to select the bodyfont at
+\typeTEX{\NormalSize} and to give your setup commands {\em after} loading
+the module (or \TeX\ will not know what \typeTEX{\NormalSize} means and
+complain about an \quotation{undefined control sequence}). So if you have
+your own typescript, your setup should look like this:
+
+\startTEX
+\usetypescriptfile[type-myfile]
+\usetypescript[Mytypescript]
+\setupbodyfont[Myfont,\NormalSize]
+\stopTEX
+
+\subsection{Macros}
+
+The module offers only a few macros to facilitate the preparation of
+presentations. 
+
+\subsection{\typeTEX{\setupTitle}}
+
+Begin your presentation by setting the name of the author(s), the title,
+and the date with this macro:
+
+\setup{setupTitle}
+
+If you don't set the date, it will default to \tex{currentdate}.
+
+\subsection{\typeTEX{\MakeTitle}}
+
+This macro will produce a title page with the author, title, and date of
+the presentation; the look is of course determined by the style of your
+presentation. 
+
+\subsection{\typeTEX{\IncludePicture}}
+
+This macro facilitates the placement of pictures. It takes four arguments:
+
+\setup{IncludePicture}
+
+The first argument decides whether the picture will be placed in a horizontal
+or vertical arrangement; for examples, refer to fig. \in[horizontal] on
+p.~\at[horizontal] and fig. \in[vertical] on p.~\at[vertical]. The second
+argument is the filename of the picture you want to include. The fourth
+argument (in braces) is the text accompanying the picture, which will be placed
+either in a \tex{SlideTitle} environment (for horizontal pictures) or opposite
+the picture, centered horizontally and vertically, for vertical pictures.
+
+\setup{setupPicture}
+
+The third argument is the most complex; it does the setup for the included
+picture. Here is a brief explanation of what the different parameters do:
+
+\starttabulate[|lw(.22\textwidth)|p|]
+\NC {\tt width} and {\tt height} 
+\NC Unsurprisingly, these set the height or width for the picture. Normally, the
+    module will automatically fit your pictures to fill the available space, so
+    you only need to set one of these values if you want to override this
+    mechanism. 
+\NC\NR
+\NC {\tt highlight} 
+\NC This boolean key decides whether elements highlighting certain areas of the
+    picture will be placed on the slide. 
+\NC \NR
+\NC {\tt alternative} 
+\NC Three different forms of highlighting are available: {\tt ellipse} places a
+    circle on top of the picture (see fig.~\in[circle] on p.~\at[circle]), {\tt
+    arrow} an arrow (see fig.~\in[arrow] on p.~\at[arrow]), and {\tt focus} a gray overlay in which a circle is
+    transparent (see fig.~\in[gray] on p.~\at[gray]). 
+\NC\NR
+\NC {\tt color} 
+\NC The color of the circle or arrow on the picture. You can either use a
+    predefined color (see chapter 6.2 of the \CONTEXT\ manual) or make one up
+    yourself in the form {\tt (r=.5,g=.3,b=.9)} 
+\NC \NR
+\NC {\tt rulethickness}
+\NC The thickness of the highlighting arrows or ellipses.
+\NC \NR
+\NC {\tt x} and {\tt y} 
+\NC These variables determine the horizontal and vertical positioning of the
+    highlighting elements; they point to the center of the circle or to the tip
+    of the arrow.% If you want more than one circle or arrow, simply set values 	   for x2, y2; x3, y3, etc.; up to five circles/arrows are defined.
+\NC \NR
+\NC {\tt xscale} and {\tt yscale} 
+\NC The scale of the ellipse, calculated in relation to the size of the
+    picture. If you want a circle instead of an ellipse, give just one of
+    the numbers and set the other to {\tt couple}. 
+\NC \NR
+\NC {\tt length}
+\NC The length of the arrow (dimension).
+\NC \NR
+\NC {\tt direction} 
+\NC The rotation of the ellipse resp. the direction of the arrow, given in degrees. 
+\NC \NR
+\NC {\tt opacity} 
+\NC  Sets the opacity of the gray layer (with {\tt 0} = transparent and {\tt
+    100} = completely opaque).
+\NC \NR
+\NC {\tt shadow}
+\NC Highlighting ellipses and arrows can have shadows attached, which will
+    make them stand out more on your slides. By default, shadows are
+    disabled. This key determines the place where this shadows will appear;
+    possible values are {\tt topleft}, {\tt topright}, {\tt bottomleft},
+    and {\tt bottomright}. Simply setting this key to {\tt yes} puts the
+    shadow {\tt bottomright}. 
+\NC \NR
+\NC {\tt grid} 
+\NC Boolean. If set to {\tt yes}, it places a grid on top of the
+    picture. The grid divides the height and width of the picture into 10
+    sections; this
+    is helpful for determining the exact position where you want to place
+    circles and arrows; see fig.~\in[grid] on p.~\at[grid]. 
+\NC \NR
+\NC {\tt subgrid}
+\NC Boolean. Use this to subdivide the grid to get more fine-grained
+    control of the position of your highlighting elements.
+\NC \NR
+\NC {\tt steps}
+\NC The number of subdivisions of the {\tt subgrid},
+\NC \NR
+\NC {\tt gridcolor} 
+\NC The color of the grid; default is {\tt black}. 
+\NC \NR
+\stoptabulate
+
+\placefigure
+    [here]
+    [horizontal]
+    {Horizontal picture with the \filename{NarrowStripes} style}
+    {\externalfigure[styles/NarrowStripes-blue][page=3,width=.66\textwidth]} 
+
+\placefigure
+    [here]
+    [vertical]
+    {Vertical picture with the \filename{DoubleFrame} style}
+    {\externalfigure[styles/RainbowStripe][page=10,width=.66\textwidth]} 
+
+\placefigure
+    [here]
+    [circle]
+    {Orange circle as highlighting mechanism, {\tt Split} style}
+    {\externalfigure[styles/Split][page=7,width=.66\textwidth]} 
+
+\placefigure
+    [here]
+    [arrow]
+    {Orange arrow as highlighting mechanism, {\tt Split} style}
+    {\externalfigure[styles/NarrowStripes-red][page=8,width=.66\textwidth]} 
+
+\placefigure
+    [here]
+    [gray]
+    {Focus as highlighting mechanism, {\tt HorizontalStripes} style}
+    {\externalfigure[styles/HorizontalStripes-blue][page=9,width=.66\textwidth]} 
+
+
+\section{Simpleslides and the \TeX|-|engines}
+
+We have not been able to test all available styles, fonts, colors,
+etc. with all engines, and we are aware that there are some problems
+especially with the \XeTeX\ engine (which neither of us uses a lot), but in
+principle, the module should work with traditional pdf\TeX\ (\type{mkii}),
+with \XeTeX\ and with lua\TeX\ (\type{mkiv}). 
+
+\page
+
+\subject{Appendix: examples of the different styles}
+
+\startcombination[2*3]
+  {\externalfigure[styles/BigNumber-blue][page=2,width=.5\textwidth]}{The {\tt BigNumber} style, {\tt color} blue}
+  {\externalfigure[styles/BottomSquares][page=2,width=.5\textwidth]}{The {\tt BottomSquares} style}
+  {\externalfigure[styles/Boxed][page=2,width=.5\textwidth]}{The {\tt Boxed} style}
+  {\externalfigure[styles/Ellipse][page=2,width=.5\textwidth]}{The {\tt Ellipse} style}
+  {\externalfigure[styles/Embossed][page=2,width=.5\textwidth]}{The {\tt Embossed} style}
+  {\externalfigure[styles/Framed-stripes][page=2,width=.5\textwidth]}{The {\tt Framed} style}
+\stopcombination
+
+\startcombination[2*3]
+  {\externalfigure[styles/FramedTitle][page=2,width=.5\textwidth]}{The {\tt FramedTitle} style}
+  {\externalfigure[styles/FramedSquare][page=2,width=.5\textwidth]}{The {\tt FramedSquare} style}
+  {\externalfigure[styles/HorizontalStripes-blue][page=2,width=.5\textwidth]}{The {\tt HorizontalStripes} style}
+  {\externalfigure[styles/NarrowStripes-green][page=2,width=.5\textwidth]}{The {\tt NarrowStripes} style}
+  {\externalfigure[styles/RainbowStripe][page=2,width=.5\textwidth]}{The {\tt RainbowStripe} style}
+  {\externalfigure[styles/Rounded][page=2,width=.5\textwidth]}{The {\tt Rounded} style}
+\stopcombination
+
+\startcombination[2*3]
+  {\externalfigure[styles/Shaded-blue][page=2,width=.5\textwidth]}{The {\tt Shaded} style}
+  {\externalfigure[styles/SideSquares][page=2,width=.5\textwidth]}{The {\tt SideSquares} style}
+  {\externalfigure[styles/Split][page=2,width=.5\textwidth]}{The {\tt Split} style}
+  {\externalfigure[styles/Sunrise][page=2,width=.5\textwidth]}{The {\tt Sunrise} style}
+  {\externalfigure[styles/Swoosh][page=2,width=.5\textwidth]}{The {\tt Swoosh} style}
+  {\externalfigure[styles/ThickStripes][page=2,width=.5\textwidth]}{The {\tt ThickStripes} style}
+\stopcombination
+
+\stoptext
