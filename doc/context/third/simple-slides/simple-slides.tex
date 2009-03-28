@@ -1,19 +1,28 @@
 \setupcolors[state=start]
 
 \usemodule[int-load]
-
-\usemodule[abr-01]
-
-\setupcolors[state=start]
+% \usemodule[abr-01]
+\def\MKII{\smallcapped{mkii}}
+\def\MKIV{\smallcapped{mkiv}}
 
 \loadsetups[cont-en.xml]
 \loadsetups[simpleslides.xml]
 
-\definetype[typeTEX][option=tex,style=type]
+\definetype[typeTEX][option=tex, style=type]
+\definetype[command][color=darkred, style=type]
+\definetype[options][color=darkblue, style=type]
 
-\setuphead[title][alternative=middle] % Will make it fancy later
+\setupindenting[medium,yes]
+\setupwhitespace[medium]
+
+\definefont [titlefont]    [LMSans-DemiCondensed]
+\setuphead[title][alternative=middle, textstyle=\titlefont] 
+\setuphead[section,subsubject][numberstyle=\titlefont,textstyle=\titlefont]
 
 \useURL[practex][http://www.tug.org/pracjourn/2006-2/schmitz/]
+
+\defineframedtext[EXAMPLE]
+                 [width=\textwidth,background=color,backgroundcolor=gray]
 
 \setupexternalfigures[location={local,global,default}] 
 
@@ -21,12 +30,12 @@
 
 \title
   Simple Slides \\
-  A \CONTEXT\ module for making slides 
+  A \CONTEXT\ presentation module 
 
 \section Introduction
 
 This module provides an easy|-|to|-|use interface
-for creating simple slides|/|presentations in \CONTEXT. 
+for creating simple slides/presentations in CONTEXT. 
 The salient feature of this module are:
 \startitemize[intro]
   \item The module is meant for presentations which will be shown on a
@@ -72,41 +81,123 @@ the current module.
 \section{Installation}
 
 The module is installed in the usual way: simply unzip the archive
-\filename{t-simpleslides-<data>.zip} into one of your \filename{$TEXMF} tree,
-and from a terminal run \type{mktexlsr} (for \MKII) and \type{luatools
+\filename{t-simpleslides-<date>.zip} into one of your \filename{$TEXMF} tree,
+and from a terminal run \command{mktexlsr} (for \MKII) and \command{luatools
 --generate} (for \MKIV). To verify that everything was installed correctly, from
-a terminal run \type{kpsewhich t-simpleslides.tex} (for \MKII) and
-\type{luatools t-simpleslides.tex} (for \MKIV); these commands should return the
-complete path of the files that you just installed.
+a terminal run \command{kpsewhich t-simpleslides.tex} (for \MKII) and
+\command{luatools t-simpleslides.tex} (for \MKIV); these commands should return
+the complete path of the files that you just installed.
 
 \section{Quick start}
 
-Here's an example of the most basic way of using the module:
+First you must tell \CONTEXT\ that you want to use this module. To do this
+simply say
 
 \startTEX
 \usemodule[simpleslides]
-	  [style=Swoosh,
-	   font=Palatino,
-	   size=17pt]
- 
-\setupTitle
-       [title={Title of the presentation},
-       author={Author of the presentation},
-         date={date of the presentation}]
- 
-\starttext
-\placeTitle
- 
-\SlideTitle{First Slide}
- 
-Your text goes here.
-
-\SlideTitle{Second Slide}
-
-More text.
- 
-\stoptext
 \stopTEX
+
+This sets the paper size and font sizes to values that are suitable for
+presentations. Everything else is left like a default \CONTEXT\ document. The
+module provides different styles that change the visual appearance of the
+presentation. The following styles are presented:
+\startitemize[columns, three]
+  \item \options{BigNumber}
+  \item \options{BottomSquares}
+  \item \options{Boxed}
+  \item \options{Ellipse}
+  \item \options{Embossed}
+  \item \options{Framed}
+  \item \options{FramedTitle}
+  \item \options{HorizontalStripes}
+  \item \options{NarrowStripes}
+  \item \options{RainbowStripe}
+  \item \options{Rounded}
+  \item \options{Shaded}
+  \item \options{SideSquares}
+  \item \options{Split}
+  \item \options{Sunrise}
+  \item \options{Swoosh}
+  \item \options{ThickStripes}
+\stopitemize
+To use a style, say \options{BigNumber}, pass \options{style=BigNumber} option
+to the \filename{simpleslides} module as follows.
+\startTEX
+\usemodule[simpleslides]
+          [style=BigNumber]
+\stopTEX
+
+Some of the styles come have some variants, which will be explained later. The
+output of different styles is shown in \in Section[sec:styles].
+
+The \filename{simpleslides} module has a very simple model of a presentation. A
+presentation consists of a title followed by a series of slides; the module
+provides macros to help create a presentation title page and slides.
+
+\subsubject Presentation title page
+
+A presentation title page displays the title of the presentation, the names of
+the authors, and the date.
+%% TODO: Also add institution and detail.
+These can be specified using \typeTEX{\setupTitle} as follows:
+\startTEX
+\setupTitle
+  [title={Title of the presentation},
+   author={Name of authors},
+   date={Date of presentation},
+  ]
+\stopTEX
+
+The macro \typeTEX{\placeTitle} places the title page in the presentation.
+
+\subsubject Presentation slide
+
+The \filename{simpleslides} module provides a \typeTEX{\SlideTitle} macro, which
+starts a new slide (basically a new page), and typesets its argument as the
+title of the slide. It also takes care of increasing the page counters and
+progress bars, and set up the background. The content of the slides follows
+after this command.
+
+A slide is a normal \CONTEXT\ page, so you can use any commands and environments
+that you want. Each presentation style, sets up a style for itemizations, and
+provides useful macros for placing pictures. These macros will be explained
+later.
+
+\subsubject A minimal presentation
+
+A minimal presentation is shown below. The result is shown in \in
+Figure[fig:example].
+
+\startEXAMPLE
+\typefile[option=tex]{example.tex}
+\stopEXAMPLE
+
+\placefigure
+  [top]
+  [fig:example]
+  {A minimal presentation}
+  \startcombination[2*2]
+    \startEXAMPLE[width=0.55\textwidth]
+\startTEX
+  \usemodule[simpleslides]
+            [style=BigNumber]
+  \setupTitle[...]
+
+  \starttext
+  \SlideTitle{...}
+  ...
+  \SlideTitle{...}
+  ...
+  \stoptext
+\stopTEX
+    \stopEXAMPLE
+    {A minimal example}
+    {\externalfigure[example][page=1,width=0.55\textwidth]}{Title page}
+    {\externalfigure[example][page=2,width=0.55\textwidth]}{First slide}
+    {\externalfigure[example][page=3,width=0.55\textwidth]}{Second slide}
+  \stopcombination
+
+\section Placing pictures
 
 The command \typeTEX{\SlideTitle} begins a new slide, typesets its argument as
 the title of this slide, takes care of increasing counters and progress
