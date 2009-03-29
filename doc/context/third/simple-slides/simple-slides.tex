@@ -1,9 +1,12 @@
 \setupcolors[state=start]
 
 \usemodule[int-load]
-% \usemodule[abr-01]
-\def\MKII{\smallcapped{mkii}}
-\def\MKIV{\smallcapped{mkiv}}
+\usemodule[abr-02]
+
+\usetypescriptfile[type-dejavu]
+
+\usetypescript[dejavu]
+\setupbodyfont[dejavu,10pt]
 
 \loadsetups[cont-en.xml]
 \loadsetups[simpleslides.xml]
@@ -16,15 +19,74 @@
 \setupwhitespace[medium]
 
 \definefont [titlefont]    [LMSans-DemiCondensed]
-\setuphead[title][alternative=middle, textstyle=\titlefont] 
-\setuphead[section,subsubject][numberstyle=\titlefont,textstyle=\titlefont]
+\setuphead[title][alternative=middle, textstyle=sansbold] 
+\setuphead[section,subsubject][numberstyle=sansbold,textstyle=sansbold]
 
 \useURL[practex][http://www.tug.org/pracjourn/2006-2/schmitz/]
 
-\defineframedtext[EXAMPLE]
-                 [width=\textwidth,background=color,backgroundcolor=gray]
+\definetextbackground
+    [EXAMPLE]
+    [           mp=background:random,
+          location=paragraph,
+     rulethickness=1pt,
+        framecolor=darkred,
+             width=broad,
+        leftoffset=1em,
+       rightoffset=1em,
+            before={\testpage[1]\blank[big]},
+             after={\blank[big]}
+%           before={\testpage[3]\blank[3*big]},
+%            after={\blank[3*big]}
+    ]
 
+\startuseMPgraphic{background:random}
+   path p;
+   for i = 1 upto nofmultipars :
+    p = (multipars[i]
+     topenlarged 8pt
+     bottomenlarged 8pt) randomized 4pt ;
+   fill p withcolor lightgray ;
+   draw p withcolor \MPvar{linecolor}
+    withpen pencircle scaled \MPvar{linewidth};
+   endfor;
+\stopuseMPgraphic
+
+\defineframedtext
+    [EXAMPLEframe]
+    [rulethickness=1pt,
+        framecolor=darkred,
+             width=broad,
+        background=color,
+   backgroundcolor=lightgray,
+    ]
+
+\defineoverlay[randomframe]
+              [\useMPgraphic{background:random:frame}]
+
+\startuseMPgraphic{background:random:frame}
+   path p;
+    p = (OverlayBox 
+     topenlarged 10pt
+     bottomenlarged 10pt) randomized 4pt ;
+   fill p withcolor lightgray ;
+   draw p withcolor \MPvar{linecolor}
+    withpen pencircle scaled \MPvar{linewidth};
+   endfor;
+\stopuseMPgraphic
 \setupexternalfigures[location={local,global,default}] 
+
+\def\ShowStyle#1%
+  {\startcombination[2*2]
+     {\externalfigure[styles/#1][page=1,width=0.55\textwidth]}
+     {Title Page}
+     {\externalfigure[styles/#1][page=2,width=0.55\textwidth]}
+     {Normal Slide}
+     {\externalfigure[styles/#1][page=3,width=0.55\textwidth]}
+     {Horizontal Picture}
+     {\externalfigure[styles/#1][page=10,width=0.55\textwidth]}
+     {Vertical Picture}
+  \stopcombination}
+
 
 \starttext
 
@@ -35,7 +97,7 @@
 \section Introduction
 
 This module provides an easy|-|to|-|use interface
-for creating simple slides/presentations in CONTEXT. 
+for creating simple slides/presentations in \CONTEXT. 
 The salient feature of this module are:
 \startitemize[intro]
   \item The module is meant for presentations which will be shown on a
@@ -93,9 +155,11 @@ the complete path of the files that you just installed.
 First you must tell \CONTEXT\ that you want to use this module. To do this
 simply say
 
+\startEXAMPLE
 \startTEX
 \usemodule[simpleslides]
 \stopTEX
+\stopEXAMPLE
 
 This sets the paper size and font sizes to values that are suitable for
 presentations. Everything else is left like a default \CONTEXT\ document. The
@@ -122,10 +186,12 @@ presentation. The following styles are presented:
 \stopitemize
 To use a style, say \options{BigNumber}, pass \options{style=BigNumber} option
 to the \filename{simpleslides} module as follows.
+\startEXAMPLE
 \startTEX
 \usemodule[simpleslides]
           [style=BigNumber]
 \stopTEX
+\stopEXAMPLE
 
 Some of the styles come have some variants, which will be explained later. The
 output of different styles is shown in \in Section[sec:styles].
@@ -140,6 +206,7 @@ A presentation title page displays the title of the presentation, the names of
 the authors, and the date.
 %% TODO: Also add institution and detail.
 These can be specified using \typeTEX{\setupTitle} as follows:
+\startEXAMPLE
 \startTEX
 \setupTitle
   [title={Title of the presentation},
@@ -147,6 +214,7 @@ These can be specified using \typeTEX{\setupTitle} as follows:
    date={Date of presentation},
   ]
 \stopTEX
+\stopEXAMPLE
 
 The macro \typeTEX{\placeTitle} places the title page in the presentation.
 
@@ -173,11 +241,11 @@ Figure[fig:example].
 \stopEXAMPLE
 
 \placefigure
-  [top]
+  [bottom]
   [fig:example]
   {A minimal presentation}
   \startcombination[2*2]
-    \startEXAMPLE[width=0.55\textwidth]
+    \startEXAMPLEframe[width=0.55\textwidth]
 \startTEX
   \usemodule[simpleslides]
             [style=BigNumber]
@@ -190,7 +258,7 @@ Figure[fig:example].
   ...
   \stoptext
 \stopTEX
-    \stopEXAMPLE
+    \stopEXAMPLEframe
     {A minimal example}
     {\externalfigure[example][page=1,width=0.55\textwidth]}{Title page}
     {\externalfigure[example][page=2,width=0.55\textwidth]}{First slide}
@@ -224,6 +292,64 @@ placed with this command:
 
 The macros \tex{NormalWidth} and \tex{NormalHeight} make sure that
 your vertical picture fills the available space.
+
+\section Examples of different styles
+
+\subsubject{BigNumber: with \options{color=blue} (also accepts \options{color=red})}
+\ShowStyle {BigNumber-blue}
+
+\subsubject{BottomSquares}
+\ShowStyle {BottomSquares}
+
+\subsubject{Boxed}
+\ShowStyle {Boxed}
+
+\subsubject{Ellipse}
+\ShowStyle {Ellipse}
+
+\subsubject{Embossed}
+\ShowStyle {Embossed}
+
+\subsubject{Framed: with \options{style=square}}
+\ShowStyle {Framed-square}
+
+\subsubject{Framed: with \options{style=stripe}}
+\ShowStyle {Framed-stripe}
+
+\subsubject{FramedTitle}
+\ShowStyle {FramedTitle}
+
+\subsubject{HorizontalStripes: with \options{color=green} (also accepts
+\options{color=blue} and \options{color=red})}
+\ShowStyle {HorizontalStripes-green}
+
+\subsubject{RainbowStripe}
+\ShowStyle {RainbowStripe}
+
+\subsubject{Rounded}
+\ShowStyle {Rounded}
+
+\subsubject{Shaded: with \options{color=blue} (also accepts
+\options{color=green})}
+\ShowStyle {Shaded-blue}
+
+\subsubject{SideSquares}
+\ShowStyle {SideSquares}
+
+\subsubject{Split}
+\ShowStyle {Split}
+
+\subsubject{Sunrise}
+\ShowStyle {Sunrise}
+
+\subsubject{Swoosh}
+\ShowStyle {Swoosh}
+
+\subsubject{ThickStripes}
+\ShowStyle {ThickStripes}
+
+
+\section{Using the Module}
 
 \section{Using the Module}
 
@@ -438,36 +564,5 @@ etc. with all engines, and we are aware that there are some problems
 especially with the \XeTeX\ engine (which neither of us uses a lot), but in
 principle, the module should work with traditional pdf\TeX\ (\type{mkii}),
 with \XeTeX\ and with lua\TeX\ (\type{mkiv}). 
-
-\page
-
-\subject{Appendix: examples of the different styles}
-
-\startcombination[2*3]
-  {\externalfigure[styles/BigNumber-blue][page=2,width=.5\textwidth]}{The {\tt BigNumber} style, {\tt color} blue}
-  {\externalfigure[styles/BottomSquares][page=2,width=.5\textwidth]}{The {\tt BottomSquares} style}
-  {\externalfigure[styles/Boxed][page=2,width=.5\textwidth]}{The {\tt Boxed} style}
-  {\externalfigure[styles/Ellipse][page=2,width=.5\textwidth]}{The {\tt Ellipse} style}
-  {\externalfigure[styles/Embossed][page=2,width=.5\textwidth]}{The {\tt Embossed} style}
-  {\externalfigure[styles/Framed-stripes][page=2,width=.5\textwidth]}{The {\tt Framed} style}
-\stopcombination
-
-\startcombination[2*3]
-  {\externalfigure[styles/FramedTitle][page=2,width=.5\textwidth]}{The {\tt FramedTitle} style}
-  {\externalfigure[styles/FramedSquare][page=2,width=.5\textwidth]}{The {\tt FramedSquare} style}
-  {\externalfigure[styles/HorizontalStripes-blue][page=2,width=.5\textwidth]}{The {\tt HorizontalStripes} style}
-  {\externalfigure[styles/NarrowStripes-green][page=2,width=.5\textwidth]}{The {\tt NarrowStripes} style}
-  {\externalfigure[styles/RainbowStripe][page=2,width=.5\textwidth]}{The {\tt RainbowStripe} style}
-  {\externalfigure[styles/Rounded][page=2,width=.5\textwidth]}{The {\tt Rounded} style}
-\stopcombination
-
-\startcombination[2*3]
-  {\externalfigure[styles/Shaded-blue][page=2,width=.5\textwidth]}{The {\tt Shaded} style}
-  {\externalfigure[styles/SideSquares][page=2,width=.5\textwidth]}{The {\tt SideSquares} style}
-  {\externalfigure[styles/Split][page=2,width=.5\textwidth]}{The {\tt Split} style}
-  {\externalfigure[styles/Sunrise][page=2,width=.5\textwidth]}{The {\tt Sunrise} style}
-  {\externalfigure[styles/Swoosh][page=2,width=.5\textwidth]}{The {\tt Swoosh} style}
-  {\externalfigure[styles/ThickStripes][page=2,width=.5\textwidth]}{The {\tt ThickStripes} style}
-\stopcombination
 
 \stoptext
