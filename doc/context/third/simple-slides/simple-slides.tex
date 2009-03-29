@@ -1,11 +1,7 @@
 \setupcolors     [state=start]
 \setupinteraction[state=start,style=normal]
 
-\usemodule[int-load]
-\loadsetups[cont-en.xml]
-\loadsetups[simpleslides.xml]
-
-%% Layout : {{{
+%% Layout : <<<
 \setuplayout[
                    width=middle,
                   height=middle,
@@ -30,8 +26,8 @@
 
 \setuppagenumbering [location=footer]
 
-%% }}}
-%% Typescripts : {{{
+%% >>>
+%% Typescripts : <<<
 \starttypescript [serif] [dejavu]
     \setups[font:fallback:sans]
     \definefontsynonym [Serif]           [name:DejaVu Serif] 
@@ -77,8 +73,8 @@
 \usetypescript[dejavu]
 \setupbodyfont[dejavu,10pt]
 
-%% }}}
-%% Logos: {{{
+%% >>>
+%% Logos: <<<
 \logo [TEX]      {Tex}
 \logo [LATEX]    {Latex}
 \logo [CONTEXT]  {Context}
@@ -90,7 +86,7 @@
 
 \setupsorting[logo][style=normal]
 
-%% }}}
+%% >>>
 
 \definetype[typeTEX][option=tex, style=type]
 \definetype[command][color=darkred, style=type]
@@ -100,7 +96,8 @@
 \setupwhitespace[medium]
 
 \setuphead[title][alternative=middle, textstyle=sansbold] 
-\setuphead[section,subsubject][numberstyle=sansbold,textstyle=sansbold]
+\setuphead[section,subsubject,subsection]
+          [numberstyle=sansbold,textstyle=sansbold]
 
 \setuplistalternative[a]
     [distance=0pt,width=1em,stretch=10em,
@@ -113,7 +110,7 @@
 
 \setupitemize[1][autointro]
 
-%% Frames and Backgrounds : {{{
+%% Frames and Backgrounds : <<<
 \definetextbackground
     [EXAMPLE]
     [           mp=background:random,
@@ -123,7 +120,7 @@
              width=broad,
         leftoffset=1em,
        rightoffset=1em,
-            before={\testpage[1]\blank[big]},
+            before={\testpage[2]\blank[big]},
              after={\blank[big]}
 %           before={\testpage[3]\blank[3*big]},
 %            after={\blank[3*big]}
@@ -147,7 +144,7 @@
         framecolor=darkred,
              width=broad,
         background=color,
-   backgroundcolor=lightgray,
+   backgroundcolor=gray,
     ]
 
 \defineoverlay[randomframe]
@@ -165,7 +162,144 @@
 \stopuseMPgraphic
 \setupexternalfigures[location={local,global,default}] 
 
-%% }}}
+%% >>>
+%% Interface <<<
+\definecolor[colorprettyfour][orange]
+\usemodule[int-load]
+\loadsetups[cont-en.xml]
+\loadsetups[t-simpleslides.xml]
+\definetextbackground
+    [setuptext]
+    [           mp=background:random,
+          location=paragraph,
+     rulethickness=1pt,
+        framecolor=darkgreen,
+             width=broad,
+        leftoffset=1em,
+       rightoffset=1em,
+             align=right,
+            before={\testpage[3]\blank[2*big]},
+             after={\endgraf\blank[big]}
+%           before={\testpage[3]\blank[3*big]},
+%            after={\blank[3*big]}
+    ]
+
+%% There gotta be a better way to configure this!
+
+\unprotected\def\showSETUPrecord
+  {\getvalue{\e!start setuptext}
+     \tttf
+     \nohyphens
+     \veryraggedright
+     \startXMLmapping [one]
+       \doglobal\newcounter\currentSETUPargument
+       \global\let\maximumSETUPargument\currentSETUPargument
+       \bgroup
+         \doif{\XMLpar{cd:command}{generated}{}}{yes}{\ttsl}%
+         \doifelseXMLop{type}{environment}
+           {\tex{\e!start}}{\startcolor[colorprettytwo]\tex{}}\ignorespaces
+           \XMLflush{cd:sequence}\stopcolor\ignorespaces
+       \egroup
+       \doifelseXMLempty{cd:arguments}
+         {}
+         {\bgroup
+            \setbox0=\hbox{\XMLflush{cd:arguments}}%
+            \global\let\maximumSETUPargument\currentSETUPargument
+            \doglobal\newcounter\currentSETUPargument
+            \ignorespaces\XMLflush{cd:arguments}%
+            \doif{\XMLpar{cd:command}{type}{}}{environment}
+              {\hskip.5em\unknown\hskip.5em
+               \doif{\XMLpar{cd:command}{generated}{}}{yes}{\ttsl}%
+               \tex{\e!stop}\ignorespaces\XMLflush{cd:sequence}}%
+            \endgraf
+          \egroup
+         %\bgroup
+         %  \tx
+         %  \doif{\XMLpar{cd:command}{interactive}{}}{yes}      {\quad INTERACTIVE}%
+         %  \doif{\XMLpar{cd:command}{interactive}{}}{exclusive}{\quad INTERACTIVE ONLY}%
+         %\egroup
+        \startXMLmapping [two]
+          \bgroup
+            \doglobal\newcounter\currentSETUPargument
+            \blank[\v!line]
+            %\switchtobodyfont[small] % kan sneller
+            \ignorespaces\XMLflush{cd:arguments}\endgraf
+            %\endgraf
+          \egroup
+        \stopXMLmapping}
+     \stopXMLmapping
+   \getvalue{\e!stop setuptext}}
+
+\def\showSETUPnumber
+  {\doglobal\increment\currentSETUPargument
+   \hbox to 2em
+     {\startcolor[blue]
+      \ifcase\maximumSETUPargument\relax
+        \or*\else\currentSETUPargument
+      \fi\stopcolor
+      \hss}}
+
+\def\showSETUPassignment {\showSETUP
+  {{\colorprettythree[}.\lower.5ex\hbox{=}.{\colorprettythree]}}
+  {{\colorprettythree[}..,.\lower.5ex\hbox{=}.,..{\colorprettythree]}}}
+
+\def\showSETUPkeyword {\showSETUP
+  {\colorprettythree{[}...{\colorprettythree]}}
+  {\colorprettythree{[}...,...{\colorprettythree]}}}
+
+\def\showSETUPargument {\showSETUP
+  {{\colorprettyone\leftargument}..{\colorprettyone\rightargument}}
+  {{\colorprettyone\leftargument}..,...,..{\colorprettyone\rightargument}}}
+
+\def\showSETUPdisplaymath {\showSETUP
+  {\$\$...\$\$}
+  {\$\$...\$\$}}
+
+\def\showSETUPindex {\showSETUP
+  {{\colorprettyone\leftargument}...{\colorprettyone\rightargument}}
+  {{\colorprettyone\leftargument}..+...+..{\colorprettyone\rightargument}}}
+
+\def\showSETUPmath {\showSETUP
+  {\$...\$}
+  {\$...\$}}
+
+\def\showSETUPnothing {\showSETUP
+  {...}
+  {}}
+
+\def\showSETUPfile {\showSETUP
+  {~...~}
+  {}}
+
+\def\showSETUPposition {\showSETUP
+  {(...)}
+  {(...,...)}}
+
+\def\showSETUPreference {\showSETUP
+  {[...]}
+  {[...,...]}}
+
+\def\showSETUPcsname {\showSETUP
+  {{\c!setup!command!{}}}
+  {}}
+
+\def\showSETUPdestination {\showSETUP
+  {[{\colorprettyone\leftargument}..[ref]{\colorprettyone\rightargument}]}
+  {[..,{\colorprettyone\leftargument}..[ref,..]{\colorprettyone\rightargument},..]}}
+
+\def\showSETUPtriplet {\showSETUP
+  {[x:y:z=]}
+  {[x:y:z=,..]}}
+
+\def\showSETUPword {\showSETUP
+  {{\colorprettyone\leftargument}...{\colorprettyone\rightargument}}
+  {{\colorprettyone\leftargument}.. ... ..{\colorprettyone\rightargument}}}
+
+\def\showSETUPcontent {\showSETUP
+  {{\colorprettyone\leftargument}...{\colorprettyone\rightargument}}
+  {{\colorprettyone\leftargument}.. ... ..{\colorprettyone\rightargument}}}
+
+%% >>>
 
 \def\ShowStyle#1%
   {\blank[big]
@@ -298,8 +432,9 @@ option to the \filename{simpleslides} module as follows.
 \stopTEX
 \stopEXAMPLE
 
-Some of the styles come have some variants, which will be explained later. The
-output of different styles is shown in \in Section[sec:styles].
+Some of the styles come have some variants, which can be chosen using
+\options{color} and \options{bottom} keys. These are explained in \in
+Section[sec:styles].
 
 By default, the Latin Modern Sans font is used. The module also makes it easy to
 use other fonts that come with a typical \TEX\ distribution. 
@@ -326,8 +461,14 @@ to the \filename{simpleslides} module as follows.
 \stopTEX
 \stopEXAMPLE
 
+By default, the chosen font is used at 17pt size. The font size can be changed
+using the \options{size} key.
+
 More details about the fonts, including information on how to use your own fonts
-is given in \in Section[sec:fonts].
+is given in \in Section[sec:fonts]. 
+
+The complete setup for using this module is
+\setup{simpleslides}
 
 \subsubject Structure of a presentation
 
@@ -344,14 +485,17 @@ These can be specified using \typeTEX{\setupTitle} as follows:
 \startEXAMPLE
 \startTEX
 \setupTitle
-  [title={Title of the presentation},
+  [ title={Title of the presentation},
    author={Name of authors},
-   date={Date of presentation},
+     date={Date of presentation},
   ]
 \stopTEX
 \stopEXAMPLE
 
-The macro \typeTEX{\placeTitle} places the title page in the presentation.
+The macro \typeTEX{\placeTitle} places the title page in the presentation. It is
+possible to change the look of \typeTEX{\placeTitle} using some additional
+arguments to \typeTEX{\setupTitle}. These are explained in \in
+Section[sec:setuptitle].
 
 \subsubject Presentation slide
 
@@ -365,6 +509,17 @@ A slide is a normal \CONTEXT\ page, so you can use any commands and environments
 that you want. Each presentation style sets up a style for itemizations, and
 provides useful macros for placing pictures. These macros will be explained
 later.
+
+\adaptlayout[lines=+2]
+
+\subsubject A minimal presentation
+
+A minimal presentation is shown below. The result is shown in \in
+Figure[fig:example].
+
+\startEXAMPLE
+\typefile[option=tex]{example.tex}
+\stopEXAMPLE
 
 \placefigure
   [top,bottom]
@@ -392,14 +547,6 @@ later.
   \stopcombination
 
 
-\subsubject A minimal presentation
-
-A minimal presentation is shown below. The result is shown in \in
-Figure[fig:example].
-
-\startEXAMPLE
-\typefile[option=tex]{example.tex}
-\stopEXAMPLE
 
 \section Placing pictures
 
@@ -413,6 +560,9 @@ provided:
   \item \options{vertical}: the slide is divided into two colums; the picture is
     placed on the left column and text is placed on the right column.
 \stopitemize
+These layouts are shown in \in Figure[fig:pictures].
+
+\page
 
 \placefigure
   [top,bottom]
@@ -457,6 +607,8 @@ provided:
 \stopcombination
 
 
+
+
 A horizontal picture is placed as follows.
 \startEXAMPLE
 \startTEX
@@ -467,9 +619,7 @@ A horizontal picture is placed as follows.
 \stopTEX
 \stopEXAMPLE
 
-\null\blank
-
-A vertical picture is placed as follows.
+while a vertical picture is placed as follows.
 \startEXAMPLE
 \startTEX
 \IncludePicture
@@ -479,14 +629,18 @@ A vertical picture is placed as follows.
 \stopTEX
 \stopEXAMPLE
 
-An example is shown in \in Figure[fig:pictures].
 It is possible to change the height and width of the pictures, or 
 highlight them with circles and arrows. These details can be found in \in
 Section[sec:pictures]
 
 \page
 
-\section[sec:styles] The available styles
+\section[sec:styles] Changing presentation styles
+
+The \options{style} key to \typeTEX{\setupmodule[simpleslides]} determines the
+look of the presentation. Some of the styles come with variants, that can be
+chosen using \options{color} and \options{bottom} keys. The available styles are
+shown below along with the details of their varients.
 
 \subsubject{BigNumber: with \options{color=blue} (also accepts \options{color=red})}
 
@@ -598,7 +752,7 @@ for presentations with relatively little text.
 \page
 
 \subsubject{Shaded: with \options{color=blue} (also accepts
-\options{color=green})}
+\options{color=green} and \options{color=bluered})}
 
 The only ornament to this style is the dark shaded background. It uses
 \CONTEXT's {\tt interactionbar} mechanism to show the progress of the
@@ -649,72 +803,66 @@ This theme is inspired by the {\em Berkeley} style of the \LATEX's
 of the number of slides.
 
 \ShowStyle {ThickStripes}
-\page
 
-\section{Using the Module}
+\section[sec:fonts] Changing presentation fonts
 
-\subsection{The setup command}
+The \options{font} and the \options{size} keys to
+\typeTEX{\setupmodule[simpleslides]} determine the font and font size for the
+main text of the presentation. The default font is Latin Modern Sans at 17pt. 
 
-To use the module, you put this line into your source file:
-
-\setup{simpleslides}
-
-The second argument takes a list of {\tt key=value} assignments which you
-can also set with this command:
-
-\setup{setupsimpleslides}
-
-The values for the different keys will be explained in the following
-sections. 
-
-\subsubsection{The {\tt style} Key}
-
-The {\tt style} key determines the look of your presentation; it defines
-the background, borders, elements of the slides, etc.  There are nineteen
-predefined options for this key; the appendix shows what they look like. 
-
-\subsubsection{The {\tt size} Key}
-
-This selects the font size for the main text. The value has to be a
-dimension; it is stored in the macro \tex{NormalSize}. The \tex{TitleSize}
-is calculated according to the main text size.
-
-\subsubsection{The {\tt font} Key}
-
-You can use any fonts and typescripts with the module. In order to
-facilitate choosing a font, especially for beginners, the module provides
-shortcuts for using the \TeX Gyre font collection and for Latin
-Modern. These predefined fonts should work on any \TeX\ installation that
-has the complete \TeX Gyre collection; this is the case for the \CONTEXT\
-minimals and for \TeX Live since 2008. They are selected by setting the
-{\tt font} key.
+\startitemize
+\item The \options{font} key can take the following values.
 
 \starttabulate[|l|p|]
-\NC {\tt LatinModern}     \NC typesets in LatinModern Serif     \NC \NR
-\NC {\tt LatinModernSans} \NC typesets in LatinModern Sans      \NC \NR
-\NC {\tt Bookman}         \NC typesets in \TeX Gyre Bonum       \NC \NR
-\NC {\tt Chancery}        \NC typesets in \TeX Gyre Chorus
+\NC \options{LatinModern}     \NC typesets in Latin Modern Serif     \NC \NR
+\NC \options{LatinModernSans} \NC typesets in Latin Modern Sans      \NC \NR
+\NC \options{Bookman}         \NC typesets in \TeX Gyre Bonum (a Bookman
+    clone)       \NC \NR
+\NC \options{Chancery}        \NC typesets in \TeX Gyre Chorus 
     \footnote{Please be aware that Chorus is a calligraphic font. It has no
-    italic or bold.}                                            \NC \NR
-\NC {\tt Gothic}          \NC typesets in \TeX Gyre Adventor    \NC \NR
-\NC {\tt Helvetica}       \NC typesets in \TeX Gyre Heros       \NC \NR
-\NC {\tt Palatino}        \NC typesets in \TeX Gyre Pagella     \NC \NR
-\NC {\tt Schoolbook}      \NC typesets in \TeX Gyre Schola      \NC \NR
-\NC {\tt Times}           \NC typesets in \TeX Gyre Termes      \NC \NR
+    italic or bold.} (a Zapf Chancery clone)                        \NC \NR
+\NC \options{Gothic}          \NC typesets in \TeX Gyre Adventor (a Gothic
+    clone)   \NC \NR
+\NC \options{Helvetica}       \NC typesets in \TeX Gyre Heros (a Helvetica
+    clone)       \NC \NR
+\NC \options{Palatino}        \NC typesets in \TeX Gyre Pagella (a Palatino
+    clone)   \NC \NR
+\NC \options{Schoolbook}      \NC typesets in \TeX Gyre Schola (a Schoolbook
+    clone)     \NC \NR
+\NC \options{Times}           \NC typesets in \TeX Gyre Termes (a Times clone)
+\NC \NR
 \stoptabulate
- 
-If you set your own font, please remember to select the bodyfont at
-\typeTEX{\NormalSize} and to give your setup commands {\em after} loading
-the module (or \TeX\ will not know what \typeTEX{\NormalSize} means and
-complain about an \quotation{undefined control sequence}). So if you have
-your own typescript, your setup should look like this:
 
+\item The \options{size} key can be any valid \TEX\ dimension.
+
+\stopitemize
+
+\subsubject Choosing your own font
+
+If you want to set up your own font, pick any value for the \options{font} key
+(or leave it empty). Use the \options{size} key to choose the font size. Then
+{\em after} loading the module, choose any font using the normal \CONTEXT\
+commands. Make sure to set the bodyfont at size \typeTEX{\NormalSize}. So, if
+you have your own typescript for a font, your setup will look like this:
+
+\startEXAMPLE
 \startTEX
-\usetypescriptfile[type-myfile]
-\usetypescript[Mytypescript]
-\setupbodyfont[Myfont,\NormalSize]
+\usemodule[simpleslides][...]
+....
+\usetypescriptfile[type-myfont]    % The typescript for your font
+\usetypescript[Mytypescript]       % As set in your typescript file
+\setupbodyfont[Myfont,\NormalSize] % Note the \NormalSize here
 \stopTEX
+\stopEXAMPLE
 
+Internally, the font size is stored in the macro \typeTEX{\NormalSize}. The main
+text is set at size \typeTEX{\NormalSize}; the title page and the slide title
+are set at size \typeTEX{\TitleSize}. The module uses some heuristics to select
+a reasonable value of \typeTEX{\TitleSize}. If you do not like ths size of the
+title page and slide titles, you can change the value to \typeTEX{\TitleSize} to
+whatever you like.
+
+\section {Details}
 \subsection{Macros}
 
 The module offers only a few macros to facilitate the preparation of
@@ -858,3 +1006,5 @@ picture. Here is a brief explanation of what the different parameters do:
 
 
 \stoptext
+
+% vim: foldmethod=marker foldmarker=<<<,>>>

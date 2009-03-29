@@ -9,21 +9,10 @@
     <cd:string value="usemodule"/>
   </cd:sequence>
   <cd:arguments>
-    <cd:keywords list="yes">
+    <cd:keywords list="no">
       <cd:constant type="simpleslides"/>
     </cd:keywords>
-    <cd:assignments list="yes">
-      <cd:inherit name="setupsimpleslides"/>
-    </cd:assignments>
-  </cd:arguments>
-</cd:command>
-
-<cd:command name="setupsimpleslides" file="t-simpleslides.tex">
-  <cd:sequence>
-    <cd:string value="setupmodule"/>
-  </cd:sequence>
-  <cd:arguments>
-    <cd:assignments list="yes">
+    <cd:assignments list="yes" optional="yes">
       <cd:parameter name="style">
         <cd:constant type="BigNumber"/>
         <cd:constant type="BottomSquares"/>
@@ -65,7 +54,7 @@
         <cd:constant type="bluered"/>
       </cd:parameter>
       <cd:parameter name="bottom">
-        <cd:constant type="squares" default="yes"/>
+        <cd:constant type="square" default="yes"/>
         <cd:constant type="stripe"/>
       </cd:parameter>
     </cd:assignments>
@@ -195,11 +184,11 @@
     <cd:string value="IncludePicture"/>
   </cd:sequence>
   <cd:arguments>
-    <cd:keywords list="yes">
+    <cd:keywords list="no">
       <cd:constant type="horizontal" default="yes"/>
       <cd:constant type="vertical"/>
     </cd:keywords>
-    <cd:keywords list="yes">
+    <cd:keywords list="no">
       <cd:constant type="cd:name"/>
     </cd:keywords>
     <cd:assignments list="yes">

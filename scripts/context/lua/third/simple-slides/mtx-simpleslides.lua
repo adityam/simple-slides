@@ -29,7 +29,7 @@ simpleslides.options = {
   ["NarrowStripes"]     ={color={"blue", "green", "red"}},
   ["RainbowStripe"]     ={},
   ["Rounded"]           ={},
-  ["Shaded"]            ={color={"blue", "green"}},
+  ["Shaded"]            ={color={"blue", "green", "bluered"}},
   ["SideSquares"]       ={},
   ["Split"]             ={},
   ["Sunrise"]           ={},
