@@ -70,6 +70,7 @@
     \definetypeface [dejavu] [mm] [math]  [modern] [default]
 \stoptypescript
 
+\setupbodyfontenvironment[default][em=italic]
 \usetypescript[dejavu]
 \setupbodyfont[dejavu,10pt]
 
@@ -109,6 +110,8 @@
 \useURL[practex][http://www.tug.org/pracjourn/2006-2/schmitz/]
 
 \setupitemize[1][autointro]
+\setupitemize[indenting=no]
+
 
 %% Frames and Backgrounds : <<<
 \definetextbackground
@@ -803,6 +806,7 @@ This theme is inspired by the {\em Berkeley} style of the \LATEX's
 of the number of slides.
 
 \ShowStyle {ThickStripes}
+\page
 
 \section[sec:fonts] Changing presentation fonts
 
@@ -816,20 +820,20 @@ main text of the presentation. The default font is Latin Modern Sans at 17pt.
 \starttabulate[|l|p|]
 \NC \options{LatinModern}     \NC typesets in Latin Modern Serif     \NC \NR
 \NC \options{LatinModernSans} \NC typesets in Latin Modern Sans      \NC \NR
-\NC \options{Bookman}         \NC typesets in \TeX Gyre Bonum (a Bookman
+\NC \options{Bookman}         \NC typesets in \TEX Gyre Bonum (a Bookman
     clone)       \NC \NR
-\NC \options{Chancery}        \NC typesets in \TeX Gyre Chorus 
+\NC \options{Chancery}        \NC typesets in \TEX Gyre Chorus 
     \footnote{Please be aware that Chorus is a calligraphic font. It has no
     italic or bold.} (a Zapf Chancery clone)                        \NC \NR
-\NC \options{Gothic}          \NC typesets in \TeX Gyre Adventor (a Gothic
+\NC \options{Gothic}          \NC typesets in \TEX Gyre Adventor (a Gothic
     clone)   \NC \NR
-\NC \options{Helvetica}       \NC typesets in \TeX Gyre Heros (a Helvetica
+\NC \options{Helvetica}       \NC typesets in \TEX Gyre Heros (a Helvetica
     clone)       \NC \NR
-\NC \options{Palatino}        \NC typesets in \TeX Gyre Pagella (a Palatino
+\NC \options{Palatino}        \NC typesets in \TEX Gyre Pagella (a Palatino
     clone)   \NC \NR
-\NC \options{Schoolbook}      \NC typesets in \TeX Gyre Schola (a Schoolbook
+\NC \options{Schoolbook}      \NC typesets in \TEX Gyre Schola (a Schoolbook
     clone)     \NC \NR
-\NC \options{Times}           \NC typesets in \TeX Gyre Termes (a Times clone)
+\NC \options{Times}           \NC typesets in \TEX Gyre Termes (a Times clone)
 \NC \NR
 \stoptabulate
 
@@ -862,58 +866,293 @@ a reasonable value of \typeTEX{\TitleSize}. If you do not like ths size of the
 title page and slide titles, you can change the value to \typeTEX{\TitleSize} to
 whatever you like.
 
-\section {Details}
-\subsection{Macros}
+\section Changing the title page
 
-The module offers only a few macros to facilitate the preparation of
-presentations. 
-
-\subsection{\typeTEX{\setupTitle}}
-
-Begin your presentation by setting the name of the author(s), the title,
-and the date with this macro:
+It is possible to change the look of \typeTEX{\placeTitle} using
+\typeTEX{\setupTitle}. This feature is intended for authors creating a new
+style, but may also be useful for someone who likes to tweak the presentation
+style. You should normally only set the  \options{title}, \options{authors}, and
+\options{date} keys. If \options{date} is not set, then the module will default
+to \typeTEX{\currentdate}.
 
 \setup{setupTitle}
 
-If you don't set the date, it will default to \tex{currentdate}.
+\section Changing the slide titles
 
-\subsection{\typeTEX{\MakeTitle}}
+It is possible to change the look of \typeTEX{\SlideTitle} using
+\typeTEX{\setupSlideTitle}. Like \typeTEX{\setupTitle}, this feature is intended
+for authors creating a new style. You can use this command to make a minor
+change in an existing style, if you want.
 
-This macro will produce a title page with the author, title, and date of
-the presentation; the look is of course determined by the style of your
-presentation. 
+\setup{setupSlideTitle}
 
-\subsection{\typeTEX{\IncludePicture}}
+\section[sec:pictures] Special macro for including pictures
 
-This macro facilitates the placement of pictures. It takes four arguments:
+As explained earlier, the \typeTEX{\IncludePicture} macro facilitates the
+placement of pictures. It takes four arguments (one of which is options, and as
+such wasn't mentioned in the previous description).
 
 \setup{IncludePicture}
 
-The first argument decides whether the picture will be placed in a horizontal
-or vertical arrangement; for examples, refer to fig. \in[horizontal] on
-p.~\at[horizontal] and fig. \in[vertical] on p.~\at[vertical]. The second
-argument is the filename of the picture you want to include. The fourth
-argument (in braces) is the text accompanying the picture, which will be placed
-either in a \tex{SlideTitle} environment (for horizontal pictures) or opposite
-the picture, centered horizontally and vertically, for vertical pictures.
+As explained earlier, the first argument determines whether the picture will be
+placed in a horizontal or vertical arrangement; fir examples, see \in
+Figure[fig:pictures]. The second argument is the filename of the picutre that
+you want to include. The third argument is an optional argument useful for
+highlighting the picture. The fourth argument (in braces) is the text
+accompanying the picture. For horizontal pictures, this text is placed as a
+\typeTEX{\SlideTitle}; for vertical pictures this text is placed opposite to the
+picture, centered horizontally and vertically. 
+
+The third argument is the most complex. It specifies picutre dimensions and
+highlights. If you want all pictures to share a common value (like
+\options{color} or \options{shadow}), specify them using
+\typeTEX{\setupPicture}.
 
 \setup{setupPicture}
 
-The third argument is the most complex; it does the setup for the included
-picture. Here is a brief explanation of what the different parameters do:
+\null\blank
+Below is a brief explanation of what the different parameters do:
 
-\starttabulate[|lw(.22\textwidth)|p|]
-\NC {\tt width} and {\tt height} 
-\NC Unsurprisingly, these set the height or width for the picture. Normally, the
+\startitemize[packed]
+  \item \options{width} and \options{height} \par
+    Unsurprisingly, these set the width and height of the picture. Normally, the
     module will automatically fit your pictures to fill the available space, so
     you only need to set one of these values if you want to override this
     mechanism. 
-\NC\NR
-\NC {\tt highlight} 
-\NC This boolean key decides whether elements highlighting certain areas of the
-    picture will be placed on the slide. 
-\NC \NR
-\NC {\tt alternative} 
+
+  \item \options{highlight} \par
+    This key determines highlighting of the picture. If you set,
+    \options{hightlight=yes}, then you can use one of the three available
+    highlights: \options{circle}, \options{arrow}, and \options{focus}. These
+    highlights are shown in \in Figure[fig:highlight]. The specific highlight is
+    chosen using the \options{alternative} key. The location of the highlight is
+    specified using the \options{x} and \options{y} keys. The scaling and
+    rotation of the highlights is set using \options{xscale}, \options{yscale},
+    \options{length} and \options{direction}.
+
+  \item \options{alternative} \par
+    When \options{highlight=yes}, three different forms of highlights are
+    available: \options{circle}, \options{arrow}, and \options{focus}.
+    
+\stopitemize
+
+\placefigure
+  [top,bottom]
+  [fig:highlight]
+  {Differnt highlight options available}
+  \startcombination[2*2]
+    {\externalfigure[styles/BigNumber-blue][page=3,width=0.55\textwidth]}
+    {Picture with \options{highlight=no} (default)}
+    {\externalfigure[styles/BigNumber-blue][page=7,width=0.55\textwidth]}
+    {Picture with \options{highlight=yes} and \options{alternative=circle}}
+    {\externalfigure[styles/BigNumber-blue][page=8,width=0.55\textwidth]}
+    {Picture with \options{highlight=yes} and \options{alternative=arrow}}
+    {\externalfigure[styles/BigNumber-blue][page=9,width=0.55\textwidth]}
+    {Picture with \options{highlight=yes} and \options{alternative=focus}}
+  \stopcombination
+
+\subsubject Units for dimensions
+
+All dimensions are specified relative to the width and height of the image. So
+you do not have to change the location of your hightlights if you change the
+presentation style. The dimensions \options{x} and \options{y} should be a
+number between 0 and 10. The \options{x} is scaled by 1/10 times the width of
+the image; the \options{y} value is scaled by 1/10 times the height of the
+image. The easiest way to understand this is to look at a scaled grid
+superimposed on the picture, as in \in Figure[fig:grid]. The grid is configured
+as follows:
+
+\startitemize[packed]
+  \item \options{grid} and \options{subgrid} \par
+    These options determine whether or not to show the grid and sub-grid. The
+    \options{grid} divides the height and width of the picture into 10 sections;
+    this is helpful for determining the exact position where you want to place
+    circles and arrows. The \options{subgrid} divides the grid into a finer
+    grid. Each cell is divided into \options{steps} times \options{steps} cells.
+
+  \item \options{gridcolor} \par
+    This option determines the color in which the grid is drawn. It can talk and
+    \CONTEXT\ color identifier. The default value is green.
+
+  \item \options{steps} \par
+    The number of subdivisions for the \options{subgrid}. The default value is
+    5.
+\stopitemize
+
+\placefigure
+  [top,bottom]
+  [fig:grid]
+  {Grids for help in determining the location of highlight}
+  \startcombination[2]
+    {\externalfigure[styles/BigNumber-blue][page=4,width=0.55\textwidth]}
+    {Picture with \options{highlight=yes} and \options{grid=yes}}
+    {\externalfigure[styles/BigNumber-blue][page=5,width=0.55\textwidth]}
+    {Picture with \options{highlight=yes}, \options{grid=yes} and
+    \options{subgrid=yes}}
+  \stopcombination
+
+\subsubject Highlighting by a circle
+
+Now lets see how different highlight alternatives are specified. Suppose we want
+to place the picture of a cow and highlight its head. To help determine the
+center of the circle, we can first superimpose a fine grid on the picture, and
+read the value for the center. From \in Figure[fig:grid], \options{x=1.4} and
+\options{y=8.2} seems like a good value. Next we need to decide on the radius of
+the circle. The radius can either be specified in terms of the \quotation{x
+units} (1/10th of the picture width) or \quotation{y units} (1/10th of the
+picture height). Lets try a radius of 1.5 \quotation{x units}. This can be
+specified as \options{xscale=1.5}. If we wanted something in terms of
+\quotation{y units}, we could have used \options{yscale}. If both
+\options{xscale} and \options{yscale} are specified, we will get an ellipse. 
+Thus, to draw the circle highlight shown in \in Figure[fig:highlight], we wrote
+
+\startEXAMPLE
+\startTEX
+\IncludePicture
+  [horizontal]
+  [cow] % Name of the image
+  [highlight=yes,
+   alternative=circle,
+   x=1.4,
+   y=8.2,
+   xscale=1.5,
+   shadow=bottomleft]
+  {The head of a dutch cow}
+\stopTEX
+\stopEXAMPLE
+
+If \options{direction} key is specified, the circle (or the ellipse) will be
+ratated by that amount (in degrees) in the counter clockwise direction. The
+color in which the circle is drawn is specified using \options{color} key. The
+thickness of the line is determined by \options{rulethickness} key. By default,
+\options{color=orange} and \options{rulethickness} is 1/100th of the picture
+width.
+
+In summary, the different keys related to \options{alternative=circle} are:
+\startitemize[packed]
+  \item \options{highlight=yes} and \options{alternative=circle} \par
+    These are needed to specify a circle highlight.
+  \item \options{x} and \options{y} \par
+    The center of the circle in terms of scaled units. Their values should be
+    between 0 and 10.
+  \item \options{xscale} and \options{yscale} \par
+    The radius of the circle if only one options is specified. The major and
+    minor radii of the ellipse if both options are specified. 
+  \item \options{direction} \par
+    The amount by which the circle is rotated. This only makes sense if we are
+    actually drawing an ellipse.
+  \item \options{rulethickness} \par
+    The line width of the circle.
+  \item \options{color} \par
+    The color of the circle.
+\stopitemize
+
+\subsubject Highlighting by an arrow
+
+Suppose we want to include a picture of a cow and point out its mouth using an
+arrow. An arrow is specified by three things, the location of its tip, given by
+\options{x} and \options{y} keys; the length of the arrow, given by
+\options{length} key; and the direction of the tail, given by
+\options{direction} key. Thus, to draw the arrow highlight shown in \in
+Figure[fig:highlight], we wrote
+\startEXAMPLE
+\startTEX
+\IncludePicture
+  [horizontal]
+  [cow] % Name of the image
+  [highlight=yes,
+   alternative=arrow,
+   x=0.4,
+   y=6.8,
+   direction=-90, 
+   length=3cm,
+   shadow=bottomleft]
+  {The mouth of a dutch cow}
+\stopTEX
+\stopEXAMPLE
+
+The different keys related to \options{alternative=arrow} are:
+\startitemize[packed]
+  \item \options{highlight=yes} and \options{alternative=arrow} \par
+    These are needed to specify a arrow highlight.
+  \item \options{x} and \options{y} \par
+    The tip of the arrow in terms of scaled units. Their values should be
+    between 0 and 10.
+  \item \options{length} \par
+    The length of the arrow. This is a dimension.
+  \item \options{direction} \par
+    The amount by which the arrow is rotated. 
+  \item \options{rulethickness} \par
+    The line width of the arrow. (Actually the line width of the arrow is twice
+    the given value. This is so that both arrows and circles look good with the
+    same value of rulethickness. )
+  \item \options{color} \par
+    The color of the arrow.
+\stopitemize
+
+\subsubject Highlighting by focus
+
+Suppose we want place the picture of a cow, focus its head, and dull out rest of
+the picture. The area to be focuses is a circle (or an ellipse) and it can be
+specified using \options{x} and \options{y} to indicate the center,
+\options{xscale} and \options{yscale} to indicate the raidius, and
+\options{direction} to indicate the ratation. The keys \options{rulethickness}
+and \options{color} do not have any effect. The area other than the focussed
+area is washed out with a transparent color. The degree to which it is washed
+out is determined by \options{opacity} (default value 0.5), and the color of the
+unfocussed area is determined by \options{shadowcolor} (default value black).
+Thus, to draw the focus highlight shown in \in Figure[fig:highlight], we wrote
+
+\startEXAMPLE
+\startTEX
+\IncludePicture
+  [horizontal]
+  [cow] % Name of the image
+  [highlight=yes,
+   alternative=focus,
+   x=1.4,
+   y=8.2,
+   xscale=1.5]
+  {The head of a dutch cow}
+\stopTEX
+\stopEXAMPLE
+
+The different keys related to \options{alternative=focus} are:
+\startitemize[packed]
+  \item \options{highlight=yes} and \options{alternative=focus} \par
+    These are needed to specify a focus highlight.
+  \item \options{x} and \options{y} \par
+    The center of the circle in terms of scaled units. Their values should be
+    between 0 and 10.
+  \item \options{xscale} and \options{yscale} \par
+    The radius of the circle if only one options is specified. The major and
+    minor radii of the ellipse if both options are specified. 
+  \item \options{direction} \par
+    The amount by which the circle is rotated. This only makes sense if we are
+    actually drawing an ellipse.
+  \item \options{opacity} \par
+    The opacity of the unfocussed area. \options{opacity=0} is transparent,
+    while \options{opacity=1} is completely opaque.
+  \item \options{shadowcolor} \par
+    The color of the unfocused area.
+\stopitemize
+
+\subsubject Adding shadows
+
+When a circle or arrow highlight is used, adding a shadow to the highlight makes
+them stand out more. The key related to shadows is:
+\startitemize[packed]
+  \item \options{shadow} \par
+    This key determines whether shadows are placed or not. By default, shadows
+    are disabled. If not set to \options{no}, this key determines where the
+    shadow is placed: at \options{topleft}, \options{topright},
+    \options{bottomleft}, or \options{bottomright}. Setting this key to
+    \options{yes} puts the shadow at \options{bottomright}.
+\stopitemize
+
+\stoptext
+
+
 \NC Three different forms of highlighting are available: {\tt ellipse} places a
     circle on top of the picture (see fig.~\in[circle] on p.~\at[circle]), {\tt
     arrow} an arrow (see fig.~\in[arrow] on p.~\at[arrow]), and {\tt focus} a gray overlay in which a circle is
@@ -932,79 +1171,10 @@ picture. Here is a brief explanation of what the different parameters do:
     highlighting elements; they point to the center of the circle or to the tip
     of the arrow.% If you want more than one circle or arrow, simply set values 	   for x2, y2; x3, y3, etc.; up to five circles/arrows are defined.
 \NC \NR
-\NC {\tt xscale} and {\tt yscale} 
-\NC The scale of the ellipse, calculated in relation to the size of the
-    picture. If you want a circle instead of an ellipse, give just one of
-    the numbers and set the other to {\tt couple}. 
-\NC \NR
 \NC {\tt length}
 \NC The length of the arrow (dimension).
 \NC \NR
 \NC {\tt direction} 
 \NC The rotation of the ellipse resp. the direction of the arrow, given in degrees. 
-\NC \NR
-\NC {\tt opacity} 
-\NC  Sets the opacity of the gray layer (with {\tt 0} = transparent and {\tt
-    100} = completely opaque).
-\NC \NR
-\NC {\tt shadow}
-\NC Highlighting ellipses and arrows can have shadows attached, which will
-    make them stand out more on your slides. By default, shadows are
-    disabled. This key determines the place where this shadows will appear;
-    possible values are {\tt topleft}, {\tt topright}, {\tt bottomleft},
-    and {\tt bottomright}. Simply setting this key to {\tt yes} puts the
-    shadow {\tt bottomright}. 
-\NC \NR
-\NC {\tt grid} 
-\NC Boolean. If set to {\tt yes}, it places a grid on top of the
-    picture. The grid divides the height and width of the picture into 10
-    sections; this
-    is helpful for determining the exact position where you want to place
-    circles and arrows; see fig.~\in[grid] on p.~\at[grid]. 
-\NC \NR
-\NC {\tt subgrid}
-\NC Boolean. Use this to subdivide the grid to get more fine-grained
-    control of the position of your highlighting elements.
-\NC \NR
-\NC {\tt steps}
-\NC The number of subdivisions of the {\tt subgrid},
-\NC \NR
-\NC {\tt gridcolor} 
-\NC The color of the grid; default is {\tt black}. 
-\NC \NR
-\stoptabulate
-
-\placefigure
-    [here]
-    [horizontal]
-    {Horizontal picture with the \filename{NarrowStripes} style}
-    {\externalfigure[styles/NarrowStripes-blue][page=3,width=.66\textwidth]} 
-
-\placefigure
-    [here]
-    [vertical]
-    {Vertical picture with the \filename{DoubleFrame} style}
-    {\externalfigure[styles/RainbowStripe][page=10,width=.66\textwidth]} 
-
-\placefigure
-    [here]
-    [circle]
-    {Orange circle as highlighting mechanism, {\tt Split} style}
-    {\externalfigure[styles/Split][page=7,width=.66\textwidth]} 
-
-\placefigure
-    [here]
-    [arrow]
-    {Orange arrow as highlighting mechanism, {\tt Split} style}
-    {\externalfigure[styles/NarrowStripes-red][page=8,width=.66\textwidth]} 
-
-\placefigure
-    [here]
-    [gray]
-    {Focus as highlighting mechanism, {\tt HorizontalStripes} style}
-    {\externalfigure[styles/HorizontalStripes-blue][page=9,width=.66\textwidth]} 
-
-
-\stoptext
 
 % vim: foldmethod=marker foldmarker=<<<,>>>

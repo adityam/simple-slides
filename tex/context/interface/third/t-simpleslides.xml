@@ -1,282 +1,282 @@
 <?xml version="1.0" standalone="yes"?>
 
 <cd:interface xmlns:cd="http://www.pragma-ade.com/commands" 
-	      name="context" language="en" 
-	      version="2008.11.30">
+  name="context" language="en" 
+  version="2008.11.30">
 
-<cd:command name="simpleslides" file="t-simpleslides.tex">
-  <cd:sequence>
-    <cd:string value="usemodule"/>
-  </cd:sequence>
-  <cd:arguments>
-    <cd:keywords list="no">
-      <cd:constant type="simpleslides"/>
-    </cd:keywords>
-    <cd:assignments list="yes" optional="yes">
-      <cd:parameter name="style">
-        <cd:constant type="BigNumber"/>
-        <cd:constant type="BottomSquares"/>
-        <cd:constant type="Boxed"/>
-        <cd:constant type="Ellipse"/>
-        <cd:constant type="Embossed"/>
-        <cd:constant type="Framed"/>
-        <cd:constant type="FramedTitle"/>
-        <cd:constant type="HorizontalStripes"/>
-        <cd:constant type="NarrowStripes"/>
-        <cd:constant type="Quads"/>
-        <cd:constant type="RainbowStripe"/>
-        <cd:constant type="Rounded"/>
-        <cd:constant type="Shaded"/>
-        <cd:constant type="SideSquares"/>
-        <cd:constant type="Split"/>
-        <cd:constant type="Sunrise"/>
-        <cd:constant type="Swoosh"/>
-        <cd:constant type="ThickStripes"/>
-      </cd:parameter>
-      <cd:parameter name="size">
-        <cd:constant type="cd:dimension"/>
-      </cd:parameter>
-      <cd:parameter name="font">
-        <cd:constant type="LatinModern"/>
-        <cd:constant type="LatinModernSans" default="yes"/>
-        <cd:constant type="Bookman"/>
-        <cd:constant type="Chancery"/>
-        <cd:constant type="Gothic"/>
-        <cd:constant type="Helvetica"/>
-        <cd:constant type="Palatino"/>
-        <cd:constant type="Schoolbook"/>
-        <cd:constant type="Times"/>
-      </cd:parameter>
-      <cd:parameter name="color">
-        <cd:constant type="red"/>
-        <cd:constant type="blue" default="yes"/>
-        <cd:constant type="green"/>
-        <cd:constant type="bluered"/>
-      </cd:parameter>
-      <cd:parameter name="bottom">
-        <cd:constant type="square" default="yes"/>
-        <cd:constant type="stripe"/>
-      </cd:parameter>
-    </cd:assignments>
-  </cd:arguments>
-</cd:command>
+  <cd:command name="simpleslides" file="t-simpleslides.tex">
+    <cd:sequence>
+      <cd:string value="usemodule"/>
+    </cd:sequence>
+    <cd:arguments>
+      <cd:keywords list="no">
+        <cd:constant type="simpleslides"/>
+      </cd:keywords>
+      <cd:assignments list="yes" optional="yes">
+        <cd:parameter name="style">
+          <cd:constant type="BigNumber"/>
+          <cd:constant type="BottomSquares"/>
+          <cd:constant type="Boxed"/>
+          <cd:constant type="Ellipse"/>
+          <cd:constant type="Embossed"/>
+          <cd:constant type="Framed"/>
+          <cd:constant type="FramedTitle"/>
+          <cd:constant type="HorizontalStripes"/>
+          <cd:constant type="NarrowStripes"/>
+          <cd:constant type="RainbowStripe"/>
+          <cd:constant type="Rounded"/>
+          <cd:constant type="Shaded"/>
+          <cd:constant type="SideSquares"/>
+          <cd:constant type="Split"/>
+          <cd:constant type="Sunrise"/>
+          <cd:constant type="Swoosh"/>
+          <cd:constant type="ThickStripes"/>
+        </cd:parameter>
+        <cd:parameter name="size">
+          <cd:constant type="cd:dimension"/>
+        </cd:parameter>
+        <cd:parameter name="font">
+          <cd:constant type="LatinModern"/>
+          <cd:constant type="LatinModernSans" default="yes"/>
+          <cd:constant type="Bookman"/>
+          <cd:constant type="Chancery"/>
+          <cd:constant type="Gothic"/>
+          <cd:constant type="Helvetica"/>
+          <cd:constant type="Palatino"/>
+          <cd:constant type="Schoolbook"/>
+          <cd:constant type="Times"/>
+        </cd:parameter>
+        <cd:parameter name="color">
+          <cd:constant type="red"/>
+          <cd:constant type="blue" default="yes"/>
+          <cd:constant type="green"/>
+          <cd:constant type="bluered"/>
+        </cd:parameter>
+        <cd:parameter name="bottom">
+          <cd:constant type="square" default="yes"/>
+          <cd:constant type="stripe"/>
+        </cd:parameter>
+      </cd:assignments>
+    </cd:arguments>
+  </cd:command>
 
-<cd:command name="setupTitle" file="simpleslides-s-default.tex">
-  <cd:sequence>
-    <cd:string value="setupTitle"/>
-  </cd:sequence>
-  <cd:arguments>
-    <cd:assignments list="yes">
-      <cd:parameter name="title">
-	<cd:constant type="cd:text"/>
-      </cd:parameter>
-      <cd:parameter name="author">
-	<cd:constant type="cd:text"/>
-      </cd:parameter>
-      <cd:parameter name="date">
-	<cd:constant type="cd:text"/>
-      </cd:parameter>
-      <cd:parameter name="style">
-	<cd:constant type="cd:text"/>
-      </cd:parameter>
-      <cd:parameter name="color">
-	<cd:constant type="cd:text"/>
-      </cd:parameter>
-      <cd:parameter name="align">
-	<cd:constant type="cd:text"/>
-      </cd:parameter>
-      <cd:parameter name="before">
-	<cd:constant type="cd:command"/>
-      </cd:parameter>
-      <cd:parameter name="after">
-	<cd:constant type="cd:command"/>
-      </cd:parameter>
-      <cd:parameter name="titlestyle">
-	<cd:constant type="cd:command"/>
-      </cd:parameter>
-      <cd:parameter name="titlecolor">
-	<cd:constant type="cd:text"/>
-      </cd:parameter>
-      <cd:parameter name="titlealign">
-	<cd:constant type="cd:text"/>
-      </cd:parameter>
-      <cd:parameter name="authorstyle">
-	<cd:constant type="cd:text"/>
-      </cd:parameter>
-      <cd:parameter name="authorcolor">
-	<cd:constant type="cd:text"/>
-      </cd:parameter>
-      <cd:parameter name="authoralign">
-	<cd:constant type="cd:command"/>
-      </cd:parameter>
-      <cd:parameter name="titlestyle">
-	<cd:constant type="cd:text"/>
-      </cd:parameter>
-      <cd:parameter name="titlecolor">
-	<cd:constant type="cd:text"/>
-      </cd:parameter>
-      <cd:parameter name="titlealign">
-	<cd:constant type="cd:command"/>
-      </cd:parameter>
-      <cd:parameter name="datestyle">
-	<cd:constant type="cd:text"/>
-      </cd:parameter>
-      <cd:parameter name="datecolor">
-	<cd:constant type="cd:text"/>
-      </cd:parameter>
-      <cd:parameter name="datealign">
-	<cd:constant type="cd:command"/>
-      </cd:parameter>
-      <cd:parameter name="beforetitle">
-	<cd:constant type="cd:command"/>
-      </cd:parameter>
-      <cd:parameter name="beforeauthor">
-	<cd:constant type="cd:command"/>
-      </cd:parameter>
-      <cd:parameter name="beforedate">
-	<cd:constant type="cd:command"/>
-      </cd:parameter>
-      <cd:parameter name="aftertitle">
-	<cd:constant type="cd:command"/>
-      </cd:parameter>
-      <cd:parameter name="afterauthor">
-	<cd:constant type="cd:command"/>
-      </cd:parameter>
-      <cd:parameter name="afterdate">
-	<cd:constant type="cd:command"/>
-      </cd:parameter>
-     </cd:assignments>
-  </cd:arguments>
-</cd:command>
+  <cd:command name="setupTitle" file="simpleslides-s-default.tex">
+    <cd:sequence>
+      <cd:string value="setupTitle"/>
+    </cd:sequence>
+    <cd:arguments>
+      <cd:assignments list="yes">
+        <cd:parameter name="title">
+          <cd:constant type="cd:text"/>
+        </cd:parameter>
+        <cd:parameter name="author">
+          <cd:constant type="cd:text"/>
+        </cd:parameter>
+        <cd:parameter name="date">
+          <cd:constant type="cd:text"/>
+        </cd:parameter>
+        <cd:parameter name="style">
+          <cd:resolve name="style"/>
+        </cd:parameter>
+        <cd:parameter name="color">
+          <cd:constant type="cd:name"/>
+        </cd:parameter>
+        <cd:parameter name="align">
+          <cd:resolve name="align"/>
+        </cd:parameter>
+        <cd:parameter name="before">
+          <cd:constant type="cd:command"/>
+        </cd:parameter>
+        <cd:parameter name="after">
+          <cd:constant type="cd:command"/>
+        </cd:parameter>
+        <cd:parameter name="titlestyle">
+          <cd:resolve name="style"/>
+        </cd:parameter>
+        <cd:parameter name="titlecolor">
+          <cd:constant type="cd:name"/>
+        </cd:parameter>
+        <cd:parameter name="titlealign">
+          <cd:resolve name="align"/>
+        </cd:parameter>
+        <cd:parameter name="authorstyle">
+          <cd:resolve name="style"/>
+        </cd:parameter>
+        <cd:parameter name="authorcolor">
+          <cd:constant type="cd:name"/>
+        </cd:parameter>
+        <cd:parameter name="authoralign">
+          <cd:resolve name="align"/>
+        </cd:parameter>
+        <cd:parameter name="titlestyle">
+          <cd:resolve name="style"/>
+        </cd:parameter>
+        <cd:parameter name="titlecolor">
+          <cd:constant type="cd:name"/>
+        </cd:parameter>
+        <cd:parameter name="titlealign">
+          <cd:resolve name="align"/>
+        </cd:parameter>
+        <cd:parameter name="datestyle">
+          <cd:resolve name="style"/>
+        </cd:parameter>
+        <cd:parameter name="datecolor">
+          <cd:constant type="cd:name"/>
+        </cd:parameter>
+        <cd:parameter name="datealign">
+          <cd:resolve name="align"/>
+        </cd:parameter>
+        <cd:parameter name="beforetitle">
+          <cd:constant type="cd:command"/>
+        </cd:parameter>
+        <cd:parameter name="beforeauthor">
+          <cd:constant type="cd:command"/>
+        </cd:parameter>
+        <cd:parameter name="beforedate">
+          <cd:constant type="cd:command"/>
+        </cd:parameter>
+        <cd:parameter name="aftertitle">
+          <cd:constant type="cd:command"/>
+        </cd:parameter>
+        <cd:parameter name="afterauthor">
+          <cd:constant type="cd:command"/>
+        </cd:parameter>
+        <cd:parameter name="afterdate">
+          <cd:constant type="cd:command"/>
+        </cd:parameter>
+      </cd:assignments>
+    </cd:arguments>
+  </cd:command>
 
-<cd:command name="setupSlideTitle" file="simpleslides-s-default.tex">
-  <cd:sequence>
-    <cd:string value="setupSlideTitle"/>
-  </cd:sequence>
-  <cd:arguments>
-    <cd:assignments list="yes">
-      <cd:parameter name="page">
-	<cd:constant type="yes" default="yes"/>
-	<cd:constant type="no"/>
-      </cd:parameter>
-      <cd:parameter name="style">
-	<cd:constant type="cd:text"/>
-      </cd:parameter>
-      <cd:parameter name="before">
-	<cd:constant type="cd:command"/>
-      </cd:parameter>
-      <cd:parameter name="after">
-	<cd:constant type="cd:command"/>
-      </cd:parameter>
-      <cd:parameter name="align">
-	<cd:constant type="cd:text"/>
-      </cd:parameter>
-      <cd:parameter name="alternative">
-	<cd:constant type="normal" default="yes"/>
-	<cd:constant type="layer"/>
-      </cd:parameter>
-    </cd:assignments>
-  </cd:arguments>
-</cd:command>
+  <cd:command name="setupSlideTitle" file="simpleslides-s-default.tex">
+    <cd:sequence>
+      <cd:string value="setupSlideTitle"/>
+    </cd:sequence>
+    <cd:arguments>
+      <cd:assignments list="yes">
+        <cd:parameter name="page">
+          <cd:constant type="yes" default="yes"/>
+          <cd:constant type="no"/>
+          <cd:constant type="cd:name"/>
+        </cd:parameter>
+        <cd:parameter name="style">
+          <cd:resolve name="style"/>
+        </cd:parameter>
+        <cd:parameter name="before">
+          <cd:constant type="cd:command"/>
+        </cd:parameter>
+        <cd:parameter name="after">
+          <cd:constant type="cd:command"/>
+        </cd:parameter>
+        <cd:parameter name="align">
+          <cd:constant type="cd:text"/>
+        </cd:parameter>
+        <cd:parameter name="alternative">
+          <cd:constant type="normal" default="yes"/>
+          <cd:constant type="layer"/>
+        </cd:parameter>
+      </cd:assignments>
+    </cd:arguments>
+  </cd:command>
 
-<cd:command name="IncludePicture" file="simpleslides-s-default.tex">
-  <cd:sequence>
-    <cd:string value="IncludePicture"/>
-  </cd:sequence>
-  <cd:arguments>
-    <cd:keywords list="no">
-      <cd:constant type="horizontal" default="yes"/>
-      <cd:constant type="vertical"/>
-    </cd:keywords>
-    <cd:keywords list="no">
-      <cd:constant type="cd:name"/>
-    </cd:keywords>
-    <cd:assignments list="yes">
-      <cd:inherit name="setupPicture"/>
-    </cd:assignments>
-    <cd:content n="4"/>
-  </cd:arguments>
-</cd:command>
+  <cd:command name="IncludePicture" file="simpleslides-s-default.tex">
+    <cd:sequence>
+      <cd:string value="IncludePicture"/>
+    </cd:sequence>
+    <cd:arguments>
+      <cd:keywords list="no">
+        <cd:constant type="horizontal" default="yes"/>
+        <cd:constant type="vertical"/>
+      </cd:keywords>
+      <cd:keywords list="no">
+        <cd:constant type="cd:name"/>
+      </cd:keywords>
+      <cd:assignments list="yes" optional="yes">
+        <cd:inherit name="setupPicture"/>
+      </cd:assignments>
+      <cd:content n="4"/>
+    </cd:arguments>
+  </cd:command>
 
-<cd:command name="setupPicture" file="simpleslides-s-default.tex">
-  <cd:sequence>
-    <cd:string value="setupPicture"/>
-  </cd:sequence>
-  <cd:arguments>
-    <cd:assignments list="yes">
-      <cd:parameter name="height">
-	<cd:constant type="cd:dimension"/>
-      </cd:parameter>
-      <cd:parameter name="width">
-	<cd:constant type="cd:dimension"/>
-      </cd:parameter>
-      <cd:parameter name="highlight">
-	<cd:constant type="yes"/>
-	<cd:constant type="no" default="yes"/>
-      </cd:parameter>
-      <cd:parameter name="alternative">
-	<cd:constant type="none" default="yes"/>
-	<cd:constant type="circle"/>
-	<cd:constant type="arrow"/>
-	<cd:constant type="focus"/>
-      </cd:parameter>
-      <cd:parameter name="color">
-	<cd:constant type="cd:name"/>
-      </cd:parameter>
-      <cd:parameter name="rulethickness">
-	<cd:constant type="cd:dimension"/>
-      </cd:parameter>
-      <cd:parameter name="x">
-	<cd:constant type="cd:number"/>
-      </cd:parameter>
-      <cd:parameter name="y">
-	<cd:constant type="cd:number"/>
-      </cd:parameter>
-      <cd:parameter name="xscale">
-	<cd:constant type="cd:number"/>
-      </cd:parameter>
-      <cd:parameter name="yscale">
-	<cd:constant type="cd:number"/>
-      </cd:parameter>
-      <cd:parameter name="length">
-	<cd:constant type="cd:dimension"/>
-      </cd:parameter>
-      <cd:parameter name="direction">
-	<cd:constant type="cd:number"/>
-      </cd:parameter>
-      <cd:parameter name="opacity">
-	<cd:constant type="cd:number"/>
-      </cd:parameter>
-      <cd:parameter name="length">
-	<cd:constant type="cd:dimension"/>
-      </cd:parameter>
-      <cd:parameter name="shadow">
-	<cd:constant type="yes"/>
-	<cd:constant type="topleft"/>
-	<cd:constant type="topright"/>
-	<cd:constant type="bottomright"/>
-	<cd:constant type="bottomleft"/>
-	<cd:constant type="no" default="yes"/>
-      </cd:parameter>
-      <cd:parameter name="shadowcolor">
-	<cd:constant type="cd:name"/>
-      </cd:parameter>
-      <cd:parameter name="grid">
-	<cd:constant type="yes"/>
-	<cd:constant type="no" default="yes"/>
-      </cd:parameter>
-      <cd:parameter name="subgrid">
-	<cd:constant type="yes"/>
-	<cd:constant type="no" default="yes"/>
-      </cd:parameter>
-      <cd:parameter name="gridcolor">
-	<cd:constant type="cd:name"/>
-      </cd:parameter>
-      <cd:parameter name="steps">
-	<cd:constant type="cd:number"/>
-      </cd:parameter>
-    </cd:assignments>
-  </cd:arguments>
-</cd:command>
+  <cd:command name="setupPicture" file="simpleslides-s-default.tex">
+    <cd:sequence>
+      <cd:string value="setupPicture"/>
+    </cd:sequence>
+    <cd:arguments>
+      <cd:assignments list="yes">
+        <cd:parameter name="height">
+          <cd:constant type="cd:dimension"/>
+        </cd:parameter>
+        <cd:parameter name="width">
+          <cd:constant type="cd:dimension"/>
+        </cd:parameter>
+        <cd:parameter name="highlight">
+          <cd:constant type="yes"/>
+          <cd:constant type="no" default="yes"/>
+        </cd:parameter>
+        <cd:parameter name="alternative">
+          <cd:constant type="none" default="yes"/>
+          <cd:constant type="circle"/>
+          <cd:constant type="arrow"/>
+          <cd:constant type="focus"/>
+        </cd:parameter>
+        <cd:parameter name="color">
+          <cd:constant type="cd:name"/>
+        </cd:parameter>
+        <cd:parameter name="rulethickness">
+          <cd:constant type="cd:dimension"/>
+        </cd:parameter>
+        <cd:parameter name="x">
+          <cd:constant type="cd:number"/>
+        </cd:parameter>
+        <cd:parameter name="y">
+          <cd:constant type="cd:number"/>
+        </cd:parameter>
+        <cd:parameter name="xscale">
+          <cd:constant type="cd:number"/>
+        </cd:parameter>
+        <cd:parameter name="yscale">
+          <cd:constant type="cd:number"/>
+        </cd:parameter>
+        <cd:parameter name="length">
+          <cd:constant type="cd:dimension"/>
+        </cd:parameter>
+        <cd:parameter name="direction">
+          <cd:constant type="cd:number"/>
+        </cd:parameter>
+        <cd:parameter name="opacity">
+          <cd:constant type="cd:number"/>
+        </cd:parameter>
+        <cd:parameter name="length">
+          <cd:constant type="cd:dimension"/>
+        </cd:parameter>
+        <cd:parameter name="shadow">
+          <cd:constant type="yes"/>
+          <cd:constant type="topleft"/>
+          <cd:constant type="topright"/>
+          <cd:constant type="bottomright"/>
+          <cd:constant type="bottomleft"/>
+          <cd:constant type="no" default="yes"/>
+        </cd:parameter>
+        <cd:parameter name="shadowcolor">
+          <cd:constant type="cd:name"/>
+        </cd:parameter>
+        <cd:parameter name="grid">
+          <cd:constant type="yes"/>
+          <cd:constant type="no" default="yes"/>
+        </cd:parameter>
+        <cd:parameter name="subgrid">
+          <cd:constant type="yes"/>
+          <cd:constant type="no" default="yes"/>
+        </cd:parameter>
+        <cd:parameter name="gridcolor">
+          <cd:constant type="cd:name"/>
+        </cd:parameter>
+        <cd:parameter name="steps">
+          <cd:constant type="cd:number"/>
+        </cd:parameter>
+      </cd:assignments>
+    </cd:arguments>
+  </cd:command>
 
 </cd:interface>

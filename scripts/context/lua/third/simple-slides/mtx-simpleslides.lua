@@ -43,7 +43,7 @@ function simpleslides.setup(style, color, bottom)
   if style  then options = options .. "style=" ..style.. ",\n" end 
   if color  then options = options .. "color=" ..color.. ",\n" end
   if bottom then options = options .. "bottom="..bottom..",\n" end
-  return usemodule .. "[" .. options .. "]"
+  return usemodule .. "[" .. options .. "]\n"
 end
 
 simpleslides.body = [[
@@ -149,6 +149,7 @@ simpleslides.body = [[
 \IncludePicture
   [vertical]
   [mill]
+  [width=\NormalWidth]
   {The windmills are an example of a green energy source.}
 
 \SlideTitle{Summary}
@@ -165,14 +166,14 @@ simpleslides.body = [[
 local engine   = environment.argument("engine") or "luatex"
 local command  = "context --" .. engine  -- .. " --batchmode"
 local styles   = environment.argument("styles")
-local filename = "simpleslides-example.tex"
+local filename = "styles/simpleslides-example.tex"
 
 function simpleslides.create_test(style, color, bottom)
   local file = assert(io.open(filename, "w"))
   file:write(simpleslides.setup(style,color,bottom))
   file:write(simpleslides.body)
   assert(io.close(file))
-  local result = "--result="..style
+  local result = "--result=styles/"..style
   if color  then result = result .. "-" .. color  end
   if bottom then result = result .. "-" .. bottom end 
   local str = command .. " " .. filename .. " " .. result
