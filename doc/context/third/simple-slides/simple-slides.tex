@@ -1,15 +1,96 @@
-\setupcolors[state=start]
+\setupcolors     [state=start]
+\setupinteraction[state=start,style=normal]
 
 \usemodule[int-load]
-\usemodule[abr-02]
+\loadsetups[cont-en.xml]
+\loadsetups[simpleslides.xml]
 
-\usetypescriptfile[type-dejavu]
+%% Layout : {{{
+\setuplayout[
+                   width=middle,
+                  height=middle,
+                %location=middle,
+                topspace=0.5in,
+             bottomspace=.75in,
+          bottomdistance=.25in,
+                  bottom=.25in,
+               backspace=1.0in,
+                cutspace=1.0in,
+              leftmargin=0.55in,
+             rightmargin=0.55in,
+      leftmargindistance=0.1in,
+     rightmargindistance=0.1in,
+                  header=0.25in,
+                  footer=0.5in,
+           headerdistace=0.25in,
+          footerdistance=0.25in,
+                 marking=on,
+%                   grid=yes,
+    ]
+
+\setuppagenumbering [location=footer]
+
+%% }}}
+%% Typescripts : {{{
+\starttypescript [serif] [dejavu]
+    \setups[font:fallback:sans]
+    \definefontsynonym [Serif]           [name:DejaVu Serif] 
+                       [features=default]
+    \definefontsynonym [SerifItalic]     [name:DejaVu Serif Italic]    
+                       [features=default]
+    \definefontsynonym [SerifBold]       [name:DejaVu Serif Bold]       [features=default]
+    \definefontsynonym [SerifBoldItalic] [name:DejaVu Serif Bold Italic]
+                       [features=default]
+\stoptypescript
+
+\starttypescript [sans] [dejavu]
+    \setups[font:fallback:sans]
+    \definefontsynonym [Sans]           [name:DejaVu Sans]    
+                       [features=default]
+    \definefontsynonym [SansItalic]     [name:DejaVu Sans Oblique]    
+                       [features=default]
+    \definefontsynonym [SansBold]       [name:DejaVu Sans Bold]
+                       [features=default]
+    \definefontsynonym [SansBoldItalic] [name:DejaVu Sans Bold Oblique] 
+                       [features=default]
+\stoptypescript
+
+\starttypescript [mono] [dejavu]
+    \setups[font:fallback:mono]
+    \definefontsynonym [Mono]           [name:DejaVu Sans Mono]   
+                       [features=default]
+    \definefontsynonym [MonoItalic]     [name:DejaVu Sans Mono Oblique]    
+                       [features=default]
+    \definefontsynonym [MonoBold]       [name:DejaVu Sans Mono Bold]      
+                       [features=default]
+    \definefontsynonym [MonoBoldItalic] [name:DejaVu Sans Mono Bold Oblique]
+                       [features=default]
+\stoptypescript
+
+\starttypescript [dejavu]
+    \definetypeface [dejavu] [rm] [serif] [dejavu] [default]
+    \definetypeface [dejavu] [ss] [sans]  [dejavu] [default]
+    \definetypeface [dejavu] [tt] [mono]  [dejavu] [default]
+    \definetypeface [dejavu] [mm] [math]  [modern] [default]
+\stoptypescript
 
 \usetypescript[dejavu]
 \setupbodyfont[dejavu,10pt]
 
-\loadsetups[cont-en.xml]
-\loadsetups[simpleslides.xml]
+%% }}}
+%% Logos: {{{
+\logo [TEX]      {Tex}
+\logo [LATEX]    {Latex}
+\logo [CONTEXT]  {Context}
+\logo [PDFTEX]   {pdftex}
+\logo [LUATEX]   {Luatex}
+\logo [XETEX]    {Xetex}
+\logo [MKII]     {MkII}
+\logo [MKIV]     {MkIV}
+
+\setupsorting[logo][style=normal]
+
+%% }}}
 
 \definetype[typeTEX][option=tex, style=type]
 \definetype[command][color=darkred, style=type]
@@ -18,12 +99,21 @@
 \setupindenting[medium,yes]
 \setupwhitespace[medium]
 
-\definefont [titlefont]    [LMSans-DemiCondensed]
 \setuphead[title][alternative=middle, textstyle=sansbold] 
 \setuphead[section,subsubject][numberstyle=sansbold,textstyle=sansbold]
 
+\setuplistalternative[a]
+    [distance=0pt,width=1em,stretch=10em,
+     command=\hskip0.5em\ldots\hskip0.5em\relax]
+
+\setuplist  [section]
+            [margin=10em, alternative=a]
+
 \useURL[practex][http://www.tug.org/pracjourn/2006-2/schmitz/]
 
+\setupitemize[1][autointro]
+
+%% Frames and Backgrounds : {{{
 \definetextbackground
     [EXAMPLE]
     [           mp=background:random,
@@ -75,8 +165,11 @@
 \stopuseMPgraphic
 \setupexternalfigures[location={local,global,default}] 
 
+%% }}}
+
 \def\ShowStyle#1%
-  {\startcombination[2*2]
+  {\blank[big]
+   \midaligned{\startcombination[2*2]
      {\externalfigure[styles/#1][page=1,width=0.55\textwidth]}
      {Title Page}
      {\externalfigure[styles/#1][page=2,width=0.55\textwidth]}
@@ -85,8 +178,7 @@
      {Horizontal Picture}
      {\externalfigure[styles/#1][page=10,width=0.55\textwidth]}
      {Vertical Picture}
-  \stopcombination}
-
+  \stopcombination}}
 
 \starttext
 
@@ -94,12 +186,16 @@
   Simple Slides \\
   A \CONTEXT\ presentation module 
 
+\startEXAMPLE
+\placelist[section]
+\stopEXAMPLE
+
 \section Introduction
 
 This module provides an easy|-|to|-|use interface
 for creating simple slides/presentations in \CONTEXT. 
 The salient feature of this module are:
-\startitemize[intro]
+\startitemize
   \item The module is meant for presentations which will be shown on a
     digital projector. They have no interactive elements (such as buttons or
     hyperlinks) and no navigational tools (such as table of contents).
@@ -143,17 +239,24 @@ the current module.
 \section{Installation}
 
 The module is installed in the usual way: simply unzip the archive
-\filename{t-simpleslides-<date>.zip} into one of your \filename{$TEXMF} tree,
+\filename{t-simpleslides-<date>.zip} into one of your \filename{$TEXMF} trees,
 and from a terminal run \command{mktexlsr} (for \MKII) and \command{luatools
 --generate} (for \MKIV). To verify that everything was installed correctly, from
 a terminal run \command{kpsewhich t-simpleslides.tex} (for \MKII) and
 \command{luatools t-simpleslides.tex} (for \MKIV); these commands should return
 the complete path of the files that you just installed.
 
-\section{Quick start}
+\subsubject A note about \TEX|-|engines
+
+We have extensively tested this module with \PDFTEX\ and \LUATEX\
+(that is, with \MKII\ and \MKIV). In spite of our best efforts, we have not been
+able to get this module to work with \XETEX. If you are a \XETEX\ guru, and know
+how to fix some of the errors with \XETEX, we will appreciate the help.
+
+\section Quick start
 
 First you must tell \CONTEXT\ that you want to use this module. To do this
-simply say
+simply write
 
 \startEXAMPLE
 \startTEX
@@ -184,8 +287,10 @@ presentation. The following styles are presented:
   \item \options{Swoosh}
   \item \options{ThickStripes}
 \stopitemize
-To use a style, say \options{BigNumber}, pass \options{style=BigNumber} option
-to the \filename{simpleslides} module as follows.
+
+To use a style, say \options{BigNumber}, pass the \options{style=BigNumber}
+option to the \filename{simpleslides} module as follows.
+
 \startEXAMPLE
 \startTEX
 \usemodule[simpleslides]
@@ -195,6 +300,36 @@ to the \filename{simpleslides} module as follows.
 
 Some of the styles come have some variants, which will be explained later. The
 output of different styles is shown in \in Section[sec:styles].
+
+By default, the Latin Modern Sans font is used. The module also makes it easy to
+use other fonts that come with a typical \TEX\ distribution. 
+The following fonts are provided:
+\startitemize[columns, three]
+  \item \options{LatinModern}
+  \item \options{LatinModernSans}
+  \item \options{Bookman}
+  \item \options{Chancery}
+  \item \options{Gothic}
+  \item \options{Helvetica}
+  \item \options{Palatino}
+  \item \options{Schoolbook}
+  \item \options{Times}
+\stopitemize
+
+To choose a font, say \options{Helvetica}, pass \options{font=Helvetica} option
+to the \filename{simpleslides} module as follows.
+\startEXAMPLE
+\startTEX
+\usemodule[simpleslides]
+          [style=BigNumber,
+            font=Helvetica]
+\stopTEX
+\stopEXAMPLE
+
+More details about the fonts, including information on how to use your own fonts
+is given in \in Section[sec:fonts].
+
+\subsubject Structure of a presentation
 
 The \filename{simpleslides} module has a very simple model of a presentation. A
 presentation consists of a title followed by a series of slides; the module
@@ -223,25 +358,16 @@ The macro \typeTEX{\placeTitle} places the title page in the presentation.
 The \filename{simpleslides} module provides a \typeTEX{\SlideTitle} macro, which
 starts a new slide (basically a new page), and typesets its argument as the
 title of the slide. It also takes care of increasing the page counters and
-progress bars, and set up the background. The content of the slides follows
+progress bars, and setting up the background. The content of the slides follows
 after this command.
 
 A slide is a normal \CONTEXT\ page, so you can use any commands and environments
-that you want. Each presentation style, sets up a style for itemizations, and
+that you want. Each presentation style sets up a style for itemizations, and
 provides useful macros for placing pictures. These macros will be explained
 later.
 
-\subsubject A minimal presentation
-
-A minimal presentation is shown below. The result is shown in \in
-Figure[fig:example].
-
-\startEXAMPLE
-\typefile[option=tex]{example.tex}
-\stopEXAMPLE
-
 \placefigure
-  [bottom]
+  [top,bottom]
   [fig:example]
   {A minimal presentation}
   \startcombination[2*2]
@@ -265,91 +391,265 @@ Figure[fig:example].
     {\externalfigure[example][page=3,width=0.55\textwidth]}{Second slide}
   \stopcombination
 
+
+\subsubject A minimal presentation
+
+A minimal presentation is shown below. The result is shown in \in
+Figure[fig:example].
+
+\startEXAMPLE
+\typefile[option=tex]{example.tex}
+\stopEXAMPLE
+
 \section Placing pictures
 
-The command \typeTEX{\SlideTitle} begins a new slide, typesets its argument as
-the title of this slide, takes care of increasing counters and progress
-bars, and sets up backgrounds; the content of your slides follows after
-this command. Your slide is just a normal \CONTEXT\ environment, so you can
-use any commands and environments you want. If you want to have slides with
-illustrations, there are two ways to place pictures: in the
-\quotation{horizontal} structure, the picture is placed under the title of
-the slide; in the \quotation{vertical} structure, the picture is placed on
-the left-hand side of the slide and the text opposite it. Pictures are
-placed with this command:
+If you want to place pictures in your slides, you can always use \CONTEXT's
+\typeTEX{\externalfigure} macro. This module also provides a macro,
+\typeTEX{\IncludePicture}, for preconfigured picture layouts. Two layouts are
+provided:
+\startitemize
+  \item \options{horizontal}: the picture is placed under the tile of the slide,
+    so that it fits in the available space.
+  \item \options{vertical}: the slide is divided into two colums; the picture is
+    placed on the left column and text is placed on the right column.
+\stopitemize
 
+\placefigure
+  [top,bottom]
+  [fig:pictures]
+  {Example of \options{horizontal} and \options{vertical} options for 
+  \typeTEX{\IncludePicture} macro}
+  \startcombination[2*2]
+    \startEXAMPLEframe[width=0.55\textwidth]
 \startTEX
-\IncludePicture[horizontal]
-               [NAME]
-	       [width=\textwidth]
-	       {This text will be the title of the slide}
-
-\IncludePicture[vertical]
-               [NAME]
-	       [width=\NormalWidth]
-	       {This text will be placed opposite the picture}
+  \usemodule[simpleslides]
+            [...]
+  \starttext
+  ...
+  \IncludePicture
+      [horizontal]
+      [cow]
+      {A Dutch Cow}
+  ...
+  \stoptext
 \stopTEX
+    \stopEXAMPLEframe
+    {A horizontal picture}
+    {\externalfigure[styles/BigNumber-blue]
+                    [page=3,width=0.55\textwidth]}{A horizontal picture}
+    \startEXAMPLEframe[width=0.55\textwidth]
+\startTEX
+  \usemodule[simpleslides]
+            [...]
+  \starttext
+  ...
+  \IncludePicture
+      [vertical]
+      [mill]
+      {The windmills are an example of a green energy source} 
+  ...
+  \stoptext
+\stopTEX
+    \stopEXAMPLEframe
+    {A vertical picture}
+    {\externalfigure[styles/BigNumber-blue]
+                    [page=10,width=0.55\textwidth]}{A vertical picture}
+\stopcombination
 
-The macros \tex{NormalWidth} and \tex{NormalHeight} make sure that
-your vertical picture fills the available space.
 
-\section Examples of different styles
+A horizontal picture is placed as follows.
+\startEXAMPLE
+\startTEX
+\IncludePicture
+  [horizontal]
+  [filename]  % Name of the file that contains the picture
+  {Title of the slide}
+\stopTEX
+\stopEXAMPLE
+
+\null\blank
+
+A vertical picture is placed as follows.
+\startEXAMPLE
+\startTEX
+\IncludePicture
+  [vertical]
+  [filename]  % Name of the file that contains the picture
+  {Text that is placed on the right of the picture}
+\stopTEX
+\stopEXAMPLE
+
+An example is shown in \in Figure[fig:pictures].
+It is possible to change the height and width of the pictures, or 
+highlight them with circles and arrows. These details can be found in \in
+Section[sec:pictures]
+
+\page
+
+\section[sec:styles] The available styles
 
 \subsubject{BigNumber: with \options{color=blue} (also accepts \options{color=red})}
+
+This is a style with subdued and quiet colors; its characteristic feature is the
+page number on the lower right border of the text area. This detail was inspired
+by {\em split} style (\filename{s-pre-14}) by Hans.
+
 \ShowStyle {BigNumber-blue}
+\page
 
 \subsubject{BottomSquares}
+
+This minimalistic style is inspired by a presentation Taco gave at EuroTeX
+2006.
+
 \ShowStyle {BottomSquares}
+\page
 
 \subsubject{Boxed}
+
+This style is inspired by the screen version of the Metafun manual. Watch
+the small gray circles at the bottom!
+
 \ShowStyle {Boxed}
+\page
 
 \subsubject{Ellipse}
+
+This style is inspired by {\em funny} style (\filename{s-pre-03}) by Hans. 
+The light red stripe marks the progress.
+
 \ShowStyle {Ellipse}
+\page
 
 \subsubject{Embossed}
+
+Spread the word, don't be shy! Show your pride in using \CONTEXT. The color
+theme will probably look familiar; I copied it from the \filename{enattab}
+manual. 
+
 \ShowStyle {Embossed}
 
-\subsubject{Framed: with \options{style=square}}
-\ShowStyle {Framed-square}
+If you are shy, or narcissist, you can change the emblem by
+\startEXAMPLE
+\startTEX
+\setuplabeltext  [simpleslidesemblem={I made this presentation}]
+\stopTEX
+\stopEXAMPLE
 
-\subsubject{Framed: with \options{style=stripe}}
+\page
+
+\subsubject{Framed: with \options{bottom=square}}
+
+This style was inspired by {\em green} style (\filename{s-pre-02}) by Hans. It
+has a thick blue frame around the entire slide area and a thinner frame around
+the text area. The style has two options for the bottom area:
+\options{bottom=stripe} will display a shaded blue area which will grow with
+each slide; \options{bottom=square} displays a row of blue squares at the bottom
+which also measure the presentation's progress.  
+
+\ShowStyle {Framed-square}
+\page
+
+\subsubject{Framed: with \options{bottom=stripe}}
 \ShowStyle {Framed-stripe}
+\page
 
 \subsubject{FramedTitle}
+
+This is a style with loud titles. Its characteristic feature is the {\em scratch
+counter} at the bottom. These are derived from Section~7.2 of the Metafun
+manual.
+
 \ShowStyle {FramedTitle}
+\page
 
 \subsubject{HorizontalStripes: with \options{color=green} (also accepts
 \options{color=blue} and \options{color=red})}
+
+A sober style with an emphasis on horizontal lines, inspired by {\em Szeged}
+theme in \LATEX's \filename{beamer} package.
+
 \ShowStyle {HorizontalStripes-green}
+\page
+
+\subsubject{NarrowStripes: with \options{color=green} (also accepts
+\options{color=blue} and \options{color=red})}
+
+A very simple and sober style, with shaded narrow stripes. 
+
+\ShowStyle {NarrowStripes-blue}
+\page
 
 \subsubject{RainbowStripe}
+
+A colorful style for daring presenters. The black line which marks the
+progress is reminiscent of absorption lines in star spectra, so this style
+may be apt for astrophysical presentations?
+
 \ShowStyle {RainbowStripe}
+\page
 
 \subsubject{Rounded}
+
+This style has cool colors and lots of white space; it is probably best suited
+for presentations with relatively little text.
+
 \ShowStyle {Rounded}
+\page
 
 \subsubject{Shaded: with \options{color=blue} (also accepts
 \options{color=green})}
+
+The only ornament to this style is the dark shaded background. It uses
+\CONTEXT's {\tt interactionbar} mechanism to show the progress of the
+presentation. It provides much space for text.
+
 \ShowStyle {Shaded-blue}
+\page
 
 \subsubject{SideSquares}
+
+This style is inspired by the colors and corporate look of Thomas's 
+university. It is very sober and offers much space for text and
+images. There is a rough progress meter built into the blue quadrangles. 
+
 \ShowStyle {SideSquares}
+\page
 
 \subsubject{Split}
+
+This style is inspired by the {\em Copenhagen} theme of the \LATEX's
+\filename{beamer} package. The narrow blue and black stripes at the top and the
+bottom of the slides display the date and slide number (top) and the title
+and author of the presentation. 
+
 \ShowStyle {Split}
+\page
 
 \subsubject{Sunrise}
+
+This style is inspired by the {\em husky} theme of the \LATEX's
+\filename{powerdot} package.
+
 \ShowStyle {Sunrise}
+\page
 
 \subsubject{Swoosh}
+
+Take a break from the right angles and straight lines. Use swooshy curves. This
+style also has a fancy page counter at the bottom.
+
 \ShowStyle {Swoosh}
+\page
 
 \subsubject{ThickStripes}
+
+This theme is inspired by the {\em Berkeley} style of the \LATEX's
+\filename{beamer} package. It has a stop watch at the bottom, which keeps tracks
+of the number of slides.
+
 \ShowStyle {ThickStripes}
-
-
-\section{Using the Module}
+\page
 
 \section{Using the Module}
 
@@ -556,13 +856,5 @@ picture. Here is a brief explanation of what the different parameters do:
     {Focus as highlighting mechanism, {\tt HorizontalStripes} style}
     {\externalfigure[styles/HorizontalStripes-blue][page=9,width=.66\textwidth]} 
 
-
-\section{Simpleslides and the \TeX|-|engines}
-
-We have not been able to test all available styles, fonts, colors,
-etc. with all engines, and we are aware that there are some problems
-especially with the \XeTeX\ engine (which neither of us uses a lot), but in
-principle, the module should work with traditional pdf\TeX\ (\type{mkii}),
-with \XeTeX\ and with lua\TeX\ (\type{mkiv}). 
 
 \stoptext
