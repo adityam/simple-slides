@@ -346,8 +346,8 @@ The salient feature of this module are:
 This module provides a simple structure that will be suitable for beginning or
 intermediate users of \CONTEXT, or someone who does not want to spend too much
 time playing around with different configuration options for \CONTEXT. As such
-it focusses on different users than Hans's presentation modules which have larger
-and fancier features. This module also offers much less features than the
+it focusses on different users than Hans's presentation modules that provide
+more fancier features. This module also offers much less features than the
 \LATEX\ \filename{beamer} package. Its main strength is its ease of use; you
 should be able to write your first presentation after spending five minutes with
 this manual.
@@ -365,7 +365,7 @@ presentations.
 
 \CONTEXT\ does make creating your own presentation style relatively easy. So
 Thomas wrote some presentation related macros (see the Prac\TEX\ article
-{\tt\from[practex]}). With time, Thomas extended these macros into a collection
+{\tt\from[practex]}). With time, he extended these macros into a collection
 of styles providing different visual effects, and later collected all of them in
 the \filename{taspresent} module. He gave a talk about the \filename{taspresent}
 module in in the second \CONTEXT\ user meeting at Bohinj, and in the ensuing
@@ -404,7 +404,7 @@ simply write
 This sets the paper size and font sizes to values that are suitable for
 presentations. Everything else is left like a default \CONTEXT\ document. The
 module provides different styles that change the visual appearance of the
-presentation. The following styles are presented:
+presentation. The following styles are provided:
 \startitemize[columns, three]
   \item \options{BigNumber}
   \item \options{BottomSquares}
@@ -435,11 +435,11 @@ option to the \filename{simpleslides} module as follows.
 \stopTEX
 \stopEXAMPLE
 
-Some of the styles come have some variants, which can be chosen using
+Some of the styles have a few variants that can be chosen using
 \options{color} and \options{bottom} keys. These are explained in \in
 Section[sec:styles].
 
-By default, the Latin Modern Sans font is used. The module also makes it easy to
+By default, the Latin Modern Sans font is used. The module makes it easy to
 use other fonts that come with a typical \TEX\ distribution. 
 The following fonts are provided:
 \startitemize[columns, three]
@@ -508,7 +508,7 @@ title of the slide. It also takes care of increasing the page counters and
 progress bars, and setting up the background. The content of the slides follows
 after this command.
 
-A slide is a normal \CONTEXT\ page, so you can use any commands and environments
+A slide is a normal \CONTEXT\ page, so you can use any command or environment
 that you want. Each presentation style sets up a style for itemizations, and
 provides useful macros for placing pictures. These macros will be explained
 later.
@@ -560,7 +560,7 @@ provided:
 \startitemize
   \item \options{horizontal}: the picture is placed under the tile of the slide,
     so that it fits in the available space.
-  \item \options{vertical}: the slide is divided into two colums; the picture is
+  \item \options{vertical}: the slide is divided into two columns; the picture is
     placed on the left column and text is placed on the right column.
 \stopitemize
 These layouts are shown in \in Figure[fig:pictures].
@@ -612,7 +612,7 @@ These layouts are shown in \in Figure[fig:pictures].
 
 
 
-A horizontal picture is placed as follows.
+A horizontal picture is placed as follows
 \startEXAMPLE
 \startTEX
 \IncludePicture
@@ -643,7 +643,7 @@ Section[sec:pictures]
 The \options{style} key to \typeTEX{\setupmodule[simpleslides]} determines the
 look of the presentation. Some of the styles come with variants, that can be
 chosen using \options{color} and \options{bottom} keys. The available styles are
-shown below along with the details of their varients.
+shown below along with the details of their variants.
 
 \subsubject{BigNumber: with \options{color=blue} (also accepts \options{color=red})}
 
@@ -758,7 +758,7 @@ for presentations with relatively little text.
 \options{color=green} and \options{color=bluered})}
 
 The only ornament to this style is the dark shaded background. It uses
-\CONTEXT's {\tt interactionbar} mechanism to show the progress of the
+\CONTEXT's \type{interactionbar} mechanism to show the progress of the
 presentation. It provides much space for text.
 
 \ShowStyle {Shaded-blue}
@@ -862,11 +862,11 @@ you have your own typescript for a font, your setup will look like this:
 Internally, the font size is stored in the macro \typeTEX{\NormalSize}. The main
 text is set at size \typeTEX{\NormalSize}; the title page and the slide title
 are set at size \typeTEX{\TitleSize}. The module uses some heuristics to select
-a reasonable value of \typeTEX{\TitleSize}. If you do not like ths size of the
+a reasonable value of \typeTEX{\TitleSize}. If you do not like the size of the
 title page and slide titles, you can change the value to \typeTEX{\TitleSize} to
 whatever you like.
 
-\section Changing the title page
+\section[sec:setuptitle] Changing the title page
 
 It is possible to change the look of \typeTEX{\placeTitle} using
 \typeTEX{\setupTitle}. This feature is intended for authors creating a new
@@ -889,14 +889,14 @@ change in an existing style, if you want.
 \section[sec:pictures] Special macro for including pictures
 
 As explained earlier, the \typeTEX{\IncludePicture} macro facilitates the
-placement of pictures. It takes four arguments (one of which is options, and as
+placement of pictures. It takes four arguments (one of which is optional, and as
 such wasn't mentioned in the previous description).
 
 \setup{IncludePicture}
 
 As explained earlier, the first argument determines whether the picture will be
-placed in a horizontal or vertical arrangement; fir examples, see \in
-Figure[fig:pictures]. The second argument is the filename of the picutre that
+placed in horizontal or vertical layout; fir examples, see \in
+Figure[fig:pictures]. The second argument is the filename of the picture that
 you want to include. The third argument is an optional argument useful for
 highlighting the picture. The fourth argument (in braces) is the text
 accompanying the picture. For horizontal pictures, this text is placed as a
@@ -916,13 +916,13 @@ Below is a brief explanation of what the different parameters do:
 \startitemize[packed]
   \item \options{width} and \options{height} \par
     Unsurprisingly, these set the width and height of the picture. Normally, the
-    module will automatically fit your pictures to fill the available space, so
+    module will automatically scale your pictures to fill the available space, so
     you only need to set one of these values if you want to override this
     mechanism. 
 
   \item \options{highlight} \par
-    This key determines highlighting of the picture. If you set,
-    \options{hightlight=yes}, then you can use one of the three available
+    This key determines the highlighting of the picture. If you set,
+    \options{highlight=yes}, then you can use one of the three available
     highlights: \options{circle}, \options{arrow}, and \options{focus}. These
     highlights are shown in \in Figure[fig:highlight]. The specific highlight is
     chosen using the \options{alternative} key. The location of the highlight is
@@ -931,7 +931,7 @@ Below is a brief explanation of what the different parameters do:
     \options{length} and \options{direction}.
 
   \item \options{alternative} \par
-    When \options{highlight=yes}, three different forms of highlights are
+    When \options{highlight=yes}, three different highlights are
     available: \options{circle}, \options{arrow}, and \options{focus}.
     
 \stopitemize
@@ -939,7 +939,7 @@ Below is a brief explanation of what the different parameters do:
 \placefigure
   [top,bottom]
   [fig:highlight]
-  {Differnt highlight options available}
+  {Different highlight options available}
   \startcombination[2*2]
     {\externalfigure[styles/BigNumber-blue][page=3,width=0.55\textwidth]}
     {Picture with \options{highlight=no} (default)}
@@ -954,7 +954,7 @@ Below is a brief explanation of what the different parameters do:
 \subsubject Units for dimensions
 
 All dimensions are specified relative to the width and height of the image. So
-you do not have to change the location of your hightlights if you change the
+you do not have to change the location of your highlights if you change the
 presentation style. The dimensions \options{x} and \options{y} should be a
 number between 0 and 10. The \options{x} is scaled by 1/10 times the width of
 the image; the \options{y} value is scaled by 1/10 times the height of the
@@ -971,7 +971,7 @@ as follows:
     grid. Each cell is divided into \options{steps} times \options{steps} cells.
 
   \item \options{gridcolor} \par
-    This option determines the color in which the grid is drawn. It can talk and
+    This option determines the color in which the grid is drawn. It can be any
     \CONTEXT\ color identifier. The default value is green.
 
   \item \options{steps} \par
@@ -1022,7 +1022,7 @@ Thus, to draw the circle highlight shown in \in Figure[fig:highlight], we wrote
 \stopEXAMPLE
 
 If \options{direction} key is specified, the circle (or the ellipse) will be
-ratated by that amount (in degrees) in the counter clockwise direction. The
+rotated by that amount (in degrees) in the counter clockwise direction. The
 color in which the circle is drawn is specified using \options{color} key. The
 thickness of the line is determined by \options{rulethickness} key. By default,
 \options{color=orange} and \options{rulethickness} is 1/100th of the picture
@@ -1085,7 +1085,7 @@ The different keys related to \options{alternative=arrow} are:
   \item \options{rulethickness} \par
     The line width of the arrow. (Actually the line width of the arrow is twice
     the given value. This is so that both arrows and circles look good with the
-    same value of rulethickness. )
+    same value of rulethickness.)
   \item \options{color} \par
     The color of the arrow.
 \stopitemize
@@ -1093,10 +1093,10 @@ The different keys related to \options{alternative=arrow} are:
 \subsubject Highlighting by focus
 
 Suppose we want place the picture of a cow, focus its head, and dull out rest of
-the picture. The area to be focuses is a circle (or an ellipse) and it can be
+the picture. The area to be focused is a circle (or an ellipse) and it can be
 specified using \options{x} and \options{y} to indicate the center,
-\options{xscale} and \options{yscale} to indicate the raidius, and
-\options{direction} to indicate the ratation. The keys \options{rulethickness}
+\options{xscale} and \options{yscale} to indicate the radius, and
+\options{direction} to indicate the rotation. The keys \options{rulethickness}
 and \options{color} do not have any effect. The area other than the focussed
 area is washed out with a transparent color. The degree to which it is washed
 out is determined by \options{opacity} (default value 0.5), and the color of the
@@ -1151,30 +1151,5 @@ them stand out more. The key related to shadows is:
 \stopitemize
 
 \stoptext
-
-
-\NC Three different forms of highlighting are available: {\tt ellipse} places a
-    circle on top of the picture (see fig.~\in[circle] on p.~\at[circle]), {\tt
-    arrow} an arrow (see fig.~\in[arrow] on p.~\at[arrow]), and {\tt focus} a gray overlay in which a circle is
-    transparent (see fig.~\in[gray] on p.~\at[gray]). 
-\NC\NR
-\NC {\tt color} 
-\NC The color of the circle or arrow on the picture. You can either use a
-    predefined color (see chapter 6.2 of the \CONTEXT\ manual) or make one up
-    yourself in the form {\tt (r=.5,g=.3,b=.9)} 
-\NC \NR
-\NC {\tt rulethickness}
-\NC The thickness of the highlighting arrows or ellipses.
-\NC \NR
-\NC {\tt x} and {\tt y} 
-\NC These variables determine the horizontal and vertical positioning of the
-    highlighting elements; they point to the center of the circle or to the tip
-    of the arrow.% If you want more than one circle or arrow, simply set values 	   for x2, y2; x3, y3, etc.; up to five circles/arrows are defined.
-\NC \NR
-\NC {\tt length}
-\NC The length of the arrow (dimension).
-\NC \NR
-\NC {\tt direction} 
-\NC The rotation of the ellipse resp. the direction of the arrow, given in degrees. 
 
 % vim: foldmethod=marker foldmarker=<<<,>>>
