@@ -30,36 +30,36 @@
 %% Typescripts : <<<
 \starttypescript [serif] [dejavu]
     \setups[font:fallback:sans]
-    \definefontsynonym [Serif]           [name:DejaVu Serif] 
+    \definefontsynonym [Serif]           [name:dejavuserif] 
                        [features=default]
-    \definefontsynonym [SerifItalic]     [name:DejaVu Serif Italic]    
+    \definefontsynonym [SerifItalic]     [name:dejavuserifitalic]    
                        [features=default]
-    \definefontsynonym [SerifBold]       [name:DejaVu Serif Bold]       [features=default]
-    \definefontsynonym [SerifBoldItalic] [name:DejaVu Serif Bold Italic]
+    \definefontsynonym [SerifBold]       [name:dejavuserifbold]       [features=default]
+    \definefontsynonym [SerifBoldItalic] [name:dejavuserifbolditalic]
                        [features=default]
 \stoptypescript
 
 \starttypescript [sans] [dejavu]
     \setups[font:fallback:sans]
-    \definefontsynonym [Sans]           [name:DejaVu Sans]    
+    \definefontsynonym [Sans]           [name:dejavusans]    
                        [features=default]
-    \definefontsynonym [SansItalic]     [name:DejaVu Sans Oblique]    
+    \definefontsynonym [SansItalic]     [name:dejavusansoblique]    
                        [features=default]
-    \definefontsynonym [SansBold]       [name:DejaVu Sans Bold]
+    \definefontsynonym [SansBold]       [name:dejavusansbold]
                        [features=default]
-    \definefontsynonym [SansBoldItalic] [name:DejaVu Sans Bold Oblique] 
+    \definefontsynonym [SansBoldItalic] [name:dejavusansboldoblique] 
                        [features=default]
 \stoptypescript
 
 \starttypescript [mono] [dejavu]
     \setups[font:fallback:mono]
-    \definefontsynonym [Mono]           [name:DejaVu Sans Mono]   
+    \definefontsynonym [Mono]           [name:dejavusansmono]   
                        [features=default]
-    \definefontsynonym [MonoItalic]     [name:DejaVu Sans Mono Oblique]    
+    \definefontsynonym [MonoItalic]     [name:dejavusansmonooblique]    
                        [features=default]
-    \definefontsynonym [MonoBold]       [name:DejaVu Sans Mono Bold]      
+    \definefontsynonym [MonoBold]       [name:dejavusansmonobold]      
                        [features=default]
-    \definefontsynonym [MonoBoldItalic] [name:DejaVu Sans Mono Bold Oblique]
+    \definefontsynonym [MonoBoldItalic] [name:dejavusansmonoboldoblique]
                        [features=default]
 \stoptypescript
 
@@ -331,7 +331,7 @@
 
 This module provides an easy|-|to|-|use interface
 for creating simple slides/presentations in \CONTEXT. 
-The salient feature of this module are:
+The salient features of this module are:
 \startitemize
   \item The module is meant for presentations which will be shown on a
     digital projector. They have no interactive elements (such as buttons or
@@ -365,13 +365,14 @@ presentations.
 
 \CONTEXT\ does make creating your own presentation style relatively easy. So
 Thomas wrote some presentation related macros (see the Prac\TEX\ article
-{\tt\from[practex]}). With time, he extended these macros into a collection
-of styles providing different visual effects, and later collected all of them in
-the \filename{taspresent} module. He gave a talk about the \filename{taspresent}
-module in in the second \CONTEXT\ user meeting at Bohinj, and in the ensuing
-discussions, Aditya and Thomas decided to modularize and
+{\tt\from[practex]}). With time, he extended these macros into a collection of
+styles providing different visual effects, and later collected all of them in
+the \filename{taspresent} module. He gave a talk about the
+\filename{taspresent} module in in the second \CONTEXT\ user meeting at Bohinj,
+and in the ensuing discussions, Aditya and Thomas decided to modularize and
 \quotation{\CONTEXT{ize}} some of the internals of the module, giving rise to
-the current module. 
+the current module. Most of the code in the current release has been
+contributed by Aditya.
 
 \section{Installation}
 
@@ -385,15 +386,15 @@ the complete path of the files that you just installed.
 
 \subsubject A note about \TEX|-|engines
 
-We have extensively tested this module with \PDFTEX\ and \LUATEX\
-(that is, with \MKII\ and \MKIV). In spite of our best efforts, we have not been
-able to get this module to work with \XETEX. If you are a \XETEX\ guru, and know
-how to fix some of the errors with \XETEX, we will appreciate the help.
+We have extensively tested this module with \PDFTEX\ and \LUATEX\ (that is,
+with \MKII\ and \MKIV). In spite of our best efforts, we have not been able to
+get this module to work reliably with \XETEX. If you are a \XETEX\ guru, and
+know how to fix some of the errors with \XETEX, we will appreciate the help.
 
 \section Quick start
 
 First you must tell \CONTEXT\ that you want to use this module. To do this
-simply write
+simply write:
 
 \startEXAMPLE
 \startTEX
@@ -436,7 +437,7 @@ option to the \filename{simpleslides} module as follows.
 \stopEXAMPLE
 
 Some of the styles have a few variants that can be chosen using
-\options{color} and \options{alternative} keys. These are explained in \in
+\options{color} and \options{bottom} keys. These are explained in \in
 Section[sec:styles].
 
 By default, the Latin Modern Sans font is used. The module makes it easy to
@@ -558,7 +559,7 @@ If you want to place pictures in your slides, you can always use \CONTEXT's
 \typeTEX{\IncludePicture}, for preconfigured picture layouts. Two layouts are
 provided:
 \startitemize
-  \item \options{horizontal}: the picture is placed under the tile of the slide,
+  \item \options{horizontal}: the picture is placed under the title of the slide,
     so that it fits in the available space.
   \item \options{vertical}: the slide is divided into two columns; the picture is
     placed on the left column and text is placed on the right column.
@@ -609,10 +610,7 @@ These layouts are shown in \in Figure[fig:pictures].
                     [page=10,width=0.55\textwidth]}{A vertical picture}
 \stopcombination
 
-
-
-
-A horizontal picture is placed as follows
+A horizontal picture is placed as follows:
 \startEXAMPLE
 \startTEX
 \IncludePicture
@@ -622,7 +620,7 @@ A horizontal picture is placed as follows
 \stopTEX
 \stopEXAMPLE
 
-while a vertical picture is placed as follows.
+while a vertical picture is placed as follows:
 \startEXAMPLE
 \startTEX
 \IncludePicture
@@ -642,8 +640,8 @@ Section[sec:pictures]
 
 The \options{style} key to \typeTEX{\setupmodule[simpleslides]} determines the
 look of the presentation. Some of the styles come with variants, that can be
-chosen using \options{color} and \options{alternative} keys. The available styles are
-shown below along with the details of their variants.
+chosen using \options{color} and \options{alternative} keys. The available
+styles are shown below along with the details of their variants.
 
 \subsubject{BigNumber: with \options{color=blue} (also accepts \options{color=red})}
 
@@ -686,7 +684,7 @@ manual.
 
 \ShowStyle {Embossed}
 
-If you are shy, or narcissist, you can change the emblem by
+If you are shy, or narcissistic, you can change the emblem by
 \startEXAMPLE
 \startTEX
 \setuplabeltext  [simpleslidesemblem={I made this presentation}]
@@ -699,7 +697,7 @@ If you are shy, or narcissist, you can change the emblem by
 
 This style was inspired by {\em green} style (\filename{s-pre-02}) by Hans. It
 has a thick blue frame around the entire slide area and a thinner frame around
-the text area. The style has two options for alternative: 
+the text area. The style has two options for the bottom area:
 \options{alternative=stripe} will display a shaded blue area which will grow with
 each slide; \options{alternative=square} displays a row of blue squares at the bottom
 which also measure the presentation's progress.  
@@ -723,8 +721,8 @@ manual.
 \subsubject{HorizontalStripes: with \options{color=green} (also accepts
 \options{color=blue} and \options{color=red})}
 
-A sober style with an emphasis on horizontal lines, inspired by {\em Szeged}
-theme in \LATEX's \filename{beamer} package.
+A sober style with an emphasis on horizontal lines, inspired by the {\em
+Szeged} theme in \LATEX's \filename{beamer} package.
 
 \ShowStyle {HorizontalStripes-green}
 \page
@@ -895,7 +893,7 @@ such wasn't mentioned in the previous description).
 \setup{IncludePicture}
 
 As explained earlier, the first argument determines whether the picture will be
-placed in horizontal or vertical layout; fir examples, see \in
+placed in horizontal or vertical layout; for examples, see \in
 Figure[fig:pictures]. The second argument is the filename of the picture that
 you want to include. The third argument is an optional argument useful for
 highlighting the picture. The fourth argument (in braces) is the text
@@ -903,7 +901,7 @@ accompanying the picture. For horizontal pictures, this text is placed as a
 \typeTEX{\SlideTitle}; for vertical pictures this text is placed opposite to the
 picture, centered horizontally and vertically. 
 
-The third argument is the most complex. It specifies picutre dimensions and
+The third argument is the most complex. It specifies picture dimensions and
 highlights. If you want all pictures to share a common value (like
 \options{color} or \options{shadow}), specify them using
 \typeTEX{\setupPicture}.
@@ -953,7 +951,7 @@ Below is a brief explanation of what the different parameters do:
 
 \subsubject Units for dimensions
 
-All dimensions are specified relative to the width and height of the image. So
+All dimensions are specified relative to the width and height of the image, so
 you do not have to change the location of your highlights if you change the
 presentation style. The dimensions \options{x} and \options{y} should be a
 number between 0 and 10. The \options{x} is scaled by 1/10 times the width of
