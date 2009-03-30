@@ -23,7 +23,7 @@ simpleslides.options = {
   ["Boxed"]             ={},
   ["Ellipse"]           ={},
   ["Embossed"]          ={},
-  ["Framed"]            ={bottom={"square", "stripe"}},
+  ["Framed"]            ={alternative={"square", "stripe"}},
   ["FramedTitle"]       ={},
   ["HorizontalStripes"] ={color={"blue", "green", "red"}},
   ["NarrowStripes"]     ={color={"blue", "green", "red"}},
@@ -37,12 +37,12 @@ simpleslides.options = {
   ["ThickStripes"]      ={},
 }
 
-function simpleslides.setup(style, color, bottom)
+function simpleslides.setup(style, color, alternative)
   local usemodule = "\\usemodule[simpleslides]\n"
   local options   = ""
   if style  then options = options .. "style=" ..style.. ",\n" end 
   if color  then options = options .. "color=" ..color.. ",\n" end
-  if bottom then options = options .. "bottom="..bottom..",\n" end
+  if alternative then options = options .. "alternative="..alternative..",\n" end
   return usemodule .. "[" .. options .. "]\n"
 end
 
@@ -168,14 +168,14 @@ local command  = "context --" .. engine  -- .. " --batchmode"
 local styles   = environment.argument("styles")
 local filename = "styles/simpleslides-example.tex"
 
-function simpleslides.create_test(style, color, bottom)
+function simpleslides.create_test(style, color, alternative)
   local file = assert(io.open(filename, "w"))
-  file:write(simpleslides.setup(style,color,bottom))
+  file:write(simpleslides.setup(style,color,alternative))
   file:write(simpleslides.body)
   assert(io.close(file))
   local result = "--result=styles/"..style
   if color  then result = result .. "-" .. color  end
-  if bottom then result = result .. "-" .. bottom end 
+  if alternative then result = result .. "-" .. alternative end 
   local str = command .. " " .. filename .. " " .. result
   logs.report("simpleslides", "executing " .. str)
   os.execute(str)
@@ -184,12 +184,12 @@ end
 function simpleslides.show_style(style)
   if simpleslides.options[style] then
     local colors  = simpleslides.options[style].color
-    local bottoms = simpleslides.options[style].bottom
+    local bottoms = simpleslides.options[style].alternative
     if colors then
       for i,color in pairs(colors) do
         if bottoms then
-          for j,bottom in pairs(bottoms) do
-            simpleslides.create_test(style,color,bottom)
+          for j,alternative in pairs(bottoms) do
+            simpleslides.create_test(style,color,alternative)
           end
         else
           simpleslides.create_test(style,color,nil)
@@ -197,8 +197,8 @@ function simpleslides.show_style(style)
       end
     else
       if bottoms then
-        for j,bottom in pairs(bottoms) do
-          simpleslides.create_test(style,nil,bottom)
+        for j,alternative in pairs(bottoms) do
+          simpleslides.create_test(style,nil,alternative)
         end
       else
         simpleslides.create_test(style,nil,nil)

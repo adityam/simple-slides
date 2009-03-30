@@ -61,17 +61,17 @@
    font=LatinModernSans,
    size=17pt,
    color=blue,
-   bottom=square]
+   alternative=square]
 
 \usemodule
   [simpleslides-s]
   [default]
 
-\doiffileelse{\currentmoduleparameter{style}}
-  {\usemodule{\currentmoduleparameter{style}}}
+\doiffileelse{\currentmoduleparameter\c!style}
+  {\usemodule[\currentmoduleparameter\c!style]}
   {\usemodule[simpleslides-s][\currentmoduleparameter{style}]}
-  [ color=\currentmoduleparameter{color},
-   bottom=\currentmoduleparameter{bottom}]
+  [      \c!color=\currentmoduleparameter\c!color,
+   \c!alternative=\currentmoduleparameter\c!alternative]
 
 \usemodule
   [simpleslides-f]
@@ -80,5 +80,3 @@
 \protect
 
 \stopmodule
-
-% Demo in the end.

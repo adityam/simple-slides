@@ -52,7 +52,7 @@
           <cd:constant type="green"/>
           <cd:constant type="bluered"/>
         </cd:parameter>
-        <cd:parameter name="bottom">
+        <cd:parameter name="alternative">
           <cd:constant type="square" default="yes"/>
           <cd:constant type="stripe"/>
         </cd:parameter>

@@ -171,25 +171,25 @@ StopPage;
 
 %D We define the ornament according to user's choice.
 
-\startsetups simpleslides:bottom:square
+\startsetups simpleslides:alternative:square
 \defineoverlay
   [simpleslides:background:ornament]
   [\uniqueMPgraphic{simpleslides:MP:ornament:square}]
 \stopsetups
 
-\startsetups simpleslides:bottom:stripe
+\startsetups simpleslides:alternative:stripe
 \defineoverlay
   [simpleslides:background:ornament]
   [\uniqueMPgraphic{simpleslides:MP:ornament:stripe}]
 \stopsetups
 
-\startsetups simpleslides:bottom:empty
-  \setups{simpleslides:bottom:square}
+\startsetups simpleslides:alternative:empty
+  \setups{simpleslides:alternative:square}
 \stopsetups
 
 %D Now we activate the user's choice
 
-\setups{simpleslides:bottom:\moduleparameter{simpleslides}{bottom}}
+\setups{simpleslides:alternative:\moduleparameter{simpleslides}{alternative}}
 
 %D The title is typed in a slightly larger font.
 
