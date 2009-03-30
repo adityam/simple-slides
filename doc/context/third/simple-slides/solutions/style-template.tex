@@ -1,0 +1,114 @@
+% This file is a template to create your own style for use with the
+% simpleslides module. Modify the "dummy"-settings in it, save it under a
+% name simpleslides-s-YOURNAME.tex, and use it by choosing style=YOURNAME
+% in the \tex{usemodule} command.
+
+% Provide the name of your style here; replace "template" with your unique
+% name for your style.
+
+\startmodule[simpleslides-s-template]
+
+\unprotect
+
+% Here, you set the layout for your style. You will probably have to fiddle
+% with the values until everything is exactly the way you want.
+
+\setuplayout [width=fit,
+	      height=middle,
+              margin=0cm,
+              height=fit,
+	      margindistance=0cm,
+              header=0cm, 
+              footer=0cm, 
+              topspace=1cm,
+	      bottomspace=2cm,
+              backspace=1.5cm,
+              location=singlesided]
+
+% Some presentations need a different layout for "horizontal" and "vertical"
+% slides. If, e.g., you want a larger header for you horizontal slides (in
+% order to accomodate the titles of your slide), you would set this up like so: 
+
+\setuplayout [simpleslides:layout:horizontal][header=1.4cm]
+\setuplayout [simpleslides:layout:vertical]  [header=0cm]
+\setuplayout [simpleslides:layout:title]     [header=0cm]
+
+% The following command defines the position of the slidetitle layer; the
+% values x= and y= determine the distance from the top left edge.
+
+\setuplayer[simpleslides:layer:slidetitle]
+            [x=15mm]
+
+% Sometimes, your vertical arrangement is set up in a way that your picture
+% frames should not take up the full textheight and less than half of the
+% textwidth. You can set these values here; they will be used internally. 
+
+\define\NormalHeight        {\textheight}
+\define\NormalWidth         {.5\textwidth}
+\define\PictureFrameHeight  {\textheight}
+\define\PictureFrameWidth   {.5\textwidth}
+
+% Now comes an important part: defining your color scheme. You will need at
+% least two colors: a backgroundcolor and a contrastcolor. The
+% simpleslides:itemize:color is used to typeset numbers and symbols of
+% itemizations; in many styles, the contrastcolor is used. 
+
+\definecolor [simpleslides:backgroundcolor]    [s=.95]
+\definecolor [simpleslides:contrastcolor]      [r=.7,g=.1,b=.3]
+\definecolor [simpleslides:variantcolor]       [s=.3]
+\definecolor [simpleslides:itemize:color]      [simpleslides:contrastcolor]
+
+% Now comes the most important part: defining the background of your slides.
+% One possibility is using \METAPOST\ to calculate it, using the colors you
+% have just defined. If you want to set up such a background, have a look at
+% chapter 6 of the Metafun manual, where many nifty tricks are explained. One
+% thing that is especially useful is the StartPage ... StopPage environment
+% (explained in chapter 6.4), which gives you access to many variables
+% pertaining to page dimensions.
+
+\startuseMPgraphic{simpleslides:MP:ornament} 
+StartPage ;
+fill Page withcolor \MPcolor{simpleslides:backgroundcolor} ;
+StopPage ;
+\stopuseMPgraphic 
+
+% The actual setup of our backgrounds is done here: we define overlays for
+% different types of slides. You can now make use of the MPgraphics that you
+% just defined, but you could also put external images as the background to
+% your slides.
+
+\defineoverlay 
+  [simpleslides:background:ornament] 
+  [\useMPgraphic{simpleslides:MP:ornament}] 
+
+\defineoverlay 
+  [simpleslides:background:title] 
+  [\useMPgraphic{simpleslides:MP:ornament}] 
+
+% The setupTitle and setupSlideTitle define the look of your titles; lots of
+% setup commands are available to determine what they should look like.
+
+\setupTitle
+  [\c!headcolor={simpleslides:contrastcolor}]
+
+\setupSlideTitle
+  [\c!color={simpleslides:contrastcolor},
+   \c!alternative=layer,
+   \c!align=\v!center,
+   \c!width=\textwidth,
+   \c!height=3cm,
+   \c!after=]
+
+% You're almost done! At long last, we define a symbol for the first level of
+% itemizations and make sure that itemizations use the right color. 
+
+\definesymbol[1][\useMPgraphic{simpleslides:itemize:square}]
+\setupitemize[1][color={simpleslides:itemize:color}]
+
+\protect
+\stopmodule
+
+% And this should be enough!
+
+\endinput
+
