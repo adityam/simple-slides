@@ -27,7 +27,8 @@
 
 % Some presentations need a different layout for "horizontal" and "vertical"
 % slides. If, e.g., you want a larger header for you horizontal slides (in
-% order to accomodate the titles of your slide), you would set this up like so: 
+% order to accomodate the titles of your slides), you would set this up like
+% so: 
 
 \setuplayout [simpleslides:layout:horizontal][header=1.4cm]
 \setuplayout [simpleslides:layout:vertical]  [header=0cm]
@@ -54,28 +55,40 @@
 % itemizations; in many styles, the contrastcolor is used. 
 
 \definecolor [simpleslides:backgroundcolor]    [s=.95]
-\definecolor [simpleslides:contrastcolor]      [r=.7,g=.1,b=.3]
-\definecolor [simpleslides:variantcolor]       [s=.3]
+\definecolor [simpleslides:contrastcolor]      [s=.3]
+\definecolor [simpleslides:variantcolor]       [s=.1]
 \definecolor [simpleslides:itemize:color]      [simpleslides:contrastcolor]
 
-% Now comes the most important part: defining the background of your slides.
-% One possibility is using \METAPOST\ to calculate it, using the colors you
-% have just defined. If you want to set up such a background, have a look at
-% chapter 6 of the Metafun manual, where many nifty tricks are explained. One
-% thing that is especially useful is the StartPage ... StopPage environment
+% Now comes the part which is of greatest importance to the visual appearance
+% of your presentation: defining the background of your slides.  One
+% possibility is using \METAPOST\ to calculate it, using the colors you have
+% just defined. If you want to set up such a background, have a look at chapter
+% 6 of the Metafun manual, where many nifty tricks are explained. One thing
+% that is especially useful is the StartPage ... StopPage environment
 % (explained in chapter 6.4), which gives you access to many variables
-% pertaining to page dimensions.
+% pertaining to page dimensions. Since there are three different types of
+% slides (for the title page, for "horizontal" and for "vertical" slides), it
+% may make sense to define three different backgrounds, but that is entirely up
+% to you.
 
 \startuseMPgraphic{simpleslides:MP:ornament} 
 StartPage ;
 fill Page withcolor \MPcolor{simpleslides:backgroundcolor} ;
+draw Page withcolor \MPcolor{simpleslides:contrastcolor} ;
 StopPage ;
 \stopuseMPgraphic 
 
 % The actual setup of our backgrounds is done here: we define overlays for
 % different types of slides. You can now make use of the MPgraphics that you
 % just defined, but you could also put external images as the background to
-% your slides.
+% your slides. By default, the following backgrounds are used:
+%
+% title page: simpleslides:background:title
+%
+% horizontal: simpleslides:background:horizontal and simpleslides:background:ornament
+%
+% vertical:   simpleslides:background:vertical and simpleslides:background:ornament
+
 
 \defineoverlay 
   [simpleslides:background:ornament] 
