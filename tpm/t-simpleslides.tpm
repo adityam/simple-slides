@@ -39,8 +39,10 @@
     </TPM:RunFiles>
     <TPM:DocFiles size="4543288">
       doc/context/third/simple-slides/simple-slides.tex
+      doc/context/third/simple-slides/simple-slides.pdf
       doc/context/third/simple-slides/solutions/generic-talk-15min-45min.tex
       doc/context/third/simple-slides/solutions/speaker_introduction-2min.tex
+      doc/context/third/simple-slides/solutions/style-template.tex
       doc/context/third/simple-slides/styles/BigNumber-blue.pdf
       doc/context/third/simple-slides/styles/BigNumber-red.pdf
       doc/context/third/simple-slides/styles/BottomSquares.pdf
