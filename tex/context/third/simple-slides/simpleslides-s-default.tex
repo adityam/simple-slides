@@ -674,8 +674,6 @@
 %D is \type{length} long in the direction specified by \type{direction}. The
 %D arrow is \type{2×rulethickness} thick (the factor of 2 is there so that the
 %D same default works for both circle and arrows) and is on \type{color} color.
-%D
-%D TODO: Add \type{shadow} key.
 
 \startuseMPgraphic{simpleslides:MP:highligh:arrow}
   autoarrows := true ; % so that arrow heads are scaled correctly.
@@ -690,8 +688,8 @@
 
   \ifcase \simpleslidesShadow \else
   save shadow_direction ; pair shadow_direction ;
-  shadow_direction =2*\simpleslidesPictureParameter\c!rulethickness * 
-     dir(\simpleslidesPictureParameter{direction} + 
+  shadow_direction = 2*\simpleslidesPictureParameter\c!rulethickness * 
+     dir(%\simpleslidesPictureParameter{direction} +
      \ifcase \simpleslidesShadow \or 
           135 \or 45 \or -45 \or -135 \fi ) ;
 
