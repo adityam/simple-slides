@@ -64,16 +64,16 @@
    alternative=square]
 
 \usemodule
+  [simpleslides-f]
+  [default]
+
+\usemodule
   [simpleslides-s]
   [default]
 
 \doiffileelse{\currentmoduleparameter\c!style}
   {\usemodule[\currentmoduleparameter\c!style]}
   {\usemodule[simpleslides-s][\currentmoduleparameter\c!style]}
-
-\usemodule
-  [simpleslides-f]
-  [default]
 
 \protect
 
