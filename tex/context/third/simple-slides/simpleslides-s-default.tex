@@ -444,7 +444,8 @@
 \def\setPictureDimensionsTo#1#2% graphic width 
   {\doifelsenothing{\simpleslidesPictureParameter\c!width}
      {\doifelsenothing{\simpleslidesPictureParameter\c!height}
-        {\setbox\scratchbox\hbox{\externalfigure[#1]}
+        {\setbox\scratchbox\hbox{\externalfigure[#1]
+          [\c!page=\simpleslidesPictureParameter\c!page]}
         % Courtsey Wolfgang Schuster
         \ifdim\dimexpr#2*100/\wd\scratchbox\relax < 
               \dimexpr\PictureFrameHeight*100/\ht\scratchbox\relax
@@ -490,7 +491,8 @@
      \c!height=\PictureFrameHeight]
     {\externalfigure[#1]
                     [\c!height=\getvalue{simpleslides:picture:height},
-                      \c!width=\getvalue{simpleslides:picture:width}]}%
+                      \c!width=\getvalue{simpleslides:picture:width},
+                       \c!page=\simpleslidesPictureParameter\c!page]}%
     \page}% Otherwise last page is not correct in \MKII.
 
 %D This macro places the picture in vertical mode.
@@ -505,7 +507,8 @@
          \c!width=\PictureFrameWidth]
          {\externalfigure[#1]
                     [\c!height=\getvalue{simpleslides:picture:height},
-                      \c!width=\getvalue{simpleslides:picture:width}]}}{}
+                      \c!width=\getvalue{simpleslides:picture:width},
+                       \c!page=\simpleslidesPictureParameter\c!page]}}{}
        {\framed[\c!frame=\v!off,
                 \c!height=\textheight,
                 \c!width=\PictureFrameWidth,
@@ -763,6 +766,7 @@
   fill unitsquare xyscaled(0.4cm,0.4cm) 
        withcolor \MPcolor{simpleslides:itemize:color} ;
 \stopuniqueMPgraphic
+
 
 
 \protect
