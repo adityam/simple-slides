@@ -858,11 +858,19 @@ you have your own typescript for a font, your setup will look like this:
 \stopEXAMPLE
 
 Internally, the font size is stored in the macro \typeTEX{\NormalSize}. The main
-text is set at size \typeTEX{\NormalSize}; the title page and the slide title
-are set at size \typeTEX{\TitleSize}. The module uses some heuristics to select
-a reasonable value of \typeTEX{\TitleSize}. If you do not like the size of the
-title page and slide titles, you can change the value to \typeTEX{\TitleSize} to
-whatever you like.
+text is set at size \typeTEX{\NormalSize}; the main title is set at
+\typeTEX{\TitleSize} while the author and date on the title page, and the slide
+title are set at \typeTEX{\SlideTitleSize}. 
+
+\typeTEX{\NormalSize}, \typeTEX{\TitleSize}, and \typeTEX{\SlideTitleSize} are
+defined in terms of the dimensions \typeTEX{\simpleslidesNormalSize},
+\typeTEX{\simpleslidesTitleSize}, and \typeTEX{\simpleslidesSlideTitleSize}.
+\typeTEX{\simpleslidesNormalSize} is equal to the \option{size} option. The
+module uses some heuristics to select a reasonable value of
+\typeTEX{\simpleslidesTitleSize} and \typeTEX{\simpleslidesSlideTitleSize}. If
+you do not like the size of the title page and slide titles, you can change
+their value to whatever you like.
+
 
 \section[sec:setuptitle] Changing the title page
 
