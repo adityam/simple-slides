@@ -27,6 +27,7 @@
 
 \newdimen\simpleslidesNormalSize  
 \newdimen\simpleslidesTitleSize  
+\newdimen\simpleslidesSlideTitleSize  
 
 \simpleslidesNormalSize=\moduleparameter{simpleslides}{size}\relax
 
@@ -40,8 +41,11 @@
 	\fi%
 \fi%
 
-\def\NormalSize{\the\simpleslidesNormalSize}
-\def\TitleSize {\the\simpleslidesTitleSize}
+\simpleslidesSlideTitleSize = \simpleslidesTitleSize
+
+\def\NormalSize     {\the\simpleslidesNormalSize}
+\def\TitleSize      {\the\simpleslidesTitleSize}
+\def\SlideTitleSize {\the\simpleslidesSlideTitleSize}
 
 \beginOLDTEX 
 \setupencoding[default=ec]
