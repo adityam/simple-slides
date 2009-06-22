@@ -11,9 +11,9 @@
       A module to create simple slides in ConTeXt
     </TPM:Description>
     <TPM:Author>Aditya Mahajan and Thomas A. Schmitz</TPM:Author>
-    <TPM:Size>4677942</TPM:Size>
+    <TPM:Size>4691886</TPM:Size>
     <TPM:Build/>
-    <TPM:RunFiles size="134654">
+    <TPM:RunFiles size="145761">
       tex/context/third/simpleslides/t-simpleslides.tex
       tex/context/third/simpleslides/simpleslides-f-default.tex
       tex/context/third/simpleslides/simpleslides-s-BigNumber.tex
@@ -37,7 +37,7 @@
       tex/context/interface/third/t-simpleslides.xml
       scripts/context/lua/third/simpleslides/mtx-simpleslides.lua
     </TPM:RunFiles>
-    <TPM:DocFiles size="4543288">
+    <TPM:DocFiles size="4546125">
       doc/context/third/simpleslides/simple-slides.tex
       doc/context/third/simpleslides/simple-slides.pdf
       doc/context/third/simpleslides/solutions/generic-talk-15min-45min.tex
