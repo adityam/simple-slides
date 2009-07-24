@@ -27,6 +27,7 @@ simpleslides.options = {
   ["FramedTitle"]       ={},
   ["HorizontalStripes"] ={color={"blue", "green", "red"}},
   ["NarrowStripes"]     ={color={"blue", "green", "red"}},
+  ["PlainCounter"]      ={},
   ["RainbowStripe"]     ={},
   ["Rounded"]           ={},
   ["Shaded"]            ={color={"blue", "green", "bluered"}},
