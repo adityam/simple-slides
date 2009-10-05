@@ -1,0 +1,193 @@
+%D \module
+%D   [      file=simpleslides-s-BoxedTitle,
+%D        version=2009.10.04
+%D          title=\CONTEXT\ Style File,
+%D       subtitle=Presentation Module --- FramedTitle style,
+%D         author=Aditya Mahajan and Thomas A. Schmitz,
+%D           date=\PRESTITdate,
+%D      copyright={Aditya Mahajan and Thomas A. Schmitz}]
+%C
+%C Copyright 2009 Aditya Mahajan and Thomas A. Schmitz
+%C This file may be distributed under the GNU General Public License v. 2.0.
+
+%D This file provides the \quotation{BoxedTitle} style for the presentation
+%D module. It is loaded at runtime. 
+%D
+\writestatus{simpleslides}{loading style BoxedTitle}
+
+\startmodule[simpleslides-s-BoxedTitle]
+
+\unprotect
+
+%D The page layout:
+
+\setuplayout [width=fit,
+              margin=0cm,
+              height=fit,
+              header=0cm, 
+              footer=0cm, 
+              topspace=1.35cm, 
+              backspace=1cm,
+              location=singlesided]
+
+\setuplayout [simpleslides:layout:horizontal][header=1.75cm]
+\setuplayout [simpleslides:layout:vertical]  [header=0cm]
+\setuplayout [simpleslides:layout:title]     [header=0cm]
+
+%D We also specify the position of the slidetitle.
+
+\setuplayer[simpleslides:layer:slidetitle]
+    [x=10mm,y=5mm]
+
+
+%D These macros are used for placing figures/pictures:
+
+\define\NormalHeight        {\textheight}
+\define\NormalWidth         {.476\textwidth}
+\define\PictureFrameHeight  {\textheight}
+\define\PictureFrameWidth   {.476\textwidth}
+
+\setupframed[simpleslides:framed]
+             [background={BoxedTitle:Title}]
+
+%D We define our color scheme:
+
+\definecolor [simpleslides:backgroundcolor]       [s=.98]
+\definecolor [simpleslides:variantcolor]          [r=0.05,g=0.06,b=0.5]
+\definecolor [simpleslides:contrastcolor]         [r=.46,g=0.67,b=0.84]
+\definecolor [simpleslides:itemize:color]         [simpleslides:variantcolor]
+
+%D We let Metapost calculate the background:
+
+\startuniqueMPgraphic{MyShade}
+  save p ; path p ;
+  p := unitsquare xscaled \overlaywidth yscaled \overlayheight smoothed 3mm ;
+  linear_shade(p,6,\MPcolor{simpleslides:variantcolor},\MPcolor{simpleslides:contrastcolor}) ;
+\stopuniqueMPgraphic
+
+\startuniqueMPgraphic{simpleslides:MP:horizontal} 
+StartPage ;
+save q ; path q ;
+q = unitsquare xscaled \overlaywidth yscaled \overlayheight smoothed 7mm ;
+fill Page withcolor black ;
+fill q withcolor \MPcolor{simpleslides:backgroundcolor} ;
+StopPage ;
+\stopuniqueMPgraphic 
+
+\startuseMPgraphic{simpleslides:MP:ornament}
+StartPage ;
+save a, b ; numeric a, b ;
+save p ; path p ;
+a = 3.5mm ;
+z0 = (0,5mm) ;
+z1 = z0 shifted (a * NOfPages,0) ;
+b = arclength (z0 --z1) ;
+
+z2 = z0 shifted (PaperWidth/2 - b/2,0) ;
+z3 = z1 shifted (PaperWidth/2 - b/2,0) ;
+z4 = z3 shifted (0,a) ;
+z5 = z2 shifted (0,a) ;
+pickup pencircle scaled 0.5pt ;
+p = z2 -- z3 -- z4 -- z5 -- cycle ;
+pair za[] ;
+pair zb[] ;
+z.a1 = z2 ;
+z.b1 = z5 ;
+for i = 2 upto (NOfPages + 1):
+  z.a[i] = z.a[(i - 1)] shifted (a,0) ;
+  z.b[i] = z.b[(i - 1)] shifted (a,0) ;
+  for k = 2 upto (PageNumber + 1) :
+    z.a[k] = z.a[(k - 1)] shifted (a,0) ;
+    z.b[k] = z.b[(k - 1)] shifted (a,0) ;
+    path q[] ;
+    q[k] = z.a[(k -1 )] -- z.a[k] -- z.b[k] -- z.b[(k - 1)] -- cycle ;
+    circular_shade(q[k],0,\MPcolor{simpleslides:contrastcolor},\MPcolor{simpleslides:variantcolor}) ;
+  endfor ;
+  pickup pencircle scaled 1pt ;
+  draw z.a[i] -- z.b[i] withcolor \MPcolor{simpleslides:variantcolor} ;
+endfor ;
+draw p withcolor \MPcolor{simpleslides:variantcolor} ;
+StopPage ;
+\stopuseMPgraphic
+
+\startuniqueMPgraphic{FilledSquare}
+save p ; path p ;
+p = unitsquare xyscaled(0.4cm,0.4cm) ;
+circular_shade(p,0,\MPcolor{simpleslides:contrastcolor},\MPcolor{simpleslides:variantcolor}) ;
+\stopuniqueMPgraphic
+
+%D We define these backgrounds as overlays:
+
+\defineoverlay 
+  [simpleslides:background:horizontal] 
+  [\useMPgraphic{simpleslides:MP:horizontal}] 
+
+\defineoverlay 
+  [simpleslides:background:vertical] 
+  [\useMPgraphic{simpleslides:MP:horizontal}] 
+
+\defineoverlay 
+  [simpleslides:background:title] 
+  [\useMPgraphic{simpleslides:MP:horizontal}] 
+
+\defineoverlay 
+  [simpleslides:background:ornament] 
+  [\useMPgraphic{simpleslides:MP:ornament}] 
+
+\defineoverlay
+  [BoxedTitle:Title]
+  [\uniqueMPgraphic{MyShade}]
+
+%D We want the title to placed in a framed box. We redefine all the keys of
+%D \type{\setupTitle}, so that the module is easier to maintain.
+
+\setupTitle
+  [\c!title=,
+   \c!author=,
+   \c!date=\currentdate,
+   \c!headstyle=,
+   \c!headcolor={simpleslides:backgroundcolor},
+   \c!align=\v!middle,
+   \c!before={\vfill\getvalue{simpleslides:framed}
+              [\c!width=\textwidth,\c!height=.75\textheight,
+               \c!align=\v!middle, \c!strut=\v!no]
+              \bgroup},
+   \c!after={\egroup\vfill},
+   \c!title\c!style={\switchtobodyfont[\TitleSize]},
+   \c!title\c!color=,
+   \c!title\c!align=,%\v!middle,
+   \c!author\c!style=,
+   \c!author\c!color=,
+   \c!author\c!align=,%\v!middle, 
+   \c!date\c!style=,
+   \c!date\c!color=,
+   \c!date\c!align=,%\v!middle,
+   \c!before\c!title=,
+   \c!before\c!author=,
+   \c!before\c!date=,
+   \c!after\c!title={\blank[1*line]},
+   \c!after\c!author={\blank[2*line]},
+   \c!after\c!date=]
+
+%D We also want the slide title in a framed box.
+
+\setupSlideTitle
+  [\c!after=,
+   \c!alternative=layer,
+   \c!height=2.1cm,
+   \c!width=\textwidth,
+   \c!color=simpleslides:backgroundcolor]
+
+
+%\setupfootertexts[\useMPgraphic{simpleslides:MP:footer}]
+
+%D The symbol for the first level of itemizations. 
+
+\definesymbol[1][\uniqueMPgraphic{FilledSquare}]
+\setupitemize[1][color=simpleslides:variantcolor]
+
+\protect
+\stopmodule
+
+\endinput
+
