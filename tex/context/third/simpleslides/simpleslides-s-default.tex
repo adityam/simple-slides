@@ -66,12 +66,15 @@
 %D Presentations have relatively dense lines, we do not care about underfull
 %D lines, but allow emergency stretch.
 
-\setuptolerance[verytolerant,stretch] 
+\setuptolerance[\v!verytolerant,\v!stretch] 
 
 %D We use combinations for placing vertical pictures and text side by side, and
-%D we want a distance of 1.1 cm between both.
+%D we want a distance of 3em between both.
 
-\setupcombinations[distance=1.1cm]
+\setupcombinations[distance=3em]
+
+%D We do not want words to be hyphenated across lines.
+\setupalign[\v!nothyphenated,\v!verytolerant]
 
 %D Next we define some dimensions that are used as nominal values by other
 %D macros and the user.

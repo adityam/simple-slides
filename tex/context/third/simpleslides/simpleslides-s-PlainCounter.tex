@@ -44,23 +44,41 @@
    \c!columndistance=5pt,
    \c!columns=6,
  ]
+%D This module has two color schemes: dull and bright
 
+\startsetups simpleslides:setups:dull
 \definecolor [simpleslides:backgroundcolor]  [s=.95]
 \definecolor [simpleslides:variantcolor]     [s=.8]
 \definecolor [simpleslides:contrastcolor]    [b=.5]
 \definecolor [simpleslides:itemize:color]    [simpleslides:contrastcolor]
 \definecolor [simpleslides:altcontrastcolor] [r=.95] 
 \definecolor [simpleslides:imp:background]   [r=1,g=1,b=0.85]
+\stopsetups
 
-\simpleslidesTitleSize      =3\simpleslidesNormalSize
-\simpleslidesSlideTitleSize =1.44\simpleslidesNormalSize
+\startsetups simpleslides:setups:bright
+\definecolor [simpleslides:backgroundcolor]  [white]
+\definecolor [simpleslides:variantcolor]     [s=.9]
+\definecolor [simpleslides:contrastcolor]    [b=.65]
+\definecolor [simpleslides:itemize:color]    [simpleslides:contrastcolor]
+\definecolor [simpleslides:altcontrastcolor] [r=.95] 
+\definecolor [simpleslides:imp:background]   [r=1,g=1,b=0.85]
+\stopsetups
+
+%D Now we choose the scheme that the user asked for
+
+\doifsetupselse{simpleslides:setups:\moduleparameter{simpleslides}{color}}
+    {\setups{simpleslides:setups:\moduleparameter{simpleslides}{color}}}
+    {\setups{simpleslides:setups:dull}}
+
+\simpleslidesTitleSize=1.73\simpleslidesNormalSize\relax
+\simpleslidesSlideTitleSize =1.44\simpleslidesNormalSize \relax
 
 \setupTitle
   [\c!before={\vfill\vfill},
    \c!align=\v!middle,
    \c!titlecolor=simpleslides:contrastcolor,
-   \c!aftertitle=\vfill,
-   \c!afterauthor={\vfill\vfill},
+   \c!after\c!title=\vfill,
+   afterauthor={\vfill\vfill},
    \c!after={\vfill}]
    
 \startuniqueMPgraphic{simpleslides:MP:horizontal} 
@@ -83,7 +101,7 @@ q =((-22bp,15bp) -- (0,30bp) ) shifted (b,0);
    draw (if i mod 5 = 0 : q else : p fi) 
          randomized 1bp
          shifted (i*5pt,0)
-        withcolor (if i < PageNumber : \MPcolor{simpleslides:contrastcolor} 
+        withcolor (if i < RealPageNumber : \MPcolor{simpleslides:contrastcolor} 
                   else :              \MPcolor{simpleslides:variantcolor}
                   fi) 
       withpen pencircle scaled (1bp randomized .5bp) ;
@@ -111,7 +129,7 @@ StopPage ;
 
 
 \setupSlideTitle
-  [align=right,
+  [align=flushleft,
    style={\switchtobodyfont[\SlideTitleSize]\bolditalic},
    color=simpleslides:contrastcolor]
 
