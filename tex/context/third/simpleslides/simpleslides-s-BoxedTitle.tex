@@ -115,7 +115,7 @@ save p ; path p ;
 p = unitsquare xyscaled(0.4cm,0.4cm) ;
 circular_shade(p,0,\MPcolor{simpleslides:contrastcolor},\MPcolor{simpleslides:variantcolor}) ;
 \stopuniqueMPgraphic
-
+ 
 %D We define these backgrounds as overlays:
 
 \defineoverlay 
@@ -178,8 +178,11 @@ circular_shade(p,0,\MPcolor{simpleslides:contrastcolor},\MPcolor{simpleslides:va
    \c!width=\textwidth,
    \c!color=simpleslides:backgroundcolor]
 
+%D In this style, the space opposite vertical pictures has the same shaded
+%D frame as the slide title.
 
-%\setupfootertexts[\useMPgraphic{simpleslides:MP:footer}]
+\setupPicture[verticalbackground=BoxedTitle:Title,
+	      verticalforegroundcolor=simpleslides:backgroundcolor]
 
 %D The symbol for the first level of itemizations. 
 

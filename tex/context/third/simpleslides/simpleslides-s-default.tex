@@ -232,10 +232,10 @@
    \c!title\c!style={\switchtobodyfont[\TitleSize]},
    \c!title\c!color=,
    \c!title\c!align=,%\v!middle,
-   \c!author\c!style={\switchtobodyfont[\SlideTitleSize]},
+   \c!author\c!style=,%{\switchtobodyfont[\SlideTitleSize]},
    \c!author\c!color=,
    \c!author\c!align=,%\v!middle, 
-   \c!date\c!style={\switchtobodyfont[\SlideTitleSize]},
+   \c!date\c!style=,%{\switchtobodyfont[\SlideTitleSize]},
    \c!date\c!color=,
    \c!date\c!align=,%\v!middle,
    \c!before\c!title=,
@@ -357,6 +357,9 @@
    opacity=0.5,
    shadow=\v!no,
    shadow\c!color=black,
+   verticalbackground=none,
+   verticalbackgroundcolor=simpleslides:backgroundcolor,
+   verticalforegroundcolor=simpleslides:textcolor,
   ]
 
 \def\simpleslidesPictureParameter%#1
@@ -472,7 +475,7 @@
            \c!strut=\v!no,
            \c!offset=\zeropoint,#1]
       {\framed[\c!frame=\v!off,
-		       \c!framecolor=red,
+	       \c!framecolor=red,
                \c!strut=\v!no,
                \c!offset=\zeropoint,
                \c!width=\v!fit,
@@ -512,6 +515,9 @@
        {\framed[\c!frame=\v!off,
                 \c!height=\textheight,
                 \c!width=\PictureFrameWidth,
+                background=\simpleslidesPictureParameter{verticalbackground},
+                backgroundcolor=\simpleslidesPictureParameter{verticalbackgroundcolor},
+ 	        foregroundcolor=\simpleslidesPictureParameter{verticalforegroundcolor},
                 \c!top=\vss,
                 \c!bottom=\vss,
                 \c!align=\v!middle,
