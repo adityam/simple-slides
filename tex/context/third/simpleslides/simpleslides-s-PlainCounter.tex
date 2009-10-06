@@ -1,0 +1,165 @@
+%D \module
+%D   [      file=simpleslides-s-PlainCounter,
+%D        version=2009.07.30
+%D          title=\CONTEXT\ Style File,
+%D       subtitle=Presentation Module --- Plain Counter,
+%D         author=Aditya Mahajan and Thomas A. Schmitz,
+%D           date=\currentdate,
+%D      copyright={Aditya Mahajan and Thomas A. Schmitz}]
+%C
+%C Copyright 2009 Aditya Mahajan and Thomas A. Schmitz
+%C This file may be distributed under the GNU General Public License v. 2.0.
+
+%D This file provides the \quotation{PlainCounter} style for the presentation
+%D module. It is loaded at runtime. 
+
+\writestatus{simpleslides}{loading Plain Counter style}
+
+\startmodule[simpleslides-s-PlainCounter]
+
+\unprotect
+
+%D First, we change the page layout to have more space all around
+
+\setuplayout  
+  [\c!topspace=2\lineheight,
+   \c!top=2\lineheight,
+   \c!topdistance=0cm,
+   \c!header=0cm,
+   \c!headerdistance=0cm,
+   \c!height=middle,
+   \c!footerdistance=\lineheight,
+   \c!footer=1.25\lineheight,
+   \c!bottomspace=0.25\lineheight,
+   \c!bottom=0.25\lineheight,
+   \c!bottomdistance=0cm,
+   \c!backspace=0.5in,
+   \c!leftmargin=0.25cm,
+   \c!leftmargindistance=.15cm,
+   \c!width=middle,
+   \c!cutspace=0.5in,
+   \c!rightmargin=.25cm,
+   \c!rightmargindistance=.15cm,
+   \c!grid=on,
+   \c!columndistance=5pt,
+   \c!columns=6,
+ ]
+%D This module has two color schemes: dull and bright
+
+\startsetups simpleslides:setups:dull
+\definecolor [simpleslides:backgroundcolor]  [s=.95]
+\definecolor [simpleslides:variantcolor]     [s=.8]
+\definecolor [simpleslides:contrastcolor]    [b=.5]
+\definecolor [simpleslides:itemize:color]    [simpleslides:contrastcolor]
+\definecolor [simpleslides:altcontrastcolor] [r=.95] 
+\definecolor [simpleslides:imp:background]   [r=1,g=1,b=0.85]
+\stopsetups
+
+\startsetups simpleslides:setups:bright
+\definecolor [simpleslides:backgroundcolor]  [white]
+\definecolor [simpleslides:variantcolor]     [s=.9]
+\definecolor [simpleslides:contrastcolor]    [b=.65]
+\definecolor [simpleslides:itemize:color]    [simpleslides:contrastcolor]
+\definecolor [simpleslides:altcontrastcolor] [r=.95] 
+\definecolor [simpleslides:imp:background]   [r=1,g=1,b=0.85]
+\stopsetups
+
+%D Now we choose the scheme that the user asked for
+
+\doifsetupselse{simpleslides:setups:\moduleparameter{simpleslides}{color}}
+    {\setups{simpleslides:setups:\moduleparameter{simpleslides}{color}}}
+    {\setups{simpleslides:setups:dull}}
+
+\simpleslidesTitleSize=1.73\simpleslidesNormalSize\relax
+\simpleslidesSlideTitleSize =1.44\simpleslidesNormalSize \relax
+
+\setupTitle
+  [\c!before={\vfill\vfill},
+   \c!align=\v!middle,
+   \c!titlecolor=simpleslides:contrastcolor,
+   \c!after\c!title=\vfill,
+   afterauthor={\vfill\vfill},
+   \c!after={\vfill}]
+   
+\startuniqueMPgraphic{simpleslides:MP:horizontal} 
+StartPage ;
+fill Page withcolor \MPcolor{simpleslides:backgroundcolor} ;
+StopPage
+\stopuniqueMPgraphic
+
+\startuseMPgraphic{simpleslides:MP:ornament}
+StartPage ;
+
+save a, b; 
+numeric a,b;
+b = PaperWidth/2 - NOfPages*5pt/2 ;
+
+save p,q ; path p, q;
+p =((0,15bp)    -- (3bp,30bp)) shifted (b,0);
+q =((-22bp,15bp) -- (0,30bp) ) shifted (b,0);
+ for i := NOfPages-1 downto 1:
+   draw (if i mod 5 = 0 : q else : p fi) 
+         randomized 1bp
+         shifted (i*5pt,0)
+        withcolor (if i < RealPageNumber : \MPcolor{simpleslides:contrastcolor} 
+                  else :              \MPcolor{simpleslides:variantcolor}
+                  fi) 
+      withpen pencircle scaled (1bp randomized .5bp) ;
+ endfor ;
+
+StopPage ;
+\stopuseMPgraphic
+
+\defineoverlay 
+  [simpleslides:background:horizontal] 
+  [\useMPgraphic{simpleslides:MP:horizontal}] 
+
+\defineoverlay 
+  [simpleslides:background:vertical] 
+  [\useMPgraphic{simpleslides:MP:horizontal}] 
+
+\defineoverlay 
+  [simpleslides:background:title] 
+  [\useMPgraphic{simpleslides:MP:horizontal}] 
+
+\defineoverlay 
+  [simpleslides:background:ornament] 
+  [\useMPgraphic{simpleslides:MP:ornament}] 
+
+
+
+\setupSlideTitle
+  [align=flushleft,
+   style={\switchtobodyfont[\SlideTitleSize]\bolditalic},
+   color=simpleslides:contrastcolor]
+
+% \setuphead 
+%   [subsubject]
+%   [numberstyle=bolditalic, textstyle=bolditalic,color=darkblue,style=\tfb,
+%   before=\blank,after=\blank]
+
+
+\setupalign[\v!flushleft,\v!nothyphenated,\v!verytolerant]
+
+\setupinterlinespace[\v!auto,\v!medium]
+
+\setupcombinations[\c!distance=3em]
+
+\setupitemize[\c!color=simpleslides:itemize:color, 
+              \c!headstyle=\tfa,
+              \c!headcolor=simpleslides:itemize:color]
+
+\setupitemize[\v!autointro]
+
+\setupitemize[2][\v!packed]
+\setupitemize[2][\c!headstyle=\v!bold, \c!headcolor=]
+
+\definesymbol[2][\useMPgraphic{simpleslides:itemize:triangle}]
+\definesymbol[1][{\symbol[circle]}] 
+\definesymbol[2][{\symbol[triangle]}] 
+\definesymbol[3][{\symbol[dash]}] 
+
+\protect
+\stopmodule
+
+\endinput
