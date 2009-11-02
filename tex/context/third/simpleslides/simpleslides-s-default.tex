@@ -170,19 +170,19 @@
 \def\setupTitle%
   {\dosingleargument\dosetupTitle}
 
-\def\dosetupTitle[#1]%
-  {\setupmodule[simpleslides:title][#1]}
+\def\dosetupTitle%[#1]%
+  {\setvariables[simpleslides:title]}% [#1]
 
 %D A few macros to save some typing
 
 \def\simpleslidestitleparameter%#1
-  {\moduleparameter{simpleslides:title}}
+  {\getvariable{simpleslides:title}}
 
 \def\simpleslidestitlecomponent#1%
   {\simpleslidestitleparameter{\c!before#1}
       \startalignment[\simpleslidestitleparameter{#1\c!align}]
         \doattributes{\??md:simpleslides:title:}{#1\c!style}{#1\c!color}
-          {\moduleparameter{simpleslides:title}{#1}}
+          {\getvariable{simpleslides:title}{#1}}
        \stopalignment
     \simpleslidestitleparameter{\c!after#1}}
 
@@ -255,12 +255,12 @@
   {\dosingleargument\dosetupSlideTitle}
 
 \def\dosetupSlideTitle[#1]%
-  {\setupmodule[simpleslides:slidetitle]
-               [\c!alternative=\v!normal,\c!width=\textwidth,
-                \c!height=2\lineheight,#1]}
+  {\setvariables[simpleslides:slidetitle]
+                [\c!alternative=\v!normal,\c!width=\textwidth,
+                 \c!height=2\lineheight,#1]}
 
 \def\simpleslidesslidetitleparameter%#1
-  {\moduleparameter{simpleslides:slidetitle}}
+  {\getvariable{simpleslides:slidetitle}}
 
 \def\defineSlideTitleAlternative
   {\dodoubleargument\dodefineSlideTitleAlternative}
@@ -331,13 +331,13 @@
   {\dosingleargument\dosetupPicture}
 
 \def\dosetupPicture[#1]%
-  {\setupmodule[simpleslides:picture]
-               [highlight=\v!no,
-                steps=5,
-                opacity=0.5,
-                \c!x\c!scale=couple,
-                \c!y\c!scale=couple,
-                \c!width=,\c!height=,#1]}
+  {\setvariables[simpleslides:picture]
+                [highlight=\v!no,
+                 steps=5,
+                 opacity=0.5,
+                 \c!x\c!scale=couple,
+                 \c!y\c!scale=couple,
+                 \c!width=,\c!height=,#1]}
 
 \setupPicture
   [highlight=\v!no,%yes|no|default=no
@@ -363,7 +363,7 @@
   ]
 
 \def\simpleslidesPictureParameter%#1
-  {\moduleparameter{simpleslides:picture}}
+  {\getvariable{simpleslides:picture}}
 
 
 \newconditional\simpleslidesHighlight   \setfalse\simpleslidesHighlight
