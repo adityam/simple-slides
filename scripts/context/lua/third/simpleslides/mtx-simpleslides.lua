@@ -21,6 +21,7 @@ simpleslides.options = {
   ["BigNumber"]         ={color={"blue", "red"}},
   ["BottomSquares"]     ={},
   ["Boxed"]             ={},
+  ["BoxedTitle"]        ={},
   ["Ellipse"]           ={},
   ["Embossed"]          ={},
   ["Framed"]            ={alternative={"square", "stripe"}},
