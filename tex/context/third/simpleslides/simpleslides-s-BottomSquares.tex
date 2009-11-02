@@ -80,7 +80,11 @@ save w; numeric w;
 w = xpart (lrcorner Field[Text][Text] - llcorner Field[Text][Text]) - diff ;
 
 save factor; numeric factor; 
-factor = w/(NOfPages - 1) ;
+if NOfPages <= 1 :
+  factor = w ;
+else :
+  factor = w/(NOfPages - 1) ;
+fi ;
 
 save p; path p ;
 p = unitsquare xyscaled (diff,diff) 

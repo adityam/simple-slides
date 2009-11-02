@@ -97,7 +97,7 @@ fill p[3] withcolor \MPcolor{simpleslides:variantcolor} ;
 
 pickup pencircle scaled 5pt ;
 
-if \realfolio > 1:
+if NOfPages > 1:
 	theta = (PageNumber - 1)/(NOfPages - 1) ;
 	p[4] = unitcircle scaled b rotated 90 shifted (b + ((a-b)/2),(a-b)/2) ;
 	fill p[4] withcolor \MPcolor{simpleslides:backgroundcolor} ;

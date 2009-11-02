@@ -68,7 +68,11 @@ path q ;
 q = z1 -- z5 ;
 t := arclength (q) ;
 u := t/15 ;
-v := (PageNumber/NOfPages) ;
+if NOfPages = 0 :
+  v := PageNumber ;
+else :
+  v := (PageNumber/NOfPages) ;
+fi ;
 z4 = (x1+1cm, y1-1cm) ;
 z3 = (x4, y1) ;
 z2 = (x1, y4) ;

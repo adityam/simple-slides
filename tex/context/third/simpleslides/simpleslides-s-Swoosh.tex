@@ -124,7 +124,7 @@ pair s[] ;
 pair circcenter ; circcenter = lrcorner Page shifted (-1cm, 1cm) ;
 picture pic ;
 b = 1.5cm ;
-if \realfolio > 1:
+if NOfPages > 1:
 	theta = (PageNumber - 1)/(NOfPages - 1) ;
 	p[4] = fullcircle scaled b rotated 90 ;
 	fill p[4] withcolor  \MPcolor{simpleslides:altcontrastcolor} ;

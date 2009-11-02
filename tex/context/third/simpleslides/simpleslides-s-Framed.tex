@@ -100,7 +100,12 @@ linear_shade(p[1],0,
             \MPcolor{simpleslides:contrastcolor}) ;
 
 save i ;
-numeric i; i = PageNumber/NOfPages ;
+numeric i; 
+if NOfPages = 0 : 
+  i = PageNumber ;
+else : 
+  i = PageNumber/NOfPages ;
+fi ;
 
 p[2] = ulcorner p[1] -- urcorner p[1] ;
 p[3] = llcorner p[1] -- lrcorner p[1] ;

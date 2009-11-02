@@ -169,7 +169,12 @@ StopPage ;
 StartPage
 path p[] ;
 p[1] := unitsquare xyscaled(MakeupWidth,.4cm) shifted (2cm,0.7cm) ;
-numeric i; i = (PageNumber - 1)/(NOfPages - 1) ;
+numeric i; 
+if NOfPages <= 1 :
+  i = (PageNumber - 1) ;
+else :
+  i = (PageNumber - 1)/(NOfPages - 1) ;
+fi ;
 p[2] = ulcorner p[1] -- urcorner p[1] ;
 p[3] = llcorner p[1] -- lrcorner p[1] ;
 pair o[] ;
