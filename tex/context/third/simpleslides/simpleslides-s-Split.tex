@@ -117,16 +117,16 @@ fill p[2] withcolor \MPcolor{simpleslides:variantcolor} ;
 fill p[3] withcolor \MPcolor{simpleslides:variantcolor} ;
 fill p[4] withcolor \MPcolor{simpleslides:contrastcolor} ;
 
-draw \sometxt[simpleslides:sometxt:left]{\noexpand\moduleparameter{simpleslides:title}{date}}
+draw \sometxt[simpleslides:sometxt:left]{\getvariable{simpleslides:title}{date}}
      shifted (1cm,y1) ;
 
 draw \sometxt[simpleslides:sometxt:right]{\folio\ of \lastpage}
      shifted (x5,y1) ;
 
-draw \sometxt[simpleslides:sometxt:left]{\noexpand\moduleparameter{simpleslides:title}{author}}
+draw \sometxt[simpleslides:sometxt:left]{\getvariable{simpleslides:title}{author}}
      shifted (1cm,0) ;
 
-draw \sometxt[simpleslides:sometxt:right]{\noexpand\moduleparameter{simpleslides:title}{title}}
+draw \sometxt[simpleslides:sometxt:right]{\getvariable{simpleslides:title}{title}}
       shifted (x5,0) ;
 
 StopPage ;
