@@ -181,7 +181,7 @@
 \def\simpleslidestitlecomponent#1%
   {\simpleslidestitleparameter{\c!before#1}
       \startalignment[\simpleslidestitleparameter{#1\c!align}]
-        \doattributes{\??md:simpleslides:title:}{#1\c!style}{#1\c!color}
+        \doattributes{\??vars:simpleslides:title:}{#1\c!style}{#1\c!color}
           {\getvariable{simpleslides:title}{#1}}
        \stopalignment
     \simpleslidestitleparameter{\c!after#1}}
@@ -197,7 +197,7 @@
    \null
    \simpleslidestitleparameter\c!before
    \startalignment[\simpleslidestitleparameter\c!align]
-   \dostartattributes{\??md:simpleslides:title:}\c!headstyle\c!headcolor
+   \dostartattributes{\??vars:simpleslides:title:}\c!headstyle\c!headcolor
     \simpleslidestitlecomponent\c!title
     \simpleslidestitlecomponent\c!author
     \simpleslidestitlecomponent\c!date
@@ -272,7 +272,7 @@
   {\page[\simpleslidesslidetitleparameter\c!page]%
    \simpleslidesslidetitleparameter\c!before
       \startalignment[\simpleslidesslidetitleparameter\c!align]
-        \doattributes{\??md:simpleslides:slidetitle:}\c!style\c!color{#1}%
+        \doattributes{\??vars:simpleslides:slidetitle:}\c!style\c!color{#1}%
        \stopalignment
     \simpleslidesslidetitleparameter\c!after}
 
@@ -287,7 +287,7 @@
         [\c!width=\simpleslidesslidetitleparameter\c!width,
         \c!height=\simpleslidesslidetitleparameter\c!height,
          \c!align=\simpleslidesslidetitleparameter\c!align]
-        {\doattributes{\??md:simpleslides:slidetitle:}\c!style\c!color{#1}}}%
+        {\doattributes{\??vars:simpleslides:slidetitle:}\c!style\c!color{#1}}}%
     \simpleslidesslidetitleparameter\c!after}
 
 
