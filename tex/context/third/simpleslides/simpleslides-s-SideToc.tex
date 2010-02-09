@@ -1,0 +1,299 @@
+%D \module
+%D   [      file=simpleslides-s-SideToc,
+%D        version=2010.02.09,
+%D          title=\CONTEXT\ Style File,
+%D       subtitle=Presentation Module --- SideToc style,
+%D         author=Aditya Mahajan and Thomas A. Schmitz,
+%D           date=\currentdate,
+%D      copyright={Aditya Mahajan and Thomas A. Schmitz}]
+%C
+%C Copyright 2010 Aditya Mahajan and Thomas A. Schmitz
+%C This file may be distributed under the GNU General Public License v. 2.0.
+
+%D This file provides the \quotation{SideToc} style for the presentation
+%D module. It is loaded at runtime. 
+
+\writestatus{simpleslides}{loading Side Toc style}
+
+\startmodule[simpleslides-s-SideToc]
+
+\unprotect
+
+%D We create different layouts for the title page, horizontal, and vertical
+%D slides.
+
+\setuplayout  [simpleslides:layout:vertical]
+	      [width=fit,
+              leftmargin=3.5cm,
+	      rightmargin=0cm,
+              leftmargindistance=1cm,
+              rightmargindistance=0pt,
+              height=fit, 
+              header=0cm, 
+              footer=0cm, 
+              topspace=1cm, 
+              backspace=5cm,
+%	      cutspace=4cm,
+              bottomspace=0cm,
+              bottom=0pt,
+              location=middle]
+
+\setuplayout  [simpleslides:layout:horizontal]
+	      [width=fit,
+              leftmargin=3.5cm,
+	      rightmargin=0cm,
+              leftmargindistance=1cm,
+              rightmargindistance=0pt,
+              height=fit, 
+              header=0.1cm, 
+	      headerdistance=1.7cm,
+              footer=0cm, 
+              topspace=1cm, 
+              backspace=5cm,
+%	      cutspace=4cm,
+              bottomspace=0cm,
+              bottom=0pt,
+              location=middle]
+
+\setuplayout  [simpleslides:layout:title]
+	      [width=fit,
+              leftmargin=0cm,
+	      rightmargin=0cm,
+              height=fit, 
+              header=0cm, 
+              footer=0cm, 
+              topspace=1cm, 
+              backspace=1cm,
+              bottomspace=0cm,
+              bottom=0pt,
+              location=middle]
+
+\setupcombinations[distance=0.75cm]
+
+%D The interesting part of this presentation style is the "Topic" list which is
+%D typeset in the left margin. It is inspired by something Hans did in
+%D s-pre-19. The Difference is that I wanted the Topic to be independent from
+%D SlideTitle macro. This way, several slides can be combined into one Topic.
+%D Here are the main macros for defining and typesetting this list.:
+
+\definelist[MyTopics][criterium=all]
+
+\def\MyMark{}
+
+\def\Topic%
+  {\dosingleargument\doTopic}
+
+\def\doTopic[#1]{%
+  \def\MyMark{#1}%
+  \writetolist[MyTopics]{#1}{}%
+}
+
+\define[3]\FancyEntry
+ {\doifelse{#1}{\MyMark} %
+    {\framed[width=3.5cm,
+	     height=4ex,
+	     align=middle,
+	     frame=off,
+	     framecolor=red,
+	     background=color,
+	     backgroundcolor=simpleslides:altcontrastcolor,
+ 	     foregroundcolor=simpleslides:backgroundcolor]
+	    {\switchtobodyfont[14pt]#1}}% fancy layout
+    {\framed[width=3.5cm,
+	     height=4ex,
+	     align=middle,
+	     frame=off,
+	     framecolor=red,
+ 	     foregroundcolor=simpleslides:backgroundcolor]
+	    {\switchtobodyfont[14pt]#1}}% normal layout
+}
+
+\setuplist[MyTopics]
+          [pagenumber=no,
+           alternative=command,
+           command=\FancyEntry]
+
+\setuptexttexts[margin][\vbox{\placelist[MyTopics]}][]
+
+% \definelayer
+%   [Topiclayer]
+%   [width=2.5cm,
+%    height=\paperheight]
+% 
+% \defineoverlay
+%   [simpleslides:background:ornament] 
+%   [\setlayer[Topiclayer]{\completelist[MyTopic]}
+
+% \startsetups tlayer
+%  \setlayer[Topiclayer]{\completelist[MyTopics]}
+%\stopsetups
+
+%D These macros are used for placing figures/pictures:
+
+\define\NormalHeight        {\textheight}
+\define\NormalWidth         {.476\textwidth}
+\define\PictureFrameHeight  {\textheight}
+\define\PictureFrameWidth   {.476\textwidth}
+
+\setuplayer
+  [simpleslides:layer:slidetitle]
+  [x=5cm]
+
+%D We define our color scheme
+
+\definecolor [simpleslides:backgroundcolor]   [s=.9]
+\definecolor [simpleslides:altcontrastcolor]  [b=.6]
+\definecolor [simpleslides:contrastcolor]     [s=.3]
+\definecolor [simpleslides:itemize:color]     [simpleslides:altcontrastcolor]
+
+
+%D We use \METAPOST to draw the background.
+
+\startuseMPgraphic{simpleslides:MP:title}
+StartPage ;
+save middle ;
+path middle ;
+fill Page withcolor \MPcolor{simpleslides:contrastcolor} ;
+middle = Page enlarged -1.5cm ;
+fill middle withcolor \MPcolor{simpleslides:altcontrastcolor} ;
+StopPage ;
+\stopuseMPgraphic
+
+\startuseMPgraphic{simpleslides:MP:horizontal}
+StartPage ;
+save a, b, c ;
+numeric a, b, c ;
+
+a = 4.5cm ;
+b = 0.5cm ;
+c = 2.2cm ;
+
+z[1] = ulcorner Page shifted (a,0) ;
+z[2] = llcorner Page shifted (a,0) ;
+z[3] = ulcorner Page shifted (0,-c) ;
+z[4] = urcorner Page shifted (0,-c) ;
+z[5] = llcorner Page shifted (0,b) ;
+z[6] = lrcorner Page shifted (0,b) ;
+z[7] = ulcorner Page shifted (a,-c) ;
+z[8] = llcorner Page shifted (a,b) ;
+
+save p ;
+path p[] ;
+p[1] = ulcorner Page -- z[1] -- z[2] -- llcorner Page -- cycle ;
+p[2] = ulcorner Page -- urcorner Page -- z[4] -- z[3] -- cycle ;
+p[3] = llcorner Page -- lrcorner Page -- z[6] -- z[5] -- cycle ;
+p[4] = ulcorner Page -- z[1] -- z[7] -- z[3] -- cycle ;
+p[5] = llcorner Page -- z[5] -- z[8] -- z[2] -- cycle ;
+
+fill Page withcolor \MPcolor{simpleslides:backgroundcolor} ;
+fill p[1] withcolor \MPcolor{simpleslides:contrastcolor} ;
+fill p[2] withcolor \MPcolor{simpleslides:contrastcolor} ;
+fill p[3] withcolor \MPcolor{simpleslides:contrastcolor} ;
+fill p[4] withcolor \MPcolor{simpleslides:altcontrastcolor} ;
+fill p[5] withcolor \MPcolor{simpleslides:altcontrastcolor} ;
+StopPage ;
+\stopuseMPgraphic
+
+\startuseMPgraphic{simpleslides:MP:vertical}
+StartPage ;
+save a, b ;
+numeric a, b ;
+
+a = 4.5cm ;
+b = 0.5cm ;
+
+z[1] = ulcorner Page shifted (a,0) ;
+z[2] = llcorner Page shifted (a,0) ;
+z[3] = ulcorner Page shifted (0,-b) ;
+z[4] = urcorner Page shifted (0,-b) ;
+z[5] = llcorner Page shifted (0,b) ;
+z[6] = lrcorner Page shifted (0,b) ;
+z[7] = ulcorner Page shifted (a,-b) ;
+z[8] = llcorner Page shifted (a,b) ;
+
+save p ;
+path p[] ;
+p[1] = ulcorner Page -- z[1] -- z[2] -- llcorner Page -- cycle ;
+p[2] = ulcorner Page -- urcorner Page -- z[4] -- z[3] -- cycle ;
+p[3] = llcorner Page -- lrcorner Page -- z[6] -- z[5] -- cycle ;
+p[4] = ulcorner Page -- z[1] -- z[7] -- z[3] -- cycle ;
+p[5] = llcorner Page -- z[5] -- z[8] -- z[2] -- cycle ;
+
+fill Page withcolor \MPcolor{simpleslides:backgroundcolor} ;
+fill p[1] withcolor \MPcolor{simpleslides:contrastcolor} ;
+fill p[2] withcolor \MPcolor{simpleslides:contrastcolor} ;
+fill p[3] withcolor \MPcolor{simpleslides:contrastcolor} ;
+fill p[4] withcolor \MPcolor{simpleslides:altcontrastcolor} ;
+fill p[5] withcolor \MPcolor{simpleslides:altcontrastcolor} ;
+StopPage ;
+\stopuseMPgraphic
+
+
+%D We define these backgrounds as overlays:
+
+\defineoverlay
+  [simpleslides:background:horizontal]
+  [\useMPgraphic{simpleslides:MP:horizontal}]
+
+\defineoverlay
+  [simpleslides:background:vertical]
+  [\useMPgraphic{simpleslides:MP:vertical}]
+
+\defineoverlay 
+  [simpleslides:background:title] 
+  [\useMPgraphic{simpleslides:MP:title}] 
+
+%D We want the title to placed in color. 
+
+\setupTitle
+  [\c!title=,
+   \c!author=,
+   \c!date=\currentdate,
+   \c!headstyle=,
+   \c!headcolor={simpleslides:backgroundcolor},
+   \c!align=\v!middle,
+   \c!before=\vfill,
+   \c!after=\vfill,
+   \c!title\c!style={\switchtobodyfont[\TitleSize]},
+   \c!title\c!color=simpleslides:backgroundcolor,
+   \c!title\c!align=,%\v!middle,
+   \c!author\c!style=,
+   \c!author\c!color=simpleslides:backgroundcolor,
+   \c!author\c!align=,%\v!middle, 
+   \c!date\c!style=,
+   \c!date\c!color=simpleslides:backgroundcolor,
+   \c!date\c!align=,%\v!middle,
+   \c!before\c!title=,
+   \c!before\c!author=,
+   \c!before\c!date=,
+   \c!after\c!title={\blank[1*line]},
+   \c!after\c!author={\blank[2*line]},
+   \c!after\c!date=]
+
+%D We want the slide title on the top
+
+\setupSlideTitle
+   [\c!after=,
+    \c!alternative=layer,
+    \c!width=\textwidth,
+    \c!height=2.5cm,
+    \c!color=simpleslides:backgroundcolor]
+
+%D The symbol for the first level of itemizations. 
+
+\definesymbol[1][\useMPgraphic{simpleslides:itemize:square}]
+%\setupitemize[1][inmargin][color=simpleslides:backgroundcolor]
+
+\protect
+\stopmodule
+
+\endinput
+
+
+
+% Write Macro "Topic"
+
+% This macro takes a keyword and appends it to a list (a LUA table?), at the same
+% time, it puts the keywords into a MPvariable. The complete list is written in
+% MP to the left of the slide; the current Topic written white on blue, the
+% others black on gray. 

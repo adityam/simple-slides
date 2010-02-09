@@ -29,7 +29,7 @@
               header=18mm, 
               footer=0cm, 
               topspace=.8cm, 
-              backspace=2cm,
+              backspace=1.9cm,
               location=singlesided]
 
 \setuplayout [simpleslides:layout:horizontal][header=18mm]
@@ -47,12 +47,14 @@
              [frame=off,offset=0pt,
               width=1.7cm,align=middle]
 
+\setupcombinations[distance=2.5em]
+
 %D These macros are used for placing figures/pictures:
 
 \define\NormalHeight        {\textheight}
-\define\NormalWidth         {.476\textwidth}
+\define\NormalWidth         {.46\textwidth}
 \define\PictureFrameHeight  {\textheight}
-\define\PictureFrameWidth   {.476\textwidth}
+\define\PictureFrameWidth   {.46\textwidth}
 
 %D This module has two color schemes, a blue one and a red one.
 
@@ -63,8 +65,8 @@
 \stopsetups
 
 \startsetups simpleslides:setups:red
-\definecolor [simpleslides:contrastcolor]     [r=0.45,]
-\definecolor [simpleslides:backgroundcolor]	  [s=.18]
+\definecolor [simpleslides:contrastcolor]     [r=0.4]
+\definecolor [simpleslides:backgroundcolor]	  [s=.35]
 \definecolor [simpleslides:textcolor]         [s=1]
 \stopsetups
 

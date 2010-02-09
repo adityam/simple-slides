@@ -174,40 +174,38 @@ StopPage ;
 
 \setupSlideTitle
   [\c!alternative=layer,
-   \c!color=simpleslides:backgroundcolor,
+   \c!color=white,
    \c!align=\v!center,
    \c!width=\textwidth,
    \c!height=2cm,
    \c!after=]
 
 
-% \setupTitle
-%   [\c!title=,
-%    \c!author=,
-%    \c!date=\currentdate,
-%    \c!headstyle=,
-%    \c!headcolor=,
-%    \c!align=\v!middle,
-%    \c!before={\vfill\getvalue{simpleslides:framed}
-%               [\c!width=\textwidth,\c!height=.75\textheight,
-%               \c!align=\v!middle, \c!strut=\v!no]
-%               \bgroup},
-%    \c!after={\egroup\vfill},
-%    \c!title\c!style={\switchtobodyfont[\TitleSize]},
-%    \c!title\c!color=,
-%    \c!title\c!align=,%\v!middle,
-%    \c!author\c!style=,
-%    \c!author\c!color=,
-%    \c!author\c!align=,%\v!middle, 
-%    \c!date\c!style=,
-%    \c!date\c!color=,
-%    \c!date\c!align=,%\v!middle,
-%    \c!before\c!title=,
-%    \c!before\c!author=,
-%    \c!before\c!date=,
-%    \c!after\c!title={\blank[1*line]},
-%    \c!after\c!author={\blank[2*line]},
-%    \c!after\c!date=]
+\setupTitle
+  [\c!title=,
+   \c!author=,
+   \c!date=\currentdate,
+   \c!headstyle=,
+   \c!headcolor={simpleslides:altcontrastcolor},
+   \c!align=\v!middle,
+   \c!before=\vfill,
+   \c!after=\vfill,
+   \c!title\c!style={\switchtobodyfont[\TitleSize]},
+   \c!title\c!color=simpleslides:altcontrastcolor,
+   \c!title\c!align=,%\v!middle,
+   \c!author\c!style=,
+   \c!author\c!color=simpleslides:altcontrastcolor,
+   \c!author\c!align=,%\v!middle, 
+   \c!date\c!style=,
+   \c!date\c!color=simpleslides:altcontrastcolor,
+   \c!date\c!align=,%\v!middle,
+   \c!before\c!title=,
+   \c!before\c!author=,
+   \c!before\c!date=,
+   \c!after\c!title={\blank[1*line]},
+   \c!after\c!author={\blank[2*line]},
+   \c!after\c!date=]
+
 % 
 % %D We want the title to be of a specific height
 % 

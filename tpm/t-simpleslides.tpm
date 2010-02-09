@@ -1,24 +1,25 @@
 <!DOCTYPE rdf:RDF SYSTEM "tpm.dtd">
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:TPM="http://texlive.dante.de/">
-  <rdf:Description about="http://dl.contextgarden.net/modules/t-vim">
+  <rdf:Description about="http://dl.contextgarden.net/modules/t-simpleslides">
     <TPM:Name>t-simpleslides</TPM:Name>
     <TPM:Type>Module</TPM:Type>
-    <TPM:Date>2009-03-24 00:00:00</TPM:Date>
-    <TPM:Version>2009-03-24</TPM:Version>
+    <TPM:Date>2010-02-09 00:00:00</TPM:Date>
+    <TPM:Version>2010-02-09</TPM:Version>
     <TPM:Creator>Aditya Mahajan and Thomas A. Schmitz</TPM:Creator>
     <TPM:Title>Simple slides in ConTeXt</TPM:Title>
     <TPM:Description>
       A module to create simple slides in ConTeXt
     </TPM:Description>
     <TPM:Author>Aditya Mahajan and Thomas A. Schmitz</TPM:Author>
-    <TPM:Size>4691886</TPM:Size>
+    <TPM:Size>4697533</TPM:Size>
     <TPM:Build/>
-    <TPM:RunFiles size="145761">
+    <TPM:RunFiles size="151272">
       tex/context/third/simpleslides/t-simpleslides.tex
       tex/context/third/simpleslides/simpleslides-f-default.tex
       tex/context/third/simpleslides/simpleslides-s-BigNumber.tex
       tex/context/third/simpleslides/simpleslides-s-BottomSquares.tex
       tex/context/third/simpleslides/simpleslides-s-Boxed.tex
+      tex/context/third/simpleslides/simpleslides-s-BoxedTitle.tex
       tex/context/third/simpleslides/simpleslides-s-default.tex
       tex/context/third/simpleslides/simpleslides-s-Ellipse.tex
       tex/context/third/simpleslides/simpleslides-s-Embossed.tex
@@ -26,10 +27,12 @@
       tex/context/third/simpleslides/simpleslides-s-FramedTitle.tex
       tex/context/third/simpleslides/simpleslides-s-HorizontalStripes.tex
       tex/context/third/simpleslides/simpleslides-s-NarrowStripes.tex
+      tex/context/third/simpleslides/simpleslides-s-PlainCounter.tex
       tex/context/third/simpleslides/simpleslides-s-RainbowStripe.tex
       tex/context/third/simpleslides/simpleslides-s-Rounded.tex
       tex/context/third/simpleslides/simpleslides-s-Shaded.tex
       tex/context/third/simpleslides/simpleslides-s-SideSquares.tex
+      tex/context/third/simpleslides/simpleslides-s-SideToc.tex
       tex/context/third/simpleslides/simpleslides-s-Split.tex
       tex/context/third/simpleslides/simpleslides-s-Sunrise.tex
       tex/context/third/simpleslides/simpleslides-s-Swoosh.tex
@@ -37,7 +40,7 @@
       tex/context/interface/third/t-simpleslides.xml
       scripts/context/lua/third/simpleslides/mtx-simpleslides.lua
     </TPM:RunFiles>
-    <TPM:DocFiles size="4546125">
+    <TPM:DocFiles size="4546261">
       doc/context/third/simpleslides/simple-slides.tex
       doc/context/third/simpleslides/simple-slides.pdf
       doc/context/third/simpleslides/solutions/generic-talk-15min-45min.tex
@@ -63,6 +66,7 @@
       doc/context/third/simpleslides/styles/Shaded-blue.pdf
       doc/context/third/simpleslides/styles/Shaded-green.pdf
       doc/context/third/simpleslides/styles/SideSquares.pdf
+      doc/context/third/simpleslides/styles/SideToc.pdf
       doc/context/third/simpleslides/styles/Split.pdf
       doc/context/third/simpleslides/styles/Sunrise.pdf
       doc/context/third/simpleslides/styles/Swoosh.pdf

@@ -134,7 +134,7 @@
    for i = 1 upto nofmultipars :
     p = (multipars[i]
      topenlarged 8pt
-     bottomenlarged 8pt) randomized 4pt ;
+     bottomenlarged 4pt) randomized 4pt ;
    fill p withcolor lightgray ;
    draw p withcolor \MPvar{linecolor}
     withpen pencircle scaled \MPvar{linewidth};
@@ -319,15 +319,14 @@
 
 \starttext
 
-\title
-  Simple Slides \\
-  A \CONTEXT\ presentation module 
+\title{Simple Slides \\
+  A \CONTEXT\ presentation module}
 
 \startEXAMPLE
 \placelist[section]
 \stopEXAMPLE
 
-\section Introduction
+\section{Introduction}
 
 This module provides an easy|-|to|-|use interface
 for creating simple slides/presentations in \CONTEXT. 
@@ -352,7 +351,7 @@ more fancier features. This module also offers much less features than the
 should be able to write your first presentation after spending five minutes with
 this manual.
 
-\section A bit of history
+\section{A bit of history}
 
 The idea of a module suitable for simple presentations took shape when Thomas
 started using \CONTEXT\ for preparing his course presentations. \CONTEXT\ comes
@@ -384,14 +383,14 @@ a terminal run \command{kpsewhich t-simpleslides.tex} (for \MKII) and
 \command{luatools t-simpleslides.tex} (for \MKIV); these commands should return
 the complete path of the files that you just installed.
 
-\subsubject A note about \TEX|-|engines
+\subsubject{A note about \TEX|-|engines}
 
 We have extensively tested this module with \PDFTEX\ and \LUATEX\ (that is,
 with \MKII\ and \MKIV). In spite of our best efforts, we have not been able to
 get this module to work reliably with \XETEX. If you are a \XETEX\ guru, and
 know how to fix some of the errors with \XETEX, we will appreciate the help.
 
-\section Quick start
+\section{Quick start}
 
 First you must tell \CONTEXT\ that you want to use this module. To do this
 simply write:
@@ -420,6 +419,7 @@ presentation. The following styles are provided:
   \item \options{Rounded}
   \item \options{Shaded}
   \item \options{SideSquares}
+  \item \options{SideToc}
   \item \options{Split}
   \item \options{Sunrise}
   \item \options{Swoosh}
@@ -474,13 +474,13 @@ is given in \in Section[sec:fonts].
 The complete setup for using this module is
 \setup{simpleslides}
 
-\subsubject Structure of a presentation
+\subsubject{Structure of a presentation}
 
 The \filename{simpleslides} module has a very simple model of a presentation. A
 presentation consists of a title followed by a series of slides; the module
 provides macros to help create a presentation title page and slides.
 
-\subsubject Presentation title page
+\subsubject{Presentation title page}
 
 A presentation title page displays the title of the presentation, the names of
 the authors, and the date.
@@ -501,7 +501,7 @@ possible to change the look of \typeTEX{\placeTitle} using some additional
 arguments to \typeTEX{\setupTitle}. These are explained in \in
 Section[sec:setuptitle].
 
-\subsubject Presentation slide
+\subsubject{Presentation slide}
 
 The \filename{simpleslides} module provides a \typeTEX{\SlideTitle} macro, which
 starts a new slide (basically a new page), and typesets its argument as the
@@ -516,7 +516,7 @@ later.
 
 \adaptlayout[lines=+2]
 
-\subsubject A minimal presentation
+\subsubject{A minimal presentation}
 
 A minimal presentation is shown below. The result is shown in \in
 Figure[fig:example].
@@ -552,7 +552,7 @@ Figure[fig:example].
 
 
 
-\section Placing pictures
+\section{Placing pictures}
 
 If you want to place pictures in your slides, you can always use \CONTEXT's
 \typeTEX{\externalfigure} macro. This module also provides a macro,
@@ -568,47 +568,47 @@ These layouts are shown in \in Figure[fig:pictures].
 
 \page
 
-\placefigure
-  [top,bottom]
-  [fig:pictures]
-  {Example of \options{horizontal} and \options{vertical} options for 
-  \typeTEX{\IncludePicture} macro}
-  \startcombination[2*2]
-    \startEXAMPLEframe[width=0.55\textwidth]
-\startTEX
-  \usemodule[simpleslides]
-            [...]
-  \starttext
-  ...
-  \IncludePicture
-      [horizontal]
-      [cow]
-      {A Dutch Cow}
-  ...
-  \stoptext
-\stopTEX
-    \stopEXAMPLEframe
-    {A horizontal picture}
-    {\externalfigure[styles/BigNumber-blue]
-                    [page=3,width=0.55\textwidth]}{A horizontal picture}
-    \startEXAMPLEframe[width=0.55\textwidth]
-\startTEX
-  \usemodule[simpleslides]
-            [...]
-  \starttext
-  ...
-  \IncludePicture
-      [vertical]
-      [mill]
-      {The windmills are an example of a green energy source} 
-  ...
-  \stoptext
-\stopTEX
-    \stopEXAMPLEframe
-    {A vertical picture}
-    {\externalfigure[styles/BigNumber-blue]
-                    [page=10,width=0.55\textwidth]}{A vertical picture}
-\stopcombination
+% \placefigure
+%   [top,bottom]
+%   [fig:pictures]
+%   {Example of \options{horizontal} and \options{vertical} options for 
+%   \typeTEX{\IncludePicture} macro}
+%   \startcombination[2*2]
+%     \startEXAMPLEframe[width=0.55\textwidth]
+% \startTEX
+%   \usemodule[simpleslides]
+%             [...]
+%   \starttext
+%   ...
+%   \IncludePicture
+%       [horizontal]
+%       [cow]
+%       {A Dutch Cow}
+%   ...
+%   \stoptext
+% \stopTEX
+%     \stopEXAMPLEframe
+%     {A horizontal picture}
+%     {\externalfigure[styles/BigNumber-blue]
+%                     [page=3,width=0.55\textwidth]}{A horizontal picture}
+%     \startEXAMPLEframe[width=0.55\textwidth]
+% \startTEX
+%   \usemodule[simpleslides]
+%             [...]
+%   \starttext
+%   ...
+%   \IncludePicture
+%       [vertical]
+%       [mill]
+%       {The windmills are an example of a green energy source} 
+%   ...
+%   \stoptext
+% \stopTEX
+%     \stopEXAMPLEframe
+%     {A vertical picture}
+%     {\externalfigure[styles/BigNumber-blue]
+%                     [page=10,width=0.55\textwidth]}{A vertical picture}
+% \stopcombination
 
 A horizontal picture is placed as follows:
 \startEXAMPLE
@@ -636,7 +636,7 @@ Section[sec:pictures]
 
 \page
 
-\section[sec:styles] Changing presentation styles
+\section[sec:styles]{Changing presentation styles}
 
 The \options{style} key to \typeTEX{\setupmodule[simpleslides]} determines the
 look of the presentation. Some of the styles come with variants, that can be
@@ -771,6 +771,16 @@ images. There is a rough progress meter built into the blue quadrangles.
 \ShowStyle {SideSquares}
 \page
 
+\subsubject{SideToc}
+
+This Style has a list of Topics in its left margin; the current topic is
+automatically highlighted. To set a topic and add it to this table simple
+type \typeTEX{\Topic[TopicName]} in your source file where the new topic
+begins. 
+
+\ShowStyle {SideToc}
+\page
+
 \subsubject{Split}
 
 This style is inspired by the {\em Copenhagen} theme of the \LATEX's
@@ -806,7 +816,7 @@ of the number of slides.
 \ShowStyle {ThickStripes}
 \page
 
-\section[sec:fonts] Changing presentation fonts
+\section[sec:fonts]{Changing presentation fonts}
 
 The \options{font} and the \options{size} keys to
 \typeTEX{\setupmodule[simpleslides]} determine the font and font size for the
@@ -839,7 +849,7 @@ main text of the presentation. The default font is Latin Modern Sans at 17pt.
 
 \stopitemize
 
-\subsubject Choosing your own font
+\subsubject{Choosing your own font}
 
 If you want to set up your own font, pick any value for the \options{font} key
 (or leave it empty). Use the \options{size} key to choose the font size. Then
@@ -872,7 +882,7 @@ you do not like the size of the title page and slide titles, you can change
 their value to whatever you like.
 
 
-\section[sec:setuptitle] Changing the title page
+\section[sec:setuptitle]{Changing the title page}
 
 It is possible to change the look of \typeTEX{\placeTitle} using
 \typeTEX{\setupTitle}. This feature is intended for authors creating a new
@@ -883,7 +893,7 @@ to \typeTEX{\currentdate}.
 
 \setup{setupTitle}
 
-\section Changing the slide titles
+\section{Changing the slide titles}
 
 It is possible to change the look of \typeTEX{\SlideTitle} using
 \typeTEX{\setupSlideTitle}. Like \typeTEX{\setupTitle}, this feature is intended
@@ -892,7 +902,7 @@ change in an existing style, if you want.
 
 \setup{setupSlideTitle}
 
-\section[sec:pictures] Special macro for including pictures
+\section[sec:pictures]{Special macro for including pictures}
 
 As explained earlier, the \typeTEX{\IncludePicture} macro facilitates the
 placement of pictures. It takes four arguments (one of which is optional, and as
@@ -957,7 +967,7 @@ Below is a brief explanation of what the different parameters do:
     {Picture with \options{highlight=yes} and \options{alternative=focus}}
   \stopcombination
 
-\subsubject Units for dimensions
+\subsubject{Units for dimensions}
 
 All dimensions are specified relative to the width and height of the image, so
 you do not have to change the location of your highlights if you change the
@@ -997,7 +1007,7 @@ as follows:
     \options{subgrid=yes}}
   \stopcombination
 
-\subsubject Highlighting by a circle
+\subsubject{Highlighting by a circle}
 
 Now lets see how different highlight alternatives are specified. Suppose we want
 to place the picture of a cow and highlight its head. To help determine the
@@ -1053,7 +1063,7 @@ In summary, the different keys related to \options{alternative=circle} are:
     The color of the circle.
 \stopitemize
 
-\subsubject Highlighting by an arrow
+\subsubject{Highlighting by an arrow}
 
 Suppose we want to include a picture of a cow and point out its mouth using an
 arrow. An arrow is specified by three things, the location of its tip, given by
@@ -1096,7 +1106,7 @@ The different keys related to \options{alternative=arrow} are:
     The color of the arrow.
 \stopitemize
 
-\subsubject Highlighting by focus
+\subsubject{Highlighting by focus}
 
 Suppose we want place the picture of a cow, focus its head, and dull out rest of
 the picture. The area to be focused is a circle (or an ellipse) and it can be
@@ -1143,7 +1153,7 @@ The different keys related to \options{alternative=focus} are:
     The color of the unfocused area.
 \stopitemize
 
-\subsubject Adding shadows
+\subsubject{Adding shadows}
 
 When a circle or arrow highlight is used, adding a shadow to the highlight makes
 them stand out more. The key related to shadows is:
@@ -1156,7 +1166,7 @@ them stand out more. The key related to shadows is:
     \options{yes} puts the shadow at \options{bottomright}.
 \stopitemize
 
-\subsubject Adding a specific page
+\subsubject{Adding a specific page}
 
 To select a specific page from a multi-page pdf file, you can use
 \options{page=<number>} option.
