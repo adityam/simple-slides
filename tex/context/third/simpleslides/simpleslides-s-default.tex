@@ -126,6 +126,11 @@
     [\c!width=\paperwidth,
     \c!height=\paperheight]
 
+\definelayer[simpleslides:layer:extras]
+    [\c!width=\paperwidth,
+    \c!height=\paperheight]
+
+
 %D A generic frame which is used for titles and other commands
 
 \defineframed[simpleslides:framed]
@@ -154,7 +159,7 @@
   \setupbackgrounds[\v!page]
         [background={simpleslides:background:horizontal,
                      simpleslides:background:ornament,
-                     simpleslides:background:extras,
+                     simpleslides:layer:extras,
                      simpleslides:layer:slidetitle}]
 \stopsetups
 
@@ -162,7 +167,7 @@
   \setuplayout[simpleslides:layout:vertical]
   \setupbackgrounds[\v!page]
         [background={simpleslides:background:vertical,
-                     simpleslides:background:extras,
+                     simpleslides:layer:extras,
                      simpleslides:background:ornament}]
 \stopsetups
 
@@ -173,7 +178,7 @@
         [background={simpleslides:background:page,
                      foreground,
                     %simpleslides:background:ornament,
-                     simpleslides:background:extras,
+                     simpleslides:layer:extras,
                      simpleslides:layer:page}]
 \stopsetups
 
@@ -839,6 +844,18 @@
   fill unitsquare xyscaled(0.4cm,0.4cm) 
        withcolor \MPcolor{simpleslides:itemize:color} ;
 \stopuniqueMPgraphic
+
+%D Sometimes we want an image as a background of a page. For that, we use the
+%D following macro. You need to set a transparent image foreground color for
+%D this to work. TODO: This macro should be combined with \type{\SlideTitle}
+
+\def\SlideBackground#1%
+  {\setlayer[simpleslides:layer:extras]
+    {\externalfigure
+    [#1]
+    [width=\paperwidth,height=\paperheight,
+    background={foreground,color},backgroundcolor=simpleslides:imageforegroundcolor]}}
+
 
 
 
