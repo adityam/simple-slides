@@ -35,9 +35,9 @@
 %D As for the page layout: most of the numbers have been reached by
 %D trial and error; I have just taken what seemed to produce the best output.
 
-\setuplayout [width=fit,
+\setuplayout [width=middle,
               margin=0.6cm,
-              height=fit, 
+              height=middle, 
               header=0.15cm, 
               footer=1.35cm, 
 	      footerdistance=0.5cm,
@@ -54,6 +54,17 @@
 \definelayout [simpleslides:layout:horizontal]
 \definelayout [simpleslides:layout:vertical]
 \definelayout [simpleslides:layout:title]
+\definelayout [simpleslides:layout:page]
+
+\setuplayout  [simpleslides:layout:page]
+              [topspace=0cm,
+               header=0cm,
+               footer=0cm,
+               bottomspace=0cm,
+               backspace=0cm,
+               cutspace=0cm,
+               width=middle,
+               height=middle]
 
 %D We want colored presentations
 
@@ -102,6 +113,7 @@
 \defineoverlay[simpleslides:background:title]
 \defineoverlay[simpleslides:background:vertical]
 \defineoverlay[simpleslides:background:ornament]
+\defineoverlay[simpleslides:background:page]
 
 \defineoverlay[simpleslides:background:highlight]
               [\useMPgraphic{simpleslides:MP:highlight}]%
@@ -110,11 +122,24 @@
     [\c!width=\paperwidth,
     \c!height=\paperheight]
 
+\definelayer[simpleslides:layer:page]
+    [\c!width=\paperwidth,
+    \c!height=\paperheight]
+
 %D A generic frame which is used for titles and other commands
 
 \defineframed[simpleslides:framed]
-             [frame=off,offset=0pt,
-              top=\vss,bottom=\vss]
+             [\c!frame=\v!off,\c!offset=\zeropoint,
+              \c!top=\vss,\c!bottom=\vss]
+
+\defineframed[simpleslides:framed:page]
+             [\c!frame=\v!off,\c!offset=3mm,
+              \c!top=\vss,\c!bottom=\vss,
+              \c!width=fit,
+              \c!corner=\v!round,
+              \c!background=\v!color,
+              \c!backgroundcolor=simpleslides:backgroundcolor]
+
 
 %D Now we define setups for specific backgrounds
 
@@ -129,6 +154,7 @@
   \setupbackgrounds[\v!page]
         [background={simpleslides:background:horizontal,
                      simpleslides:background:ornament,
+                     simpleslides:background:extras,
                      simpleslides:layer:slidetitle}]
 \stopsetups
 
@@ -136,7 +162,19 @@
   \setuplayout[simpleslides:layout:vertical]
   \setupbackgrounds[\v!page]
         [background={simpleslides:background:vertical,
+                     simpleslides:background:extras,
                      simpleslides:background:ornament}]
+\stopsetups
+
+\startsetups simpleslides:background:page
+  \page
+  \setuplayout[simpleslides:layout:page]
+  \setupbackgrounds[\v!page]
+        [background={simpleslides:background:page,
+                     foreground,
+                    %simpleslides:background:ornament,
+                     simpleslides:background:extras,
+                     simpleslides:layer:page}]
 \stopsetups
 
 %D We also define some fall backs for presentation backgrounds.
@@ -290,6 +328,18 @@
         {\doattributes{\??vars:simpleslides:slidetitle:}\c!style\c!color{#1}}}%
     \simpleslidesslidetitleparameter\c!after}
 
+\defineSlideTitleAlternative[page]#1%
+  {\page[\simpleslidesslidetitleparameter\c!page]%
+   %\simpleslidesslidetitleparameter\c!before
+   \setlayer[simpleslides:layer:page]%
+     [\c!preset=\simpleslidesslidetitleparameter\c!preset,
+      \c!hoffset=\simpleslidesslidetitleparameter\c!hoffset,
+      \c!voffset=\simpleslidesslidetitleparameter\c!voffset]
+     {\getvalue{simpleslides:framed:page}
+       [\c!align=\simpleslidesslidetitleparameter\c!align]
+        {\let\\\crlf\doattributes{\??vars:simpleslides:slidetitle:}\c!style\c!color{#1}}}}
+    %\simpleslidesslidetitleparameter\c!after}
+
 
 %D Now the main user command
 
@@ -430,6 +480,7 @@
     \processaction[#1]
       [\v!horizontal=>{\doIncludePictureHorizontal[#2]{#4}},
          \v!vertical=>{\doIncludePictureVertical[#2]{#4}},
+             \v!page=>{\doIncludePicturePage[#2]{#4}},
           \v!default=>{\doIncludePictureHorizontal[#2]{#4}},
           \v!unknown=>{\doIncludePictureHorizontal[#2]{#4}}%
                        \message{Keywords for positioning pictures are
@@ -444,20 +495,20 @@
 %D the available space. Small pictures will be enlarged, big pictures will be
 %D fit. This code was suggested by Wolfgang Schuster on the mailing list.
 
-\def\setPictureDimensionsTo#1#2% graphic width 
+\def\setPictureDimensionsTo#1#2#3% graphic height width 
   {\doifelsenothing{\simpleslidesPictureParameter\c!width}
      {\doifelsenothing{\simpleslidesPictureParameter\c!height}
         {\setbox\scratchbox\hbox{\externalfigure[#1]
           [\c!page=\simpleslidesPictureParameter\c!page]}
         % Courtsey Wolfgang Schuster
-        \ifdim\dimexpr#2*100/\wd\scratchbox\relax < 
-              \dimexpr\PictureFrameHeight*100/\ht\scratchbox\relax
+        \ifdim\dimexpr#3*100/\wd\scratchbox\relax < 
+              \dimexpr#2*100/\ht\scratchbox\relax
           %
-          \setvalue{simpleslides:picture:width}{#2}%
+          \setvalue{simpleslides:picture:width}{#3}%
           \setvalue{simpleslides:picture:height}{}%
         \else
           \setvalue{simpleslides:picture:width}{}%
-          \setvalue{simpleslides:picture:height}{\PictureFrameHeight}%
+          \setvalue{simpleslides:picture:height}{#2}%
         \fi}
      {\setvalue{simpleslides:picture:width}{}%
       \setvalue{simpleslides:picture:height}{\simpleslidesPictureParameter\c!height}}}
@@ -487,7 +538,7 @@
 %D This macro places the picture in horizontal mode.
 
 \def\doIncludePictureHorizontal[#1]#2% graphic text
- {\setPictureDimensionsTo{#1}\textwidth
+ {\setPictureDimensionsTo{#1}\PictureFrameHeight\textwidth
   \SlideTitle{#2}%
   \doplacePictureFrame
     [\c!width=\textwidth,
@@ -502,7 +553,7 @@
 
 \def\doIncludePictureVertical[#1]#2% graphic text
   {\page
-   \setPictureDimensionsTo{#1}\PictureFrameWidth
+   \setPictureDimensionsTo{#1}\PictureFrameHeight\PictureFrameWidth
     \setupPageBackground[vertical]
     \startcombination[2]
       {\doplacePictureFrame
@@ -524,6 +575,21 @@
                 \c!align=\v!middle,
                 \c!strut=\v!no]{#2}}{}
     \stopcombination
+    \page}% Otherwise last page is not correct in \MKII.
+
+%D This macro places the picture in full page mode
+
+\def\doIncludePicturePage[#1]#2% graphic text
+ {%\setPictureDimensionsTo{#1}{0.95\paperheight}{0.95\paperwidth}
+  \getvalue{simpleslides:slidetitle:page}{#2}%
+  \setupPageBackground[page]%
+  \doplacePictureFrame
+    [\c!width=\paperwidth,
+     \c!height=\paperheight]
+    {\externalfigure[#1]
+                    [\c!height=\paperheight,
+                      \c!width=\paperwidth,
+                       \c!page=\simpleslidesPictureParameter\c!page]}%
     \page}% Otherwise last page is not correct in \MKII.
    
 %D Now, we define the main \METAPOST\ graphic to highlight the picture. It first
