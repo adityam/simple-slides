@@ -23,10 +23,12 @@
           <cd:constant type="FramedTitle"/>
           <cd:constant type="HorizontalStripes"/>
           <cd:constant type="NarrowStripes"/>
+          <cd:constant type="PlainCounter"/>
           <cd:constant type="RainbowStripe"/>
           <cd:constant type="Rounded"/>
           <cd:constant type="Shaded"/>
           <cd:constant type="SideSquares"/>
+          <cd:constant type="SideToc"/>
           <cd:constant type="Split"/>
           <cd:constant type="Sunrise"/>
           <cd:constant type="Swoosh"/>
