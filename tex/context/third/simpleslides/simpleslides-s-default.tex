@@ -130,6 +130,10 @@
     [\c!width=\paperwidth,
     \c!height=\paperheight]
 
+\definelayer[simpleslides:layer:highlight]
+    [\c!width=\paperwidth,
+    \c!height=\paperheight]
+
 
 %D A generic frame which is used for titles and other commands
 
@@ -151,7 +155,9 @@
 \startsetups simpleslides:background:title
    \setuplayout[simpleslides:layout:title]
      \setupbackgrounds[\v!page]
-        [background={simpleslides:background:title}]
+        [background={simpleslides:background:title,
+                     foreground,
+                     simpleslides:layer:highlight}]
 \stopsetups
 
 \startsetups simpleslides:background:horizontal
@@ -160,7 +166,9 @@
         [background={simpleslides:background:horizontal,
                      simpleslides:background:ornament,
                      simpleslides:layer:extras,
-                     simpleslides:layer:slidetitle}]
+                     simpleslides:layer:slidetitle,
+                     foreground,
+                     simpleslides:layer:highlight}]
 \stopsetups
 
 \startsetups simpleslides:background:vertical
@@ -411,7 +419,7 @@
    direction=0,
    opacity=0.4,
    shadow=\v!no,
-   shadow\c!color=black,
+   shadow\c!color=gray,
    verticalbackground=none,
    verticalbackgroundcolor=simpleslides:backgroundcolor,
    verticalforegroundcolor=simpleslides:textcolor,
