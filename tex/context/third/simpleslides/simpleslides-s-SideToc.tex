@@ -74,46 +74,6 @@
 %D typeset in the left margin. It is inspired by something Hans did in
 %D s-pre-19. The Difference is that I wanted the Topic to be independent from
 %D SlideTitle macro. This way, several slides can be combined into one Topic.
-%D Here are the main macros for defining and typesetting this list.:
-
-\definelist[MyTopics][criterium=all]
-
-\def\MyMark{}
-
-\def\Topic%
-  {\dosingleargument\doTopic}
-
-\def\doTopic[#1]{%
-  \def\MyMark{#1}%
-  \writetolist[MyTopics]{#1}{}%
-}
-
-\define[3]\FancyEntry
- {\doifelse{#1}{\MyMark} %
-    {\framed[width=3.5cm,
-	     height=4ex,
-	     align=middle,
-	     frame=off,
-	     framecolor=red,
-	     background=color,
-	     backgroundcolor=simpleslides:altcontrastcolor,
- 	     foregroundcolor=simpleslides:backgroundcolor]
-	    {\switchtobodyfont[14pt]#1}}% fancy layout
-    {\framed[width=3.5cm,
-	     height=4ex,
-	     align=middle,
-	     frame=off,
-	     framecolor=red,
- 	     foregroundcolor=simpleslides:backgroundcolor]
-	    {\switchtobodyfont[14pt]#1}}% normal layout
-}
-
-\setuplist[MyTopics]
-          [pagenumber=no,
-           alternative=command,
-           command=\FancyEntry]
-
-\setuptexttexts[margin][\vbox{\placelist[MyTopics]}][]
 
 % \definelayer
 %   [Topiclayer]
@@ -141,11 +101,77 @@
 
 %D We define our color scheme
 
+\enablemode[\moduleparameter{simpleslides}{color}]
+
+\startmode[dark]
 \definecolor [simpleslides:backgroundcolor]   [s=.9]
 \definecolor [simpleslides:altcontrastcolor]  [b=.6]
 \definecolor [simpleslides:contrastcolor]     [s=.3]
 \definecolor [simpleslides:itemize:color]     [simpleslides:altcontrastcolor]
+\define[3]\FancyEntry
+ {\doifelse{#1}{\MyMark}%
+    {\framed[width=3.5cm,
+	     height=4ex,
+	     align=middle,
+	     frame=off,
+	     framecolor=red,
+	     background=color,
+	     backgroundcolor=simpleslides:altcontrastcolor,
+ 	     foregroundcolor=simpleslides:backgroundcolor]
+	    {\switchtobodyfont[14pt]#1}}% fancy layout
+    {\framed[width=3.5cm,
+	     height=4ex,
+	     align=middle,
+	     frame=off,
+	     framecolor=red,
+ 	     foregroundcolor=simpleslides:backgroundcolor]
+	    {\switchtobodyfont[14pt]#1}}% normal layout
+}
+\stopmode
 
+\startmode[light]
+\definecolor [simpleslides:altcontrastcolor]  [r=1,g=0.5,b=0]
+\definecolor [simpleslides:contrastcolor]     [s=0.95]
+\definecolor [simpleslides:textcolor]         [s=0]
+\definecolor [simpleslides:itemize:color]     [simpleslides:altcontrastcolor]
+\define[3]\FancyEntry
+ {\doifelse{#1}{\MyMark} %
+    {\framed[width=3.5cm,
+	     height=4ex,
+	     frame=off,
+	     align=middle,
+ 	     foregroundcolor=simpleslides:altcontrastcolor]
+	    {\switchtobodyfont[14pt]\bf #1}}% fancy layout
+    {\framed[width=3.5cm,
+	     height=4ex,
+	     align=middle,
+	     frame=off,
+	     framecolor=red,
+ 	     foregroundcolor=simpleslides:altcontrastcolor]
+	    {\switchtobodyfont[14pt]#1}}% normal layout
+}
+\stopmode
+
+%D Here are the main macros for defining and typesetting the Topic list:
+
+\definelist[MyTopics][criterium=all]
+
+\def\MyMark{}
+
+\def\Topic%
+  {\dosingleargument\doTopic}
+
+\def\doTopic[#1]{%
+  \def\MyMark{#1}%
+  \writetolist[MyTopics]{#1}{}%
+}
+
+\setuplist[MyTopics]
+          [pagenumber=no,
+           alternative=command,
+           command=\FancyEntry]
+
+\setuptexttexts[margin][\vbox{\placelist[MyTopics]}][]
 
 %D We use \METAPOST to draw the background.
 
