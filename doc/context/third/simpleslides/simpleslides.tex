@@ -92,6 +92,7 @@
 \definetype[typeTEX][option=tex, style=type]
 \definetype[command][color=darkred, style=type]
 \definetype[options][color=darkblue, style=type]
+\definetyping[TEX][option=tex, before=\startEXAMPLE,after=\stopEXAMPLE]
 
 \setupindenting[medium,yes]
 \setupwhitespace[medium]
@@ -121,12 +122,11 @@
      rulethickness=1pt,
         framecolor=darkred,
              width=broad,
+            height=fit,
         leftoffset=1em,
        rightoffset=1em,
-            before={\testpage[2]\blank[big]},
-             after={\blank[big]}
-%           before={\testpage[3]\blank[3*big]},
-%            after={\blank[3*big]}
+            before={\testpage[3]\blank[2*big]},
+             after={\blank},
     ]
 
 \startuseMPgraphic{background:random}
@@ -182,9 +182,7 @@
        rightoffset=1em,
              align=right,
             before={\testpage[3]\blank[2*big]},
-             after={\endgraf\blank[big]}
-%           before={\testpage[3]\blank[3*big]},
-%            after={\blank[3*big]}
+             after={\blank\testpage[2]},
     ]
 
 %% There gotta be a better way to configure this!
@@ -229,7 +227,7 @@
             \ignorespaces\XMLflush{cd:arguments}\endgraf
             %\endgraf
           \egroup
-        \stopXMLmapping}
+        \stopXMLmapping}%
      \stopXMLmapping
    \getvalue{\e!stop setuptext}}
 
@@ -395,16 +393,14 @@ know how to fix some of the errors with \XETEX, we will appreciate the help.
 First you must tell \CONTEXT\ that you want to use this module. To do this
 simply write:
 
-\startEXAMPLE
 \startTEX
 \usemodule[simpleslides]
 \stopTEX
-\stopEXAMPLE
 
-This sets the paper size and font sizes to values that are suitable for
+The module sets the paper size and font sizes to values that are suitable for
 presentations. Everything else is left like a default \CONTEXT\ document. The
-module provides different styles that change the visual appearance of the
-presentation. The following styles are provided:
+module comes with the following styles that change the visual appearance of the
+presentation.
 \startitemize[columns, three]
   \item \options{BigNumber}
   \item \options{BottomSquares}
@@ -415,6 +411,7 @@ presentation. The following styles are provided:
   \item \options{FramedTitle}
   \item \options{HorizontalStripes}
   \item \options{NarrowStripes}
+  \item \options{PlainCounter}
   \item \options{RainbowStripe}
   \item \options{Rounded}
   \item \options{Shaded}
@@ -427,18 +424,16 @@ presentation. The following styles are provided:
 \stopitemize
 
 To use a style, say \options{BigNumber}, pass the \options{style=BigNumber}
-option to the \filename{simpleslides} module as follows.
+option to the \filename{simpleslides} module:
 
-\startEXAMPLE
 \startTEX
 \usemodule[simpleslides]
           [style=BigNumber]
 \stopTEX
-\stopEXAMPLE
 
 Some of the styles have a few variants that can be chosen using
 \options{color} and \options{alternative} keys. These are explained in \in
-Section[sec:styles].
+{Section}[sec:styles].
 
 By default, the Latin Modern Sans font is used. The module makes it easy to
 use other fonts that come with a typical \TEX\ distribution. 
@@ -457,19 +452,17 @@ The following fonts are provided:
 
 To choose a font, say \options{Helvetica}, pass \options{font=Helvetica} option
 to the \filename{simpleslides} module as follows.
-\startEXAMPLE
 \startTEX
 \usemodule[simpleslides]
           [style=BigNumber,
             font=Helvetica]
 \stopTEX
-\stopEXAMPLE
 
-By default, the chosen font is used at 17pt size. The font size can be changed
-using the \options{size} key.
+The default font size is 17pt. Font size can be changed using 
+the \options{size} key.
 
 More details about the fonts, including information on how to use your own fonts
-is given in \in Section[sec:fonts]. 
+is given in \in{Section}[sec:fonts]. 
 
 The complete setup for using this module is
 \setup{simpleslides}
@@ -479,45 +472,6 @@ The complete setup for using this module is
 The \filename{simpleslides} module has a very simple model of a presentation. A
 presentation consists of a title followed by a series of slides; the module
 provides macros to help create a presentation title page and slides.
-
-\subsubject{Presentation title page}
-
-A presentation title page displays the title of the presentation, the names of
-the authors, and the date.
-%% TODO: Also add institution and detail.
-These can be specified using \typeTEX{\setupTitle} as follows:
-\startEXAMPLE
-\startTEX
-\setupTitle
-  [ title={Title of the presentation},
-   author={Name of authors},
-     date={Date of presentation},
-  ]
-\stopTEX
-\stopEXAMPLE
-
-The macro \typeTEX{\placeTitle} places the title page in the presentation. It is
-possible to change the look of \typeTEX{\placeTitle} using some additional
-arguments to \typeTEX{\setupTitle}. These are explained in \in
-Section[sec:setuptitle].
-
-\subsubject{Presentation slide}
-
-The \filename{simpleslides} module provides a \typeTEX{\SlideTitle} macro, which
-starts a new slide (basically a new page), and typesets its argument as the
-title of the slide. It also takes care of increasing the page counters and
-progress bars, and setting up the background. The content of the slides follows
-after this command.
-
-A slide is a normal \CONTEXT\ page, so you can use any command or environment
-that you want. Each presentation style sets up a style for itemizations, and
-provides useful macros for placing pictures. These macros will be explained
-later.
-
-\adaptlayout[lines=+2]
-
-\subsubject{A minimal presentation}
-
 A minimal presentation is shown below. The result is shown in \in
 Figure[fig:example].
 
@@ -552,6 +506,40 @@ Figure[fig:example].
 
 
 
+\subsubject{Presentation title page}
+
+A presentation title page displays the title of the presentation, the names of
+the authors, and the date.
+%% TODO: Also add institution and detail.
+These can be specified using \typeTEX{\setupTitle} as follows:
+\startTEX
+\setupTitle
+  [ title={Title of the presentation},
+   author={Name of authors},
+     date={Date of presentation},
+  ]
+\stopTEX
+
+The macro \typeTEX{\placeTitle} places the title page in the presentation. It is
+possible to change the look of \typeTEX{\placeTitle} using some additional
+arguments to \typeTEX{\setupTitle}. These are explained in \in
+{Section}[sec:setuptitle].
+
+\subsubject{Presentation slide}
+
+The \filename{simpleslides} module provides a \typeTEX{\SlideTitle} macro, which
+starts a new slide (basically a new page), and typesets its argument as the
+title of the slide. It also takes care of increasing the page counters and
+progress bars, and setting up the background. The content of the slides follows
+after this command.
+
+A slide is a normal \CONTEXT\ page, so you can use any command or environment
+that you want. Each presentation style sets up a style for itemizations, and
+provides useful macros for placing pictures. These macros will be explained
+later.
+
+
+
 \section{Placing pictures}
 
 If you want to place pictures in your slides, you can always use \CONTEXT's
@@ -564,75 +552,70 @@ provided:
   \item \options{vertical}: the slide is divided into two columns; the picture is
     placed on the left column and text is placed on the right column.
 \stopitemize
-These layouts are shown in \in Figure[fig:pictures].
+These layouts are shown in \in{Figure}[fig:pictures].
 
-\page
-
-% \placefigure
-%   [top,bottom]
-%   [fig:pictures]
-%   {Example of \options{horizontal} and \options{vertical} options for 
-%   \typeTEX{\IncludePicture} macro}
-%   \startcombination[2*2]
-%     \startEXAMPLEframe[width=0.55\textwidth]
-% \startTEX
-%   \usemodule[simpleslides]
-%             [...]
-%   \starttext
-%   ...
-%   \IncludePicture
-%       [horizontal]
-%       [cow]
-%       {A Dutch Cow}
-%   ...
-%   \stoptext
-% \stopTEX
-%     \stopEXAMPLEframe
-%     {A horizontal picture}
-%     {\externalfigure[styles/BigNumber-blue]
-%                     [page=3,width=0.55\textwidth]}{A horizontal picture}
-%     \startEXAMPLEframe[width=0.55\textwidth]
-% \startTEX
-%   \usemodule[simpleslides]
-%             [...]
-%   \starttext
-%   ...
-%   \IncludePicture
-%       [vertical]
-%       [mill]
-%       {The windmills are an example of a green energy source} 
-%   ...
-%   \stoptext
-% \stopTEX
-%     \stopEXAMPLEframe
-%     {A vertical picture}
-%     {\externalfigure[styles/BigNumber-blue]
-%                     [page=10,width=0.55\textwidth]}{A vertical picture}
-% \stopcombination
+\placefigure
+  [top,bottom]
+  [fig:pictures]
+  {Example of \options{horizontal} and \options{vertical} options for 
+  \typeTEX{IncludePicture} macro}
+  %FIXME: Change caption to \IncludePicture ..
+  \startcombination[2*2]
+    \startEXAMPLEframe[width=0.55\textwidth]
+\startTEX
+  \usemodule[simpleslides]
+            [...]
+  \starttext
+  ...
+  \IncludePicture
+      [horizontal]
+      [cow]
+      {A Dutch Cow}
+  ...
+  \stoptext
+\stopTEX
+    \stopEXAMPLEframe
+    {A horizontal picture}
+    {\externalfigure[styles/BigNumber-blue]
+                    [page=3,width=0.55\textwidth]}{A horizontal picture}
+    \startEXAMPLEframe[width=0.55\textwidth]
+\startTEX
+  \usemodule[simpleslides]
+            [...]
+  \starttext
+  ...
+  \IncludePicture
+      [vertical]
+      [mill]
+      {The windmills are an example of a green energy source} 
+  ...
+  \stoptext
+\stopTEX
+    \stopEXAMPLEframe
+    {A vertical picture}
+    {\externalfigure[styles/BigNumber-blue]
+                    [page=10,width=0.55\textwidth]}{A vertical picture}
+\stopcombination
 
 A horizontal picture is placed as follows:
-\startEXAMPLE
 \startTEX
 \IncludePicture
   [horizontal]
   [filename]  % Name of the file that contains the picture
   {Title of the slide}
 \stopTEX
-\stopEXAMPLE
 
 while a vertical picture is placed as follows:
-\startEXAMPLE
 \startTEX
 \IncludePicture
   [vertical]
   [filename]  % Name of the file that contains the picture
   {Text that is placed on the right of the picture}
 \stopTEX
-\stopEXAMPLE
 
 It is possible to change the height and width of the pictures, or 
 highlight them with circles and arrows. These details can be found in \in
-Section[sec:pictures]
+{Section}[sec:pictures]
 
 \page
 
@@ -685,11 +668,9 @@ manual.
 \ShowStyle {Embossed}
 
 If you are shy, or narcissistic, you can change the emblem by
-\startEXAMPLE
 \startTEX
 \setuplabeltext  [simpleslidesemblem={I made this presentation}]
 \stopTEX
-\stopEXAMPLE
 
 \page
 
@@ -857,7 +838,6 @@ If you want to set up your own font, pick any value for the \options{font} key
 commands. Make sure to set the bodyfont at size \typeTEX{\NormalSize}. So, if
 you have your own typescript for a font, your setup will look like this:
 
-\startEXAMPLE
 \startTEX
 \usemodule[simpleslides][...]
 ....
@@ -865,7 +845,6 @@ you have your own typescript for a font, your setup will look like this:
 \usetypescript[Mytypescript]       % As set in your typescript file
 \setupbodyfont[Myfont,\NormalSize] % Note the \NormalSize here
 \stopTEX
-\stopEXAMPLE
 
 Internally, the font size is stored in the macro \typeTEX{\NormalSize}. The main
 text is set at size \typeTEX{\NormalSize}; the main title is set at
@@ -940,7 +919,7 @@ Below is a brief explanation of what the different parameters do:
     This key determines the highlighting of the picture. If you set,
     \options{highlight=yes}, then you can use one of the three available
     highlights: \options{circle}, \options{arrow}, and \options{focus}. These
-    highlights are shown in \in Figure[fig:highlight]. The specific highlight is
+    highlights are shown in \in{Figure}[fig:highlight]. The specific highlight is
     chosen using the \options{alternative} key. The location of the highlight is
     specified using the \options{x} and \options{y} keys. The scaling and
     rotation of the highlights is set using \options{xscale}, \options{yscale},
@@ -975,7 +954,7 @@ presentation style. The dimensions \options{x} and \options{y} should be a
 number between 0 and 10. The \options{x} is scaled by 1/10 times the width of
 the image; the \options{y} value is scaled by 1/10 times the height of the
 image. The easiest way to understand this is to look at a scaled grid
-superimposed on the picture, as in \in Figure[fig:grid]. The grid is configured
+superimposed on the picture, as in \in{Figure}[fig:grid]. The grid is configured
 as follows:
 
 \startitemize[packed]
@@ -1012,7 +991,7 @@ as follows:
 Now lets see how different highlight alternatives are specified. Suppose we want
 to place the picture of a cow and highlight its head. To help determine the
 center of the circle, we can first superimpose a fine grid on the picture, and
-read the value for the center. From \in Figure[fig:grid], \options{x=1.4} and
+read the value for the center. From \in{Figure}[fig:grid], \options{x=1.4} and
 \options{y=8.2} seems like a good value. Next we need to decide on the radius of
 the circle. The radius can either be specified in terms of the \quotation{x
 units} (1/10th of the picture width) or \quotation{y units} (1/10th of the
@@ -1020,9 +999,8 @@ picture height). Lets try a radius of 1.5 \quotation{x units}. This can be
 specified as \options{xscale=1.5}. If we wanted something in terms of
 \quotation{y units}, we could have used \options{yscale}. If both
 \options{xscale} and \options{yscale} are specified, we will get an ellipse. 
-Thus, to draw the circle highlight shown in \in Figure[fig:highlight], we wrote
+Thus, to draw the circle highlight shown in \in{Figure}[fig:highlight], we wrote
 
-\startEXAMPLE
 \startTEX
 \IncludePicture
   [horizontal]
@@ -1035,7 +1013,6 @@ Thus, to draw the circle highlight shown in \in Figure[fig:highlight], we wrote
    shadow=bottomleft]
   {The head of a dutch cow}
 \stopTEX
-\stopEXAMPLE
 
 If \options{direction} key is specified, the circle (or the ellipse) will be
 rotated by that amount (in degrees) in the counter clockwise direction. The
@@ -1071,7 +1048,6 @@ arrow. An arrow is specified by three things, the location of its tip, given by
 \options{length} key; and the direction of the tail, given by
 \options{direction} key. Thus, to draw the arrow highlight shown in \in
 Figure[fig:highlight], we wrote
-\startEXAMPLE
 \startTEX
 \IncludePicture
   [horizontal]
@@ -1085,7 +1061,6 @@ Figure[fig:highlight], we wrote
    shadow=bottomleft]
   {The mouth of a dutch cow}
 \stopTEX
-\stopEXAMPLE
 
 The different keys related to \options{alternative=arrow} are:
 \startitemize[packed]
@@ -1117,9 +1092,8 @@ and \options{color} do not have any effect. The area other than the focussed
 area is washed out with a transparent color. The degree to which it is washed
 out is determined by \options{opacity} (default value 0.5), and the color of the
 unfocussed area is determined by \options{shadowcolor} (default value black).
-Thus, to draw the focus highlight shown in \in Figure[fig:highlight], we wrote
+Thus, to draw the focus highlight shown in \in{Figure}[fig:highlight], we wrote
 
-\startEXAMPLE
 \startTEX
 \IncludePicture
   [horizontal]
@@ -1131,7 +1105,6 @@ Thus, to draw the focus highlight shown in \in Figure[fig:highlight], we wrote
    xscale=1.5]
   {The head of a dutch cow}
 \stopTEX
-\stopEXAMPLE
 
 The different keys related to \options{alternative=focus} are:
 \startitemize[packed]
