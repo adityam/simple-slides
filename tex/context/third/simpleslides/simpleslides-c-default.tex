@@ -1,0 +1,154 @@
+%D \module
+%D   [      file=simpleslides-c-default,
+%D        version=2010.09.20
+%D          title=\CONTEXT\ Style File,
+%D       subtitle=Presentation Module simpleslides --- Default counter setup,
+%D         author=Aditya Mahajan and Thomas A. Schmitz,
+%D           date=\currentdate,
+%D      copyright={Aditya Mahajan and Thomas A. Schmitz}]
+%C
+%C Copyright 2010 Aditya Mahajan and Thomas A. Schmitz
+%C This file may be distributed under the GNU General Public License v. 2.0.
+
+\writestatus{simpleslides}{loading default counter setup}
+
+\startmodule[simpleslides-c-default]
+
+\unprotect
+
+%D Attempt to make the counters for the simpleslides module more "modular."
+%D This file is called by t-simpleslides.tex and provides the metapost code for
+%D page counters which are then included in the backgrounds of the style
+%D modules.
+
+% \def\setupSlideCounter%
+%  {\dosingleargument\dosetupSlideCounter}
+% 
+% \def\dosetupSlideCounter[#1]%
+%   {\setvariables[simpleslides:counter]
+%                 [#1]}
+% 
+% \processaction
+%   [\getvariable{simpleslides:counter}{alternative}]
+%   [        a=>\def\simpleslidescounter{simpleslides:shaded:counter1},
+%            b=>\def\simpleslidescounter{simpleslides:shaded:counter2},
+%            c=>\def\simpleslidescounter{simpleslides:shaded:counter3},
+%   \v!default=>\def\simpleslidescounter{simpleslides:shaded:counter1},
+%   \v!unknown=>\def\simpleslidescounter{simpleslides:shaded:counter1}]
+
+\def\simpleslidescounter{simpleslides:shaded:counter4}
+
+\startuseMPgraphic{simpleslides:shaded:counter1}
+save p ; path p[] ;
+save a ; 
+if NOfPages <= 15:
+	a = 0.7cm ;
+elseif NOfPages <= 30:
+	a = 0.45cm ;
+else :
+	a = 0.25cm ;
+fi ;
+save factor ; numeric factor ;
+factor = (TextWidth - a)/(NOfPages - 2) ;
+for i = 2 upto NOfPages :
+	p[i] = unitcircle scaled a shifted (BackSpace + (i-2)*factor, (2cm - a)/2) ;
+	if i = PageNumber :
+		pickup pencircle scaled 5pt ;
+		drawfill p[i] withcolor \MPcolor{simpleslides:variantcolor} ;
+	else :
+		circular_shade(p[i],2,\MPcolor{simpleslides:backgroundcolor}, \MPcolor{simpleslides:variantcolor}) ;
+	fi
+endfor ;
+\stopuseMPgraphic
+
+\startuseMPgraphic{simpleslides:shaded:counter2}
+save a,b ;
+numeric a,b ;
+a = 7mm ;
+b = PaperWidth/2 - NOfPages * 2.5pt ;
+
+save p,q; path p,q ;
+p =((0,5mm)    -- (1mm,11mm)) shifted (b,0) ;
+q =((-8mm,5mm) -- (0,11mm)  ) shifted (b,0) ;
+
+pickup pencircle scaled 3pt ;
+for i := NOfPages-1 downto 1:
+  draw (if i mod 5 = 0 : q else : p fi)
+       shifted (i*5pt, 0pt)
+       withcolor if i < PageNumber : \MPcolor{simpleslides:variantcolor} 
+                 else :              \MPcolor{simpleslides:contrastcolor}
+                 fi ;
+endfor ;
+\stopuseMPgraphic
+
+\startuseMPgraphic{simpleslides:shaded:counter3} 
+save diff ;numeric diff; 
+if NOfPages <= 25:
+	diff = 0.4cm ;
+elseif NOfPages <= 35:
+	diff = 0.3cm ;
+else :
+	diff = 0.2cm ;
+fi ;
+
+save factor; numeric factor; 
+factor = TextWidth/(NOfPages - 2) ;
+
+save p; path p ;
+p = unitsquare xyscaled (diff,diff) 
+               shifted (BackSpace,0.85cm) ;
+
+for i = 2 upto NOfPages:
+  if PageNumber = i:
+    fill p xyscaled (0,2) shifted ( (i-2)*factor,-diff-0.85cm) 
+         withcolor \MPcolor{simpleslides:contrastcolor} ;
+  else :
+    fill p shifted ( (i-2)*factor, 0) 
+         withcolor \MPcolor{simpleslides:variantcolor} ;
+  fi ;
+endfor ;
+\stopuseMPgraphic 
+
+\startuseMPgraphic{simpleslides:shaded:counter4}
+save p ;
+path p[] ;
+linejoin := rounded ;
+
+p[1] := unitsquare xyscaled(TextWidth,1cm) shifted (BackSpace,0.8cm) ;
+save i ;
+numeric i; 
+i = PageNumber/NOfPages ;
+
+p[2] = ulcorner p[1] -- urcorner p[1] ;
+p[3] = llcorner p[1] -- lrcorner p[1] ;
+
+save o;
+pair o[] ;
+
+o[1] := point i along p[2] ;
+o[2] := point i along p[3] ;
+
+p[4] = ulcorner p[1] -- o[1] -- o[2] -- llcorner p[1] -- cycle ;
+
+fill p[1] withcolor 0.7\MPcolor{simpleslides:backgroundcolor} ;
+fill p[4] withcolor \MPcolor{simpleslides:contrastcolor} ;
+
+pickup pencircle scaled 1pt ;
+draw ulcorner p[1] -- urcorner p[1] -- lrcorner p[1] withcolor 0.3white ;
+draw lrcorner p[1] -- llcorner p[1] -- ulcorner p[1] withcolor 0.8white ;
+
+%clip currentpicture to p[4] ;
+
+% linear_shade(p[1],0,white,red) ;
+% 
+% %            \MPcolor{simpleslides:backgroundcolor},
+% %            \MPcolor{simpleslides:contrastcolor}) ;
+% 
+% 
+% 
+% 
+\stopuseMPgraphic
+
+\protect
+
+\stopmodule
