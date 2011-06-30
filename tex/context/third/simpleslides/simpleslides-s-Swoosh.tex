@@ -32,7 +32,11 @@ fi ;
 \stopsetups
 
 \startsetups simpleslides:setups:dot
+\setuplayout [simpleslides:layout:horizontal][header=3cm,footer=0cm]
 \startuseMPgraphic{simpleslides:MP:counter}
+if NOfPages > 1:
+  numeric prog ; prog = PageNumber/NOfPages - 0.005 ;
+fi ;
 if PageNumber > 1:
   if condition = 1:
     z11 = (prog * PaperWidth, PaperHeight) ;
@@ -40,16 +44,17 @@ if PageNumber > 1:
     z13 = (z11 -- z12) intersectionpoint qw ;
     draw z13 withcolor \MPcolor{simpleslides:altcontrastcolor} ;
   elseif condition = 2:
-    z12 = (0, (PaperHeight - prog * PaperHeight)) ;
-    z13 = (PaperWidth, y12) ;
-    z14 = (z12 -- z13) intersectionpoint qw ;
-    draw z14 withcolor \MPcolor{simpleslides:altcontrastcolor} ;
+    z14 = (0, (PaperHeight - prog * PaperHeight)) ;
+    z15 = (PaperWidth, y14) ;
+    z16 = (z14 -- z15) intersectionpoint qw ;
+    draw z16 withcolor \MPcolor{simpleslides:altcontrastcolor} ;
   fi ;
 fi ;
 \stopuseMPgraphic
 \stopsetups
 
 \startsetups simpleslides:setups:circle
+\setuplayout [simpleslides:layout:horizontal][header=3cm]
 \startuseMPgraphic{simpleslides:MP:counter}
 save b, s, t, p, circcenter, theta, pic ;
 path p[] ;
@@ -107,7 +112,6 @@ fi ;
               backspace=1cm,
               location=singlesided]
 
-\setuplayout [simpleslides:layout:horizontal][header=3cm]
 \setuplayout [simpleslides:layout:vertical]  [header=0.8cm]
 \setuplayout [simpleslides:layout:title]     [header=0.8cm]
 
@@ -160,9 +164,6 @@ numeric c ; c = PaperWidth * 0.4 ;
 numeric d ; d = 2.2cm ;
 numeric e ; e = PaperWidth / 46.9 ;
 numeric condition ; condition = 1 ;
-if NOfPages > 1:
-  numeric prog ; prog = PageNumber/NOfPages - 0.005 ;
-fi ;
 save ql, qr, qt, qw, qnw, qc ; path ql, qr, qt, qw, qnw, qc ;
 ql = ulcorner Page -- llcorner Page ;
 qr = lrcorner Page -- urcorner Page ;
@@ -193,7 +194,9 @@ fill Page withcolor \MPcolor{simpleslides:backgroundcolor} ;
 numeric c ; c = PaperHeight * 0.4 ;
 numeric d ; d = 2.2cm ;
 numeric e ; e = PaperHeight / 46.9 ;
-numeric prog ; prog = PageNumber/NOfPages - 0.005 ;
+if NOfPages > 1:
+  numeric prog ; prog = PageNumber/NOfPages - 0.005 ;
+fi ;
 numeric condition ; condition = 2 ;
 save ql, qr, qt, qw, qc, qu, qb ; path ql, qr, qt, qw, qc, qu, qb ;
 pickup pencircle scaled 4pt ;
@@ -205,17 +208,16 @@ z7 = (x3 - 2*e, y6 - c) ;
 z8 = (x3 + 2*e, y7 - c) ;
 z9 = (x3 - 2*e, y8 - c) ;
 qw = z4 .. z6 .. z7 .. z8 .. z9 ;
-ql = ulcorner Page -- urcorner Page ;
-qr = llcorner Page -- ulcorner Page ;
-qt = llcorner Page -- lrcorner Page ;
-qw := qw shifted (0, c*0.1*uniformdeviate(10)) ; 
+qt = ulcorner Page -- urcorner Page ;
+ql = llcorner Page -- ulcorner Page ;
+qb = llcorner Page -- lrcorner Page ;
 \includeMPgraphic{simpleslides:MP:randomize} ;
-z10 = ql intersectionpoint qw ;
+z10 = qt intersectionpoint qw ;
 qu = ulcorner Page -- z10 ;
-z11 = qt intersectionpoint qw ;
-qb = z11 -- llcorner Page ;
+z11 = qb intersectionpoint qw ;
+qr = z11 -- llcorner Page ;
 qw := qw cutbefore z10 cutafter z11 ;
-fill qw -- qb & qr & qu --cycle withcolor \MPcolor{simpleslides:contrastcolor} ;
+fill qw -- qr & ql & qu -- cycle withcolor \MPcolor{simpleslides:contrastcolor} ;
 draw qw withcolor white ;
 \includeMPgraphic{simpleslides:MP:counter} ;
 StopPage ;

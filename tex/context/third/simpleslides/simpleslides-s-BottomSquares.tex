@@ -115,7 +115,7 @@ StopPage ;
 %D We want the title information to be colored
 
 \setupTitle
-  [\c!headcolor={simpleslides:contrastcolor}]
+  [color=simpleslides:contrastcolor]
 
 %D The slide title is typeset in a layer
 
@@ -126,6 +126,41 @@ StopPage ;
    \c!width=\textwidth,
    \c!height=3cm,
    \c!after=]
+
+%D attempt!
+
+\startuniqueMPgraphic{Important}
+save p, q ; path p[], q[] ;
+p[1] = unitsquare xyscaled (\overlaywidth,\overlayheight) ;
+z[1] = ulcorner p[1] ;
+z[2] = llcorner p[1] ;
+save a ; numeric a ;
+a = arclength (z[1] -- z[2])/15 ;
+z[3] = ulcorner p[1] shifted (a,0) ;
+z[4] = urcorner p[1] shifted (-a,0) ;
+z[5] = urcorner p[1] shifted (0,-a) ;
+z[6] = lrcorner p[1] shifted (0,a) ;
+z[7] = lrcorner p[1] shifted (-a,0) ;
+z[8] = llcorner p[1] shifted (a,0) ;
+z[9] = llcorner p[1] shifted (0,a) ;
+z[10] = ulcorner p[1] shifted (0,-a) ;
+z[11] = z[8] shifted (5mm,0) ;
+z[12] = z[5] shifted (0,-5mm) ;
+p[2] = z[3] --- z[4] .. z[5] --- z[6]  .. z[7] --- z[8] .. z[9] --- z[10] .. cycle ;
+q[1] = z[11] --- z[7] .. z[6] --- z[12] ;
+for i = 3 upto 22:
+	pickup pencircle scaled (i*0.5mm) ;
+	draw q[1] withcolor transparent ("normal", 0.01, black) ;
+endfor
+pickup pencircle scaled 2pt ;
+fill p[2] withcolor \MPcolor{simpleslides:contrastcolor} ;
+%draw z[8] withcolor red ;
+\stopuniqueMPgraphic
+
+\defineoverlay[VImportant][\useMPgraphic{Important}]
+
+\define[1]\Important%
+  {\blank[line]\midaligned{{\framed[height=5cm,width=0.9\textwidth,frame=off,background=VImportant,align=middle,offset=0pt,top=\vss,bottom=\vss,strut=no,foregroundcolor=simpleslides:backgroundcolor]{#1}}}}
 
 %D The symbol for the first level of itemizations. 
 

@@ -36,7 +36,7 @@
 %   \v!default=>\def\simpleslidescounter{simpleslides:shaded:counter1},
 %   \v!unknown=>\def\simpleslidescounter{simpleslides:shaded:counter1}]
 
-\def\simpleslidescounter{simpleslides:shaded:counter4}
+\def\simpleslidescounter{simpleslides:shaded:counter5}
 
 \startuseMPgraphic{simpleslides:shaded:counter1}
 save p ; path p[] ;
@@ -148,6 +148,31 @@ draw lrcorner p[1] -- llcorner p[1] -- ulcorner p[1] withcolor 0.8white ;
 % 
 % 
 \stopuseMPgraphic
+
+\startuseMPgraphic{simpleslides:shaded:counter5}
+save a,b ;
+numeric a,b ;
+save p ;
+path p ;
+p = unitsquare xyscaled (3mm,7mm) randomized 2mm shifted (BackSpace, 5mm) ;
+fill p withcolor red ;
+% a = 7mm ;
+% b = PaperWidth/2 - NOfPages * 2.5pt ;
+% 
+% save p,q; path p,q ;
+% p =((0,5mm)    -- (1mm,11mm)) shifted (b,0) ;
+% q =((-8mm,5mm) -- (0,11mm)  ) shifted (b,0) ;
+% 
+% pickup pencircle scaled 3pt ;
+% for i := NOfPages-1 downto 1:
+%   draw (if i mod 5 = 0 : q else : p fi)
+%        shifted (i*5pt, 0pt)
+%        withcolor if i < PageNumber : red 
+%                  else :              yellow
+%                  fi ;
+% endfor ;
+\stopuseMPgraphic
+
 
 \protect
 

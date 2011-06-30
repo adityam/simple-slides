@@ -118,14 +118,14 @@
 	     background=color,
 	     backgroundcolor=simpleslides:altcontrastcolor,
  	     foregroundcolor=simpleslides:backgroundcolor]
-	    {\switchtobodyfont[14pt]#1}}% fancy layout
+	    {\switchtobodyfont[13pt]#1}}% fancy layout
     {\framed[width=3.5cm,
 	     height=4ex,
 	     align=middle,
 	     frame=off,
 	     framecolor=red,
  	     foregroundcolor=simpleslides:backgroundcolor]
-	    {\switchtobodyfont[14pt]#1}}% normal layout
+	    {\switchtobodyfont[13pt]#1}}% normal layout
 }
 \stopmode
 
@@ -141,14 +141,14 @@
 	     frame=off,
 	     align=middle,
  	     foregroundcolor=simpleslides:altcontrastcolor]
-	    {\switchtobodyfont[14pt]\bf #1}}% fancy layout
+	    {\switchtobodyfont[13pt]\bf #1}}% fancy layout
     {\framed[width=3.5cm,
 	     height=4ex,
 	     align=middle,
 	     frame=off,
 	     framecolor=red,
  	     foregroundcolor=simpleslides:altcontrastcolor]
-	    {\switchtobodyfont[14pt]#1}}% normal layout
+	    {\switchtobodyfont[13pt]#1}}% normal layout
 }
 \stopmode
 
@@ -159,6 +159,7 @@
 \def\MyMark{}
 
 \def\Topic%
+%{\relax}
   {\dosingleargument\doTopic}
 
 \def\doTopic[#1]{%

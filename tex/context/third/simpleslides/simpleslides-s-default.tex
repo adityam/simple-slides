@@ -813,7 +813,7 @@
         \simpleslidesPictureParameter\c!y *OverlayHeight/10)  ;
 
   fill OverlayBox -- reverse p -- cycle
-       withcolor transparent ("normal",
+       withcolor transparent (1,
          \simpleslidesPictureParameter{opacity},
          \MPcolor{\simpleslidesPictureParameter{shadow\c!color}}) ;
 \stopuseMPgraphic
@@ -832,7 +832,7 @@
   %% I hope there were a better way to do this.
   for i = 1 upto 20 :
   shadow_draw p shifted shadow_direction 
-       withcolor transparent ("normal",
+       withcolor transparent (1,
          \simpleslidesPictureParameter{opacity}/10, % 0.1,
          \MPcolor{\simpleslidesPictureParameter{shadow\c!color}}) 
        withpen pencircle scaled (i*shadow_thickness/20) ;
