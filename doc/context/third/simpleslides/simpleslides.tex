@@ -28,50 +28,9 @@
 
 %% >>>
 %% Typescripts : <<<
-\starttypescript [serif] [dejavu]
-    \setups[font:fallback:sans]
-    \definefontsynonym [Serif]           [name:dejavuserif] 
-                       [features=default]
-    \definefontsynonym [SerifItalic]     [name:dejavuserifitalic]    
-                       [features=default]
-    \definefontsynonym [SerifBold]       [name:dejavuserifbold]       [features=default]
-    \definefontsynonym [SerifBoldItalic] [name:dejavuserifbolditalic]
-                       [features=default]
-\stoptypescript
-
-\starttypescript [sans] [dejavu]
-    \setups[font:fallback:sans]
-    \definefontsynonym [Sans]           [name:dejavusans]    
-                       [features=default]
-    \definefontsynonym [SansItalic]     [name:dejavusansoblique]    
-                       [features=default]
-    \definefontsynonym [SansBold]       [name:dejavusansbold]
-                       [features=default]
-    \definefontsynonym [SansBoldItalic] [name:dejavusansboldoblique] 
-                       [features=default]
-\stoptypescript
-
-\starttypescript [mono] [dejavu]
-    \setups[font:fallback:mono]
-    \definefontsynonym [Mono]           [name:dejavusansmono]   
-                       [features=default]
-    \definefontsynonym [MonoItalic]     [name:dejavusansmonooblique]    
-                       [features=default]
-    \definefontsynonym [MonoBold]       [name:dejavusansmonobold]      
-                       [features=default]
-    \definefontsynonym [MonoBoldItalic] [name:dejavusansmonoboldoblique]
-                       [features=default]
-\stoptypescript
-
-\starttypescript [dejavu]
-    \definetypeface [dejavu] [rm] [serif] [dejavu] [default]
-    \definetypeface [dejavu] [ss] [sans]  [dejavu] [default]
-    \definetypeface [dejavu] [tt] [mono]  [dejavu] [default]
-    \definetypeface [dejavu] [mm] [math]  [modern] [default]
-\stoptypescript
 
 \setupbodyfontenvironment[default][em=italic]
-\usetypescript[dejavu]
+
 \setupbodyfont[dejavu,10pt]
 
 %% >>>
@@ -93,13 +52,14 @@
 \definetype[command][color=darkred, style=type]
 \definetype[options][color=darkblue, style=type]
 \definetyping[TEX][option=tex, before=\startEXAMPLE,after=\stopEXAMPLE]
+\definetyping[SIMPLETEX][option=tex]
 
 \setupindenting[medium,yes]
 \setupwhitespace[medium]
 
-\setuphead[title][alternative=middle, textstyle=sansbold] 
+\setuphead[title][alternative=middle, textstyle=\ss\bf] 
 \setuphead[section,subsubject,subsection]
-          [numberstyle=sansbold,textstyle=sansbold]
+          [numberstyle=\ss\bf,textstyle=\ss\bf]
 
 \setuplistalternative[a]
     [distance=0pt,width=1em,stretch=10em,
@@ -145,6 +105,7 @@
     [EXAMPLEframe]
     [rulethickness=1pt,
         framecolor=darkred,
+            height=6.55cm,
              width=broad,
         background=color,
    backgroundcolor=gray,
@@ -167,7 +128,12 @@
 
 %% >>>
 %% Interface <<<
+
+\definecolor [colorprettyone]   [r=.6,g=.0,b=.0]  % red
+\definecolor [colorprettytwo]   [r=.0,g=.6,b=.0]  % green
+\definecolor [colorprettythree] [r=.0,g=.0,b=.6]  % blue
 \definecolor[colorprettyfour][orange]
+
 \usemodule[int-load]
 \loadsetups[cont-en.xml]
 \loadsetups[t-simpleslides.xml]
@@ -340,14 +306,14 @@ The salient features of this module are:
     a new style is also easy.
 \stopitemize
 
-This module provides a simple structure that will be suitable for beginning or
-intermediate users of \CONTEXT, or someone who does not want to spend too much
-time playing around with different configuration options for \CONTEXT. As such
-it focusses on different users than Hans's presentation modules that provide
-more fancier features. This module also offers much less features than the
-\LATEX\ \filename{beamer} package. Its main strength is its ease of use; you
-should be able to write your first presentation after spending five minutes with
-this manual.
+This module provides a simple structure that will be suitable for beginning
+or intermediate users of \CONTEXT, or someone who does not want to spend
+too much time playing around with different configuration options for
+\CONTEXT. As such it focusses on different users than Hans's presentation
+modules that provide more and fancier features. This module also offers
+much less features than the \LATEX\ \filename{beamer} package. Its main
+strength is its ease of use; you should be able to write your first
+presentation after spending five minutes with this manual.
 
 \section{A bit of history}
 
@@ -365,7 +331,7 @@ Thomas wrote some presentation related macros (see the Prac\TEX\ article
 {\tt\from[practex]}). With time, he extended these macros into a collection of
 styles providing different visual effects, and later collected all of them in
 the \filename{taspresent} module. He gave a talk about the
-\filename{taspresent} module in in the second \CONTEXT\ user meeting at Bohinj,
+\filename{taspresent} module at the second \CONTEXT\ user meeting at Bohinj,
 and in the ensuing discussions, Aditya and Thomas decided to modularize and
 \quotation{\CONTEXT{ize}} some of the internals of the module, giving rise to
 the current module. Most of the code in the current release has been
@@ -374,11 +340,11 @@ contributed by Aditya.
 \section{Installation}
 
 The module is installed in the usual way: simply unzip the archive
-\filename{t-simpleslides-<date>.zip} into one of your \filename{$TEXMF} trees,
-and from a terminal run \command{mktexlsr} (for \MKII) and \command{luatools
---generate} (for \MKIV). To verify that everything was installed correctly, from
-a terminal run \command{kpsewhich t-simpleslides.tex} (for \MKII) and
-\command{luatools t-simpleslides.tex} (for \MKIV); these commands should return
+\filename{t-simpleslides-<date>.zip} into one of your \filename{$TEXMF}
+trees, and from a terminal run \command{mktexlsr} (for \MKII) and
+\command{mtxrun --generate} (for \MKIV). 
+
+To verify that everything was installed correctly, run \command{kpsewhich t-simpleslides.tex} from a terminal (for \MKII) and \command{mtxrun --locate t-simpleslides.tex} (for \MKIV); these commands should return
 the complete path of the files that you just installed.
 
 \subsubject{A note about \TEX|-|engines}
@@ -473,7 +439,7 @@ The \filename{simpleslides} module has a very simple model of a presentation. A
 presentation consists of a title followed by a series of slides; the module
 provides macros to help create a presentation title page and slides.
 A minimal presentation is shown below. The result is shown in \in
-Figure[fig:example].
+{Figure}[fig:example].
 
 \startEXAMPLE
 \typefile[option=tex]{example.tex}
@@ -485,7 +451,7 @@ Figure[fig:example].
   {A minimal presentation}
   \startcombination[2*2]
     \startEXAMPLEframe[width=0.55\textwidth]
-\startTEX
+\startSIMPLETEX
   \usemodule[simpleslides]
             [style=BigNumber]
   \setupTitle[...]
@@ -496,7 +462,7 @@ Figure[fig:example].
   \SlideTitle{...}
   ...
   \stoptext
-\stopTEX
+\stopSIMPLETEX
     \stopEXAMPLEframe
     {A minimal example}
     {\externalfigure[example][page=1,width=0.55\textwidth]}{Title page}
@@ -562,7 +528,7 @@ These layouts are shown in \in{Figure}[fig:pictures].
   %FIXME: Change caption to \IncludePicture ..
   \startcombination[2*2]
     \startEXAMPLEframe[width=0.55\textwidth]
-\startTEX
+\startSIMPLETEX
   \usemodule[simpleslides]
             [...]
   \starttext
@@ -573,7 +539,7 @@ These layouts are shown in \in{Figure}[fig:pictures].
       {A Dutch Cow}
   ...
   \stoptext
-\stopTEX
+\stopSIMPLETEX
     \stopEXAMPLEframe
     {A horizontal picture}
     {\externalfigure[styles/BigNumber-blue]
@@ -630,7 +596,7 @@ styles are shown below along with the details of their variants.
 
 This is a style with subdued and quiet colors; its characteristic feature is the
 page number on the lower right border of the text area. This detail was inspired
-by {\em split} style (\filename{s-pre-14}) by Hans.
+by the {\em split} style (\filename{s-pre-14}) by Hans.
 
 \ShowStyle {BigNumber-blue}
 \page
@@ -662,7 +628,7 @@ The light red stripe marks the progress.
 \subsubject{Embossed}
 
 Spread the word, don't be shy! Show your pride in using \CONTEXT. The color
-theme will probably look familiar; I copied it from the \filename{enattab}
+theme will probably look familiar; we copied it from the \filename{enattab}
 manual. 
 
 \ShowStyle {Embossed}
@@ -676,12 +642,12 @@ If you are shy, or narcissistic, you can change the emblem by
 
 \subsubject{Framed: with \options{alternative=square}}
 
-This style was inspired by {\em green} style (\filename{s-pre-02}) by Hans. It
-has a thick blue frame around the entire slide area and a thinner frame around
-the text area. The style has two options for alternative:
-\options{alternative=stripe} will display a shaded blue area which will grow with
-each slide; \options{alternative=square} displays a row of blue squares at the bottom
-which also measure the presentation's progress.  
+This style was inspired by the {\em green} style (\filename{s-pre-02}) by
+Hans. It has a thick blue frame around the entire slide area and a thinner
+frame around the text area. The style has two options for alternative:
+\options{alternative=stripe} will display a shaded blue area which will
+grow with each slide; \options{alternative=square} displays a row of blue
+squares at the bottom which also measure the presentation's progress.
 
 \ShowStyle {Framed-square}
 \page
@@ -693,7 +659,7 @@ which also measure the presentation's progress.
 \subsubject{FramedTitle}
 
 This is a style with loud titles. Its characteristic feature is the {\em scratch
-counter} at the bottom. These are derived from Section~7.2 of the Metafun
+counter} at the bottom, which is derived from Section~7.2 of the Metafun
 manual.
 
 \ShowStyle {FramedTitle}
@@ -791,7 +757,7 @@ style also has a fancy page counter at the bottom.
 \subsubject{ThickStripes}
 
 This theme is inspired by the {\em Berkeley} style of the \LATEX's
-\filename{beamer} package. It has a stop watch at the bottom, which keeps tracks
+\filename{beamer} package. It has a stop watch at the bottom, which keeps track
 of the number of slides.
 
 \ShowStyle {ThickStripes}
@@ -891,7 +857,7 @@ such wasn't mentioned in the previous description).
 
 As explained earlier, the first argument determines whether the picture will be
 placed in horizontal or vertical layout; for examples, see \in
-Figure[fig:pictures]. The second argument is the filename of the picture that
+{Figure}[fig:pictures]. The second argument is the filename of the picture that
 you want to include. The third argument is an optional argument useful for
 highlighting the picture. The fourth argument (in braces) is the text
 accompanying the picture. For horizontal pictures, this text is placed as a
@@ -916,7 +882,7 @@ Below is a brief explanation of what the different parameters do:
     mechanism. 
 
   \item \options{highlight} \par
-    This key determines the highlighting of the picture. If you set,
+    This key determines the highlighting of the picture. If you set
     \options{highlight=yes}, then you can use one of the three available
     highlights: \options{circle}, \options{arrow}, and \options{focus}. These
     highlights are shown in \in{Figure}[fig:highlight]. The specific highlight is
@@ -1029,7 +995,7 @@ In summary, the different keys related to \options{alternative=circle} are:
     The center of the circle in terms of scaled units. Their values should be
     between 0 and 10.
   \item \options{xscale} and \options{yscale} \par
-    The radius of the circle if only one options is specified. The major and
+    The radius of the circle if only one option is specified. The major and
     minor radii of the ellipse if both options are specified. 
   \item \options{direction} \par
     The amount by which the circle is rotated. This only makes sense if we are
@@ -1047,7 +1013,7 @@ arrow. An arrow is specified by three things, the location of its tip, given by
 \options{x} and \options{y} keys; the length of the arrow, given by
 \options{length} key; and the direction of the tail, given by
 \options{direction} key. Thus, to draw the arrow highlight shown in \in
-Figure[fig:highlight], we wrote
+{Figure}[fig:highlight], we wrote
 \startTEX
 \IncludePicture
   [horizontal]
@@ -1143,6 +1109,24 @@ them stand out more. The key related to shadows is:
 
 To select a specific page from a multi-page pdf file, you can use
 \options{page=<number>} option.
+
+\subsubject{Using your own style}
+
+The module makes it easy to write your own style or to tweak one of the
+provided styles beyond the configuration options provided by the
+module. Simply copy the style which is closest in appearance to what you
+want to obtain. Give it a filename \filename{s-myownstyle.tex},
+\filename{myownstyle} being any name you like. Put this file into a
+directory where \CONTEXT\ will find it, either the directory where you will
+process your presentation or somewhere in your personal \filename{$TEXMF}
+tree. Then, let the module know that you want to use your own style:
+
+\startTEX
+\usemodule[simpleslides]
+          [style=myownstyle]
+\stopTEX
+
+The module will read your file and apply your settings.
 
 \stoptext
 
